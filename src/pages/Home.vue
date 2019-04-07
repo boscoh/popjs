@@ -5,25 +5,35 @@
         overflow: auto">
     <v-layout>
       <v-flex
-        md6 
+        xs10
+        offset-xs1
+        md6
         offset-md3
-        xs8 
-        offset-xs2
-        style="text-align: left">
+        lg6
+        offset-lg3
+        style="
+          text-align: left;
+          padding-top: 80px;
+          padding-bottom: 40px">
 
         <h1 
-          class="display-1"
-          style="padding-top: 80px; padding-bottom: 40px">
-          Compartmental Models
+          class="display-3">
+          PlasticGui Demos
         </h1>
 
-        <br>
-        <div style="text-align: justify">
+        <div class="mt-5"></div>
+
+        <p>
           This website demonstrates the visualization and calculation of
           compartmental models in Javascript. All modelling is directly
           calculated in the web-browser
-        </div>
+        </p>
 
+        <p>
+          This website demonstrates the visualization and calculation of
+          compartmental models in Javascript. All modelling is directly
+          calculated in the web-browser
+        </p>
       </v-flex>
     </v-layout>
   </v-container>

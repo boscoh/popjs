@@ -90,6 +90,7 @@
 import ChartWidget from '../modules/chart-widget'
 import { EconModel } from '../modules/econ-models'
 import $ from 'jquery'
+import _ from 'lodash'
 import util from '../modules/util'
 
 export default {

@@ -1,47 +1,48 @@
 <template>
-  <v-container>
-    <v-card>
+  <v-container style="padding-top: 6em">
+    <v-flex
+      xs8 
+      offset-xs2
+      md4
+      offset-md4
+      lg4
+      offset-lg4>
+      <v-card>
 
-      <v-toolbar>
-        <v-toolbar-title>
+        <v-card-title
+          primary-title
+          class="headline">
           Login to {{ title }}
-        </v-toolbar-title>
-      </v-toolbar>
+        </v-card-title>
 
-      <v-card-text>
-        <form
-          novalidate
-          @submit.prevent="submit">
-          <v-container
-            fluid
-            grid-list-xl>
+        <v-card-text>
+          <form
+            novalidate
+            @submit.prevent="submit">
 
-            <v-layout
-              row
-              wrap>
-              <v-flex class="xs12">
-                <v-text-field
-                  v-validate="'email'"
-                  v-model="user.email"
-                  :error-messages="errors.collect('email')"
-                  label="E-mail address"
-                  data-vv-name="email"/>
-                <v-text-field
-                  v-validate="'required|min:6'"
-                  v-model="rawPassword"
-                  :append-icon="passwordHidden ? 'visibility' : 'visibility_off'"
-                  :append-icon-cb="() => (passwordHidden = !passwordHidden)"
-                  :type="passwordHidden ? 'password' : 'text'"
-                  :error-messages="errors.collect('rawPassword')"
-                  hint="At least 6 characters"
-                  counter
-                  label="Password"
-                  data-vv-name="rawPassword"/>
-                <p>
-                  <router-link to="/forgot-password">Forgot</router-link>
-                  your password? </p>
-              </v-flex>
-            </v-layout>
+            <v-text-field
+              v-validate="'email'"
+              v-model="user.email"
+              :error-messages="errors.collect('email')"
+              label="E-mail address"
+              data-vv-name="email"/>
+
+            <v-text-field
+              v-validate="'required|min:6'"
+              v-model="rawPassword"
+              :append-icon="passwordHidden ? 'visibility' : 'visibility_off'"
+              :append-icon-cb="() => (passwordHidden = !passwordHidden)"
+              :type="passwordHidden ? 'password' : 'text'"
+              :error-messages="errors.collect('rawPassword')"
+              hint="At least 6 characters"
+              counter
+              label="Password"
+              data-vv-name="rawPassword"/>
+
+            <p style="margin-bottom: 2em">
+              <router-link to="/forgot-password">Forgot</router-link>
+              your password?
+            </p>
 
             <v-btn
               type="submit"
@@ -49,24 +50,24 @@
               Login
             </v-btn>
 
-            <div 
+            <div
               v-if="error"
               style="color: red">
               {{ error }}
             </div>
 
-            <div style="margin-top: 3em">
+            <div style="margin-top: 2em">
               New to {{ title }}? &nbsp;
               <router-link to="/register">
                 Register
               </router-link>
             </div>
 
-          </v-container>
-        </form>
-      </v-card-text>
+          </form>
+        </v-card-text>
 
-    </v-card>
+      </v-card>
+    </v-flex>
   </v-container>
 </template>
 
@@ -75,7 +76,6 @@ import auth from '../../modules/auth'
 import config from '../../config'
 
 export default {
-  name: 'Login',
   data() {
     return {
       title: config.title,

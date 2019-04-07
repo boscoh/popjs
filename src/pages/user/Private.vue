@@ -17,13 +17,12 @@
 
         <h1
           class="display-2">
-          About
+          Private
         </h1>
 
         <br>
         <div style="padding-top: 2em; text-align: justify">
-          This is a skeleton for a Vue-app with user system and
-          a local web-server.
+          This page is only shown if the user has been logged-in.
         </div>
 
       </v-flex>

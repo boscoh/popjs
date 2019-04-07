@@ -1,31 +1,31 @@
 <template>
-  <v-container>
-    <v-card>
+  <v-container style="padding-top: 6em">
+    <v-flex
+      xs8 
+      offset-xs2
+      md6 
+      offset-md3
+      lg4
+      offset-lg4>
+      <v-card>
 
-      <v-toolbar>
-        <v-toolbar-title>Forgot your password to {{ title }}?</v-toolbar-title>
-      </v-toolbar>
+        <v-card-title
+          primary-title
+          class="headline">
+          Forgot your password to {{ title }}?
+        </v-card-title>
 
-      <v-card-text>
-        <form
-          novalidate
-          @submit.prevent="submit">
-          <v-container
-            fluid
-            grid-list-xl>
+        <v-card-text>
+          <form
+            novalidate
+            @submit.prevent="submit">
 
-            <v-layout
-              row
-              wrap>
-              <v-flex class="xs12">
-                <v-text-field
-                  v-validate="'email'"
-                  v-model="user.email"
-                  :error-messages="errors.collect('email')"
-                  label="E-mail address"
-                  data-vv-name="email"/>
-              </v-flex>
-            </v-layout>
+            <v-text-field
+              v-validate="'email'"
+              v-model="user.email"
+              :error-messages="errors.collect('email')"
+              label="E-mail address"
+              data-vv-name="email"/>
 
             <v-btn
               type="submit"
@@ -42,10 +42,10 @@
               <router-link to="/register">Register</router-link>
             </div>
 
-          </v-container>
-        </form>
-      </v-card-text>
-    </v-card>
+          </form>
+        </v-card-text>
+      </v-card>
+    </v-flex>
   </v-container>
 </template>
 
@@ -54,7 +54,6 @@ import auth from '../../modules/auth'
 import config from '../../config'
 
 export default {
-  name: 'ForgotPassword',
   data() {
     return {
       title: config.title,

@@ -1,33 +1,41 @@
 <template>
   <v-container>
-    <v-card>
+    <v-flex
+      xs8 
+      offset-xs2
+      md6 
+      offset-md3
+      lg6 
+      offset-lg3>
+      <v-card>
 
-      <v-toolbar>
-        <v-toolbar-title>Administrate Users</v-toolbar-title>
-      </v-toolbar>
+        <v-toolbar>
+          <v-toolbar-title>Administrate Users</v-toolbar-title>
+        </v-toolbar>
 
-      <v-card-text>
-        <v-list>
-          <v-list-tile
-            v-for="user of users"
-            :key="user.id">
+        <v-card-text>
+          <v-list>
+            <v-list-tile
+              v-for="user of users"
+              :key="user.id">
 
-            {{ user.name }} - {{ user.email }}
+              {{ user.name }} - {{ user.email }}
 
-            <v-btn
-              flat
-              icon
-              @click="deleteUser(user.id)">
-              <v-icon>
-                delete
-              </v-icon>
-            </v-btn>
+              <v-btn
+                flat
+                icon
+                @click="deleteUser(user.id)">
+                <v-icon>
+                  delete
+                </v-icon>
+              </v-btn>
 
-          </v-list-tile>
-        </v-list>
-      </v-card-text>
+            </v-list-tile>
+          </v-list>
+        </v-card-text>
 
-    </v-card>
+      </v-card>
+    </v-flex>
   </v-container>
 </template>
 
@@ -36,7 +44,6 @@ import rpc from '../../modules/rpc'
 import config from '../../config'
 
 export default {
-  name: 'AdminUser',
   data() {
     return {
       title: config.title,

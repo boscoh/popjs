@@ -1,67 +1,68 @@
 <template>
-  <v-container>
-    <v-card>
+  <v-container style="padding-top: 6em">
+    <v-flex
+      xs8
+      offset-xs2
+      md4
+      offset-md4
+      lg4
+      offset-lg4>
+      <v-card>
 
-      <v-toolbar>
-        <v-toolbar-title>
+        <v-card-title
+          primary-title
+          class="headline">
           Register to {{ title }}
-        </v-toolbar-title>
-      </v-toolbar>
+        </v-card-title>
 
-      <v-card-text>
-        <form
-          novalidate
-          class="login-screen"
-          @submit.prevent="submit">
-          <v-container
-            fluid
-            grid-list-xl>
+        <v-card-text>
+          <form
+            novalidate
+            class="login-screen"
+            @submit.prevent="submit">
 
-            <v-layout
-              row
-              wrap>
-              <v-flex class="xs12">
-                <v-text-field
-                  v-validate="'name'"
-                  v-model="name"
-                  :error-messages="errors.collect('name')"
-                  label="User name"
-                  data-vv-name="name"/>
-                <v-text-field
-                  v-validate="'email'"
-                  v-model="email"
-                  :error-messages="errors.collect('email')"
-                  label="E-mail address"
-                  data-vv-name="email"/>
-                <v-text-field
-                  v-validate="'required|min:6'"
-                  ref="password"
-                  v-model="rawPassword"
-                  :append-icon="passwordHidden ? 'visibility' : 'visibility_off'"
-                  :append-icon-cb="() => (passwordHidden = !passwordHidden)"
-                  :type="passwordHidden ? 'password' : 'text'"
-                  :error-messages="errors.collect('password')"
-                  hint="At least 6 characters"
-                  counter
-                  label="Password"
-                  data-vv-name="password"
-                  data-vv-delay="300"/>
-                <v-text-field
-                  v-validate="'required|confirmed:password'"
-                  ref="password_confirmation"
-                  v-model="rawPasswordConfirm"
-                  :append-icon="confirmPasswordHidden ? 'visibility' : 'visibility_off'"
-                  :append-icon-cb="() => (confirmPasswordHidden = !confirmPasswordHidden)"
-                  :type="confirmPasswordHidden ? 'password' : 'text'"
-                  :error-messages="errors.collect('password_confirmation')"
-                  hint="At least 6 characters"
-                  counter
-                  label="Confirm Password"
-                  target="password"
-                  data-vv-name="password_confirmation"
-                  data-vv-delay="300"/>
-              </v-flex>
-            </v-layout>
+            <v-text-field
+              v-validate="'name'"
+              v-model="name"
+              :error-messages="errors.collect('name')"
+              label="User name"
+              data-vv-name="name"/>
+
+            <v-text-field
+              v-validate="'email'"
+              v-model="email"
+              :error-messages="errors.collect('email')"
+              label="E-mail address"
+              data-vv-name="email"/>
+
+            <v-text-field
+              v-validate="'required|min:6'"
+              ref="password"
+              v-model="rawPassword"
+              :append-icon="passwordHidden ? 'visibility' : 'visibility_off'"
+              :append-icon-cb="() => (passwordHidden = !passwordHidden)"
+              :type="passwordHidden ? 'password' : 'text'"
+              :error-messages="errors.collect('password')"
+              hint="At least 6 characters"
+              counter
+              label="Password"
+              data-vv-name="password"
+              data-vv-delay="300"/>
+
+            <v-text-field
+              v-validate="'required|confirmed:password'"
+              ref="password_confirmation"
+              v-model="rawPasswordConfirm"
+              :append-icon="confirmPasswordHidden ? 'visibility' : 'visibility_off'"
+              :append-icon-cb="() => (confirmPasswordHidden = !confirmPasswordHidden)"
+              :type="confirmPasswordHidden ? 'password' : 'text'"
+              :error-messages="errors.collect('password_confirmation')"
+              hint="At least 6 characters"
+              counter
+              label="Confirm Password"
+              target="password"
+              data-vv-name="password_confirmation"
+              data-vv-delay="300"/>
 
             <v-btn
               type="submit"
@@ -75,10 +76,11 @@
               {{ error }}
             </div>
 
-          </v-container>
-        </form>
-      </v-card-text>
-    </v-card>
+          </form>
+        </v-card-text>
+
+      </v-card>
+    </v-flex>
   </v-container>
 </template>
 
@@ -87,7 +89,6 @@ import auth from '../../modules/auth'
 import config from '../../config'
 
 export default {
-  name: 'Register',
   data() {
     return {
       title: config.title,

@@ -327,7 +327,7 @@ class BaseModel {
   /**
    * Clears variables for transfers with other countryModels to occur
    */
-  clearBeforeTransfer() {
+  clearDelta() {
     for (let key of this.keys) {
       this.delta[key] = 0
     }
@@ -425,7 +425,7 @@ class BaseModel {
     this.saveToSolution(0)
 
     _.times(nStep, () => {
-      this.clearBeforeTransfer()
+      this.clearDelta()
       this.integrateStep(dTimeInDay)
     })
 

@@ -16,9 +16,9 @@
       <v-flex
         xs12>
         <v-select
-          style="width: 500px"
           :items="modelNames"
           v-model="modelName"
+          style="width: 500px"
           label="Model Type"
           solo
           @change="changeModel"

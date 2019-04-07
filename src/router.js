@@ -6,8 +6,8 @@ import config from './config.js'
 import Home from './pages/Home'
 
 import About from './pages/About'
-import Private from './pages/Private'
 
+import Private from './pages/user/Private'
 import Login from './pages/user/Login'
 import Register from './pages/user/Register'
 import EditUser from './pages/user/EditUser'
@@ -16,28 +16,39 @@ import ForgotPassword from './pages/user/ForgotPassword'
 import ResetPassword from './pages/user/ResetPassword'
 import EpiModel from './pages/EpiModel'
 import EconModel from './pages/EconModel'
+import Property from './pages/Property'
 
 Vue.use(Router)
 let routes = [
   {
     path: '/',
     name: 'home',
-    component: Home
+    component: Home,
+    isNavbar: true
   },
   {
     path: '/econ',
     name: 'econ',
-    component: EconModel
+    component: EconModel,
+    isNavbar: true
   },
   {
     path: '/epi',
     name: 'epi',
-    component: EpiModel
+    component: EpiModel,
+    isNavbar: true
+  },
+  {
+    path: '/property',
+    name: 'property',
+    component: Property,
+    isNavbar: true
   },
   {
     path: '/about',
     name: 'about',
-    component: About
+    component: About,
+    isNavbar: true
   }
 ]
 

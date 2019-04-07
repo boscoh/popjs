@@ -126,7 +126,7 @@ class EconModel extends Model {
       },
       {
         key: 'time',
-        value: 20,
+        value: 100,
         max: 300,
         interval: 1,
         decimal: 0,
@@ -200,7 +200,7 @@ class EconModel extends Model {
       {
         title: 'INCOME',
         divTag: 'output-chart',
-        keys: ['output', 'bank', 'wages', 'profit'],
+        keys: ['wages', 'profit', 'bank', 'output'],
         xlabel: 'time (days)'
       },
       {
@@ -254,10 +254,7 @@ class EconModel extends Model {
     // build functions
     this.fns = {}
 
-    // this.fns.wageChangeFn = makeLinearFunction(
-    //   -this.param.wageLinearC, this.param.wageLinearD)
-
-    let fn0 = makeExponentialFunction(
+    let wageExpFn = makeExponentialFunction(
       this.param.wX,
       this.param.wY,
       this.param.wS,
@@ -268,54 +265,59 @@ class EconModel extends Model {
     let B = 1
     let C = 1
     let D = 0.0400641
-    let fn1 = function(x) {
+    // x0 = B / C = 1
+    let wageSqFn = function(x) {
       let num = B - C * x
       return A / num / num - D
-    }
-
-    this.fns.wageChangeFn = function(x) {
-      let xMax = 1.05
-      let fn = fn0
-      let yMax = fn(xMax)
-      if (x > xMax) {
-        return yMax
-      }
-      let y = fn(x)
-      if (y > yMax) {
-        return yMax
-      }
-      return y
     }
 
     let E = 0.0175
     let F = 0.53
     let G = 6
     let H = 0.065
-    let fn2 = function(x) {
+    // x0 = F / G = 0.08833333333333333
+    let investSqFn = function(x) {
       let num = F - G * x
       return E / num / num - H
     }
 
-    let fn3 = makeExponentialFunction(
+    let investExpFn = makeExponentialFunction(
       this.param.pX,
       this.param.pY,
       this.param.pS,
       this.param.pYMin
     )
 
-    this.fns.investmentChangeFn = function(x) {
-      let xMax = 0.1
-      let fn = fn2
+    function getCutoffFn(fn, xMax) {
       let yMax = fn(xMax)
-      if (x > xMax) {
-        return yMax
+      return function(x) {
+        if (x > xMax) {
+          return yMax
+        }
+        let y = fn(x)
+        if (y > yMax) {
+          return yMax
+        }
+        return y
       }
-      let y = fn(x)
-      if (y > yMax) {
-        return yMax
-      }
-      return y
     }
+
+    // if xMax = 2, high interest rates, no flucts
+    // if xMax = 1.5, bankshare always bends down for high interest rate
+    this.fns.wageChangeFn = getCutoffFn(wageExpFn, 1.1)
+
+    // this.fns.wageChangeFn = makeCutoffFn(wageSqFn, 0.99999)
+
+    // if xMax < 0.1 no fluctuations
+    // if xMax = 0.095 strange behavior
+    // if xMax = 0.1 get damped behavior but bank drops below
+    // if xMax = 0.2 get damped behavior but bankShare goes to -0.2
+    this.fns.investmentChangeFn = getCutoffFn(investExpFn, 0.2)
+
+    // if xMax < 0.05 bank stays near zero then drops
+    // if xMax < 0.03 no fluctuations
+    // if xMax > 0.06 always rises
+    // this.fns.investmentChangeFn = makeCutoffFn(investSqFn, 0.088)
 
     this.var.productivity = 1
     this.var.population = 100
@@ -343,11 +345,8 @@ class EconModel extends Model {
 
     this.var.profitShare = 1 - this.var.wageShare - this.var.bankShare
 
-    this.var.profitRate =
-      this.var.profitShare / this.param.capitalAccelerator
-    this.var.investmentChange = this.fns.investmentChangeFn(
-      this.var.profitRate
-    )
+    this.var.profitRate = this.var.profitShare / this.param.capitalAccelerator
+    this.var.investmentChange = this.fns.investmentChangeFn(this.var.profitRate)
 
     this.var.wage = this.var.wages / this.var.employed
     this.var.profit = this.var.profitShare * this.var.output
@@ -375,9 +374,7 @@ class EconModel extends Model {
     this.var.profitShare = 1 - this.var.wageShare - this.var.bankShare
 
     this.var.profitRate = this.var.profit / this.var.capital
-    this.var.investmentChange = this.fns.investmentChangeFn(
-      this.var.profitRate
-    )
+    this.var.investmentChange = this.fns.investmentChangeFn(this.var.profitRate)
     this.var.investment = this.var.investmentChange * this.var.output
     // this.var.investment = this.var.profit
     this.var.borrow = this.var.investment - this.var.profit
@@ -392,8 +389,7 @@ class EconModel extends Model {
     this.dVars.productivity =
       this.param.productivityExponent * this.var.productivity
 
-    this.dVars.population =
-      this.param.populationExponent * this.var.population
+    this.dVars.population = this.param.populationExponent * this.var.population
 
     this.dVars.wage = this.var.wageChange * this.var.wage
 
