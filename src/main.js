@@ -1,35 +1,14 @@
-/**
- * @fileoverview Main entry point of the Vue app
- */
-
 import Vue from 'vue'
-import Vuetify from 'vuetify'
-
-import config from './config.js'
-import auth from './modules/auth'
-import App from './App'
-import router from './router.js'
+import App from './App.vue'
+import router from './router'
 import store from './store'
-import VeeValidate from 'vee-validate'
+import vuetify from './plugins/vuetify'
 
 Vue.config.productionTip = false
 
-Vue.use(Vuetify)
-Vue.use(VeeValidate)
-
-document.title = config.title
-
-async function init() {
-  if (config.isUser) {
-    await auth.restoreLastUser()
-  }
-  return new Vue({
-    el: '#app',
+new Vue({
     router,
     store,
-    components: { App },
-    template: '<App/>'
-  })
-}
-
-init()
+    vuetify,
+    render: h => h(App),
+}).$mount('#app')

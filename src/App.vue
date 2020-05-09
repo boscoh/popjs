@@ -1,30 +1,41 @@
 <template>
-  <div id="app">
     <v-app>
-      <navbar/>
-      <router-view/>
+        <v-app-bar app light color="white">
+            <div class="d-flex align-center">
+                <v-icon
+                    alt="Vuetify Logo"
+                    class="shrink mr-2"
+                    contain
+                    width="40"
+                >
+                    mdi-chart-timeline-variant
+                </v-icon>
+            </div>
+
+            <v-toolbar-title class="title shrink mt-1 hidden-sm-and-down">
+                Dynamic Models
+            </v-toolbar-title>
+
+            <v-spacer></v-spacer>
+
+            <v-btn to="/" text router>Home</v-btn>
+            <v-btn to="/epi" text router>Epidemiology</v-btn>
+            <v-btn to="/econ" text router>Economics</v-btn>
+            <v-btn to="/property" text router>Property</v-btn>
+        </v-app-bar>
+
+        <v-content>
+            <router-view></router-view>
+        </v-content>
     </v-app>
-  </div>
 </template>
 
-<style>
-@import 'vuetify/dist/vuetify.min.css';
-@import 'http://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic';
-@import 'http://fonts.googleapis.com/icon?family=Material+Icons';
-#app {
-  /*font-family: "Avenir", Helvetica, Arial, sans-serif;*/
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 0px;
-}
-</style>
-
 <script>
-import Navbar from './components/Navbar.vue'
 export default {
-  name: 'App',
-  components: { Navbar }
+    name: 'App',
+
+    data: () => ({
+        //
+    }),
 }
 </script>
