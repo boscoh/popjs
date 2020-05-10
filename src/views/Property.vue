@@ -2,51 +2,12 @@
     <v-container fluid class="pa-0 pt-1">
         <v-layout row wrap>
             <v-flex xs4 md4 lg3>
-                <v-card
-                    class="text-left"
-                    style=" height: calc(100vh - 48px); overflow: auto;"
-                >
+                <v-card style=" height: calc(100vh - 48px); overflow: auto;">
                     <v-card-text>
-                        <p class="small mt-3 mb-1">
-                            PARAMETERS
-                        </p>
-                        <div v-for="(slider, i) in sliders" :key="i">
-                            <div
-                                v-if="'comment' in slider"
-                                class="mt-5 text-capitalize font-italic"
-                            >
-                                {{ slider.label }}
-                            </div>
-
-                            <v-container
-                                v-else
-                                fluid
-                                class="d-inline-flex pa-0"
-                            >
-                                <div class="flex-grow-1 pt-2">
-                                    {{ slider.label }}
-                                    <v-slider
-                                        style="margin-top: -10px"
-                                        v-model="slider.value"
-                                        :max="slider.max"
-                                        :step="slider.interval"
-                                        hide-details
-                                        @change="changeGraph()"
-                                    />
-                                </div>
-                                <div class="pl-4 flex-grow-0">
-                                    <v-text-field
-                                        class="pt-0"
-                                        style="width: 7em"
-                                        type="number"
-                                        step="any"
-                                        v-model="slider.value"
-                                        @keypress="changeGraph()"
-                                    >
-                                    </v-text-field>
-                                </div>
-                            </v-container>
-                        </div>
+                        <sliders
+                            :sliders="sliders"
+                            :callback="changeGraph"
+                        ></sliders>
                     </v-card-text>
                 </v-card>
             </v-flex>
@@ -58,6 +19,8 @@
                     </v-card-title>
                     <v-card-text class="text-xs-left">
                         <div style="max-width: 500px">
+                            <markdown-it-vue class="md-body" content="# Markdown"/>
+
                             <p>
                                 There's that proverb which says rent money is
                                 dead money. But interest repayments for a
@@ -106,8 +69,6 @@
                             </ul>
                         </div>
                     </v-card-text>
-                    <div id="charts2" />
-
                     <div id="charts" />
                 </v-card>
             </v-flex>
@@ -119,13 +80,14 @@
 <style scoped></style>
 
 <script>
+import MarkdownItVue from 'markdown-it-vue'
+import 'markdown-it-vue/dist/markdown-it-vue.css'
+import { ChartsContainer} from '../modules/charts-container'
 import { PropertyModel } from '../modules/property-model'
-import $ from 'jquery'
-import ChartWidget from '../modules/chart-widget'
+import Sliders from '../components/sliders'
 
 export default {
-    name: 'Home',
-    components: {},
+    components: { Sliders, MarkdownItVue },
     data() {
         return {
             sliders: [],
@@ -144,22 +106,11 @@ export default {
         this.sliders = this.model.getGuiParams()
         this.charts = this.model.getCharts()
         this.graphWidgets = {}
-        let $div = $('#charts').empty()
+        this.chartsContainer = new ChartsContainer('charts')
         for (let chart of this.charts) {
-            let id = chart.divTag
-            $div.append(
-                $('<div>')
-                    .attr('id', id)
-                    .addClass('chart')
+            this.chartsContainer.addChart(
+                chart.id, chart.title, chart.xlabel, '', chart.keys
             )
-            let chartWidget = new ChartWidget(`#${id}`)
-            chartWidget.setTitle(chart.title)
-            chartWidget.setXLabel(chart.xlabel)
-            chartWidget.setYLabel('')
-            for (let key of chart.keys) {
-                chartWidget.addDataset(key)
-            }
-            this.graphWidgets[chart.divTag] = chartWidget
         }
         this.changeGraph()
     },
@@ -167,14 +118,11 @@ export default {
         changeGraph() {
             this.model.importGuiParams(this.sliders)
             this.model.run()
+            let x = this.model.times
             for (let chart of this.charts) {
-                for (let [i, key] of chart.keys.entries()) {
-                    console.log(key, key in this.model.solution)
-                    this.graphWidgets[chart.divTag].updateDataset(
-                        i,
-                        this.model.times,
-                        this.model.solution[key]
-                    )
+                for (let key of chart.keys) {
+                    let y = this.model.solution[key]
+                    this.chartsContainer.updateChart(chart.id, key, x, y)
                 }
             }
         },

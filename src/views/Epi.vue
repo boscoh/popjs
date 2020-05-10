@@ -4,41 +4,13 @@
             <v-flex xs4 md4 lg3>
                 <v-card
                     class="text-sm-left text-md-left"
-                    style=" height : calc(100vh - 48px); overflow: auto; "
+                    style="height: calc(100vh - 48px); overflow: auto;"
                 >
                     <v-card-text>
-                        <p class="small mt-3 mb-1">
-                            PARAMETERS
-                        </p>
-                        <div
-                            v-for="(param, i) of sliders"
-                            :key="i"
-                            style="display: flex; margin-bottom: -20px"
-                            column
-                        >
-                            <div
-                                style="flex: 1; text-align: left; padding-top:0.6em"
-                            >
-                                {{ param.label }}
-                                <v-slider
-                                    style="margin-top: -10px"
-                                    :step="param.interval"
-                                    :max="param.max"
-                                    v-model="param.value"
-                                    @change="changeGraph()"
-                                />
-                            </div>
-                            <div style="flex: 0 0 7em; padding-left: 1em">
-                                <v-text-field
-                                    class="pt-0"
-                                    type="number"
-                                    step="any"
-                                    v-model="param.value"
-                                    @keypress="changeGraph()"
-                                >
-                                </v-text-field>
-                            </div>
-                        </div>
+                        <sliders
+                            :sliders="sliders"
+                            :callback="changeGraph"
+                        ></sliders>
                     </v-card-text>
                 </v-card>
             </v-flex>
@@ -75,12 +47,13 @@
 </style>
 
 <script>
-import ChartWidget from '../modules/chart-widget'
+import { ChartsContainer} from '../modules/charts-container'
 import { epiModels } from '../modules/epi-models'
-import $ from 'jquery'
 import _ from 'lodash'
+import Sliders from '../components/sliders'
 
 export default {
+    components: { Sliders },
     data() {
         return {
             title: 'Graphing Models',
@@ -103,7 +76,7 @@ export default {
             this.models.push(new EpiModel())
         }
         this.modelNames = _.map(this.models, e => e.name)
-        this.modelName = this.models[0].name
+        this.modelName = this.modelNames[0]
         this.changeModel()
     },
     methods: {
@@ -112,39 +85,22 @@ export default {
             this.title = 'Epi Models - the ' + this.model.modelType + ' model'
             this.charts = this.model.getCharts()
             this.sliders = this.model.getGuiParams()
-
-            this.graphWidgets = {}
-            let $div = $('#epi-charts').empty()
+            this.chartsContainer = new ChartsContainer('epi-charts')
             for (let chart of this.charts) {
-                let id = chart.divTag
-                $div.append(
-                    $('<div>')
-                        .attr('id', id)
-                        .addClass('chart')
+                this.chartsContainer.addChart(
+                    chart.id, chart.title, chart.xlabel, '', chart.keys
                 )
-                let chartWidget = new ChartWidget(`#${id}`)
-                chartWidget.setTitle(chart.title)
-                chartWidget.setXLabel(chart.xlabel)
-                chartWidget.setYLabel('')
-                for (let key of chart.keys) {
-                    chartWidget.addDataset(key)
-                }
-                this.graphWidgets[chart.divTag] = chartWidget
             }
-
             this.changeGraph()
         },
         changeGraph() {
             this.model.importGuiParams(this.sliders)
             this.model.run()
+            let x = this.model.times
             for (let chart of this.charts) {
-                for (let [i, key] of chart.keys.entries()) {
-                    console.log('changeGraph', key, this.model)
-                    this.graphWidgets[chart.divTag].updateDataset(
-                        i,
-                        this.model.times,
-                        this.model.solution[key]
-                    )
+                for (let key of chart.keys) {
+                    let y = this.model.solution[key]
+                    this.chartsContainer.updateChart(chart.id, key, x, y)
                 }
             }
         },

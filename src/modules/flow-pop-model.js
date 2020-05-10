@@ -61,14 +61,14 @@ export class FlowPopModel extends DynaPopModel {
         let charts = [
             {
                 title: 'COMPARTMENTS',
-                divTag: 'compartment-chart',
+                id: 'compartment-chart',
                 keys: _.keys(this.var),
                 xlabel: 'days',
             },
         ]
         charts.push({
             title: 'RN',
-            divTag: 'rn-chart',
+            id: 'rn-chart',
             keys: ['rn'],
             xlabel: 'days',
         })

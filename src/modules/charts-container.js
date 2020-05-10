@@ -1,11 +1,12 @@
 import $ from 'jquery'
 import Chart from 'chart.js'
+// import _ from 'lodash'
 
 /**
  * Functions to generate chartJs data for model
  */
 
-function makeLineChartData (title, xAxisLabel, yAxisLabel) {
+function makeLineChartData(title, xAxisLabel, yAxisLabel) {
     return {
         type: 'line',
         data: {
@@ -70,7 +71,7 @@ const colors = [
 
 let seenNames = []
 
-function getColor (name) {
+function getColor(name) {
     let i = seenNames.indexOf(name)
     if (i < 0) {
         seenNames.push(name)
@@ -85,9 +86,9 @@ function getColor (name) {
  *
  */
 class ChartWidget {
-    constructor (divTag, chartData) {
-        this.divTag = divTag
-        this.div = $(this.divTag)
+    constructor(id, chartData) {
+        this.id = id
+        this.div = $(this.id)
         let canvas = $('<canvas>')
         this.div.append(canvas)
         if (!chartData) {
@@ -98,15 +99,15 @@ class ChartWidget {
         this.chart = new Chart(canvas, this.chartData)
     }
 
-    getDatasets () {
+    getDatasets() {
         return this.chartData.data.datasets
     }
 
-    getChartOptions () {
+    getChartOptions() {
         return this.chartData.options
     }
 
-    addDataset (name, xValues, yValues) {
+    addDataset(name, xValues, yValues) {
         let datasets = this.getDatasets()
         let newDatasetData = []
         if (xValues && yValues) {
@@ -133,7 +134,7 @@ class ChartWidget {
         return iDataset
     }
 
-    updateDataset (iDataset, xValues, yValues) {
+    updateDataset(iDataset, xValues, yValues) {
         let data = []
         for (let i = 0; i < xValues.length; i += 1) {
             data.push({
@@ -146,20 +147,56 @@ class ChartWidget {
         this.chart.update()
     }
 
-    setTitle (title) {
+    setTitle(title) {
         let options = this.getChartOptions()
         options.title.text = title
     }
 
-    setXLabel (xLabel) {
+    setXLabel(xLabel) {
         let options = this.getChartOptions()
         options.scales.xAxes[0].scaleLabel.labelString = xLabel
     }
 
-    setYLabel (yLabel) {
+    setYLabel(yLabel) {
         let options = this.getChartOptions()
         options.scales.yAxes[0].scaleLabel.labelString = yLabel
     }
 }
 
-export default ChartWidget
+class ChartsContainer {
+    constructor(divId) {
+        this.chartWidgets = {}
+        this.$div = $(`#${divId}`).empty()
+    }
+
+    addChart(id, title, xlabel, ylabel, keys) {
+        this.$div.append(
+            $('<div>')
+                .attr('id', id)
+                .addClass('chart')
+        )
+        let chartWidget = new ChartWidget(`#${id}`)
+        if (title) {
+            chartWidget.setTitle(title)
+        }
+        if (xlabel) {
+            chartWidget.setXLabel(xlabel)
+        }
+        if (ylabel) {
+            chartWidget.setYLabel(ylabel)
+        }
+        chartWidget.keys = []
+        for (let key of keys) {
+            chartWidget.keys = keys
+            chartWidget.addDataset(key)
+        }
+        this.chartWidgets[id] = chartWidget
+    }
+
+    updateChart(id, key, x, y) {
+        let chartWidget = this.chartWidgets[id]
+        let i = chartWidget.keys.indexOf(key)
+        chartWidget.updateDataset(i, x, y)
+    }
+}
+export { ChartsContainer }

@@ -154,7 +154,7 @@ class PropertyModel extends DynaPopModel {
         let charts = [
             {
                 title: 'Property',
-                divTag: 'property-chart',
+                id: 'property-chart',
                 keys: [
                     'property',
                     'totalPaidForPropertyAndInterest',
@@ -165,7 +165,7 @@ class PropertyModel extends DynaPopModel {
             },
             {
                 title: 'Investment Fund',
-                divTag: 'fund-chart',
+                id: 'fund-chart',
                 keys: [
                     'totalFund',
                     'totalPaidForFundAndRent',
@@ -175,7 +175,7 @@ class PropertyModel extends DynaPopModel {
             },
             {
                 title: 'Return on investment',
-                divTag: 'roi-chart',
+                id: 'roi-chart',
                 keys: [
                     'propertyProfit',
                     'totalPaidForPropertyAndInterest',
@@ -185,7 +185,7 @@ class PropertyModel extends DynaPopModel {
             },
             {
                 title: 'Monthly Expenses',
-                divTag: 'monthly-chart',
+                id: 'monthly-chart',
                 keys: [
                     'mortgagePerMonth',
                     'interestPerMonth',
