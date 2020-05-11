@@ -47,7 +47,7 @@
 </style>
 
 <script>
-import { ChartsContainer} from '../modules/charts-container'
+import { ChartsContainer } from '../modules/charts-container'
 import { epiModels } from '../modules/epi-models'
 import _ from 'lodash'
 import Sliders from '../components/sliders'
@@ -87,9 +87,7 @@ export default {
             this.sliders = this.model.getGuiParams()
             this.chartsContainer = new ChartsContainer('epi-charts')
             for (let chart of this.charts) {
-                this.chartsContainer.addChart(
-                    chart.id, chart.title, chart.xlabel, '', chart.keys
-                )
+                this.chartsContainer.addChart(chart)
             }
             this.changeGraph()
         },

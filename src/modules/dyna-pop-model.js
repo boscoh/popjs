@@ -42,6 +42,7 @@ class DynaPopModel {
         this.times = []
         this.fn = {}
         this.dt = 1
+        this.yCutoff = 1e10
     }
 
     getGuiParams() {
@@ -120,6 +121,7 @@ class DynaPopModel {
         this.integrator.setInitX(this.getVec()) // y(0) -- value of y when t=0.
         this.integrator.setFn(v => this.getDVec(v)) // Differential equation we're solving.
         this.integrator.solve()
+        this.status = this.integrator.getStatus()
         this.setVec(this.integrator.newX)
         this.calcAuxVars()
     }
@@ -153,7 +155,11 @@ class DynaPopModel {
             this.integrateDtWithRungeKutta(time, this.dt)
             this.pushToSolution(this.var)
             this.pushToSolution(this.auxVar)
+            if (_.some(_.values(this.var), y => y > this.yCutoff)) {
+                break
+            }
         }
+        console.log(`integration status ${JSON.stringify(this.status)}`)
     }
 }
 

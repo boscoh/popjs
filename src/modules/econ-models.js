@@ -6,16 +6,15 @@ class EconModel extends DynaPopModel {
         const params = {
             time: 300,
             initialEmployedFraction: 0.9,
-            productivityExponent: 0.015,
-            populationExponent: 0.035,
+            productivityGrowthRate: 0.015,
+            populationGrowthRate: 0.035,
             depreciationRate: 0.02,
             capitalAccelerator: 2,
             baseInterestRate: 0.05,
             interestRateMultiplier: 0.0,
         }
         super(params)
-        this.defaultParams = _.cloneDeep(this.param)
-        this.modelType = 'Keen PropertyModel'
+        this.modelType = 'Keen-Minsky Financial Instability Model'
         this.dt = 0.1
         this.fn.wageChange = makeExponentialFunction(0.95, 0.0, 0.5, -0.01)
         this.fn.investmentChange = makeExponentialFunction(0.05, 0.05, 1.75, 0)
@@ -68,9 +67,9 @@ class EconModel extends DynaPopModel {
                 this.param.depreciationRate)
         this.dVar.wage = this.auxVar.wageChange * this.var.wage
         this.dVar.productivity =
-            this.param.productivityExponent * this.var.productivity
+            this.param.productivityGrowthRate * this.var.productivity
         this.dVar.population =
-            this.param.populationExponent * this.var.population
+            this.param.populationGrowthRate * this.var.population
         this.dVar.debt = this.auxVar.borrow
     }
 
@@ -84,13 +83,13 @@ class EconModel extends DynaPopModel {
                 interval: 0.01,
             },
             {
-                key: 'productivityExponent',
+                key: 'productivityGrowthRate',
                 value: 0.015,
                 max: 0.1,
                 interval: 0.001,
             },
             {
-                key: 'populationExponent',
+                key: 'populationGrowthRate',
                 value: 0.035,
                 max: 0.2,
                 interval: 0.005,

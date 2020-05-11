@@ -54,14 +54,9 @@ export default {
         this.charts = this.model.getCharts()
         this.chartsContainer = new ChartsContainer('econ-charts')
         for (let chart of this.charts) {
-            this.chartsContainer.addChart(
-                chart.id,
-                chart.title,
-                chart.xlabel,
-                '',
-                chart.keys
-            )
+            this.chartsContainer.addChart(chart)
         }
+        this.changeGraph()
     },
     methods: {
         changeGraph() {
@@ -90,12 +85,7 @@ export default {
                     let x = this.model.times
                     for (let key of chart.keys) {
                         let y = this.model.solution[key]
-                        this.chartsContainer.updateChart(
-                            chart.id,
-                            key,
-                            x,
-                            y
-                        )
+                        this.chartsContainer.updateChart(chart.id, key, x, y)
                     }
                 }
             }

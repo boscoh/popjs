@@ -15,50 +15,48 @@ class PropertyModel extends DynaPopModel {
         const defaultParams = {
             initialProperty: 600000.0,
             deposit: 150000.0,
-            fixedInterestRatePerYear: 0.05,
-            mortgageLengthYear: 30,
-            propertyGrowthPerYear: 0.045,
+            interestRate: 0.05,
+            mortgageLength: 30,
+            propertyGrowthRate: 0.045,
             initialRentPerMonth: 2000,
-            inflationPerYear: 0.015,
-            fundGrowthPerYear: 6,
+            rentInflationRate: 0.015,
+            fundGrowthRate: 6,
         }
         super(params)
         this.param = _.assign(defaultParams, params)
-        this.param.time = this.param.mortgageLengthYear
         this.dt = 1
     }
 
-
-
-
     initializeVars() {
+        this.param.time = this.param.mortgageLength
+        let initialPrincipal = this.param.initialProperty - this.param.deposit
+        this.param.mortgagePayment = getMinimumPayment(
+            initialPrincipal,
+            this.param.interestRate,
+            this.param.mortgageLength
+        )
+
         this.var.property = this.param.initialProperty
-        let initPrincipal = this.param.initialProperty - this.param.deposit
-        this.var.principal = initPrincipal
+        this.var.principal = initialPrincipal
         this.var.totalInterest = 0
-        this.var.totalFund = this.param.deposit
-        this.var.rentPerYear = this.param.initialRentPerMonth * 12
+        this.var.fund = this.param.deposit
+        this.var.rent = this.param.initialRentPerMonth * 12
         this.var.totalRent = 0
         this.var.totalPaidForFundAndRent = this.param.deposit
         this.var.totalPaidForPropertyAndInterest = this.param.deposit
-        this.param.mortgagePerYear = getMinimumPayment(
-            initPrincipal,
-            this.param.fixedInterestRatePerYear,
-            this.param.mortgageLengthYear
-        )
     }
 
     calcAuxVars() {
-        this.auxVar.interestPerYear = this.param.fixedInterestRatePerYear * this.var.principal
-        this.auxVar.fundPaymentPerYear = this.param.mortgagePerYear - this.var.rentPerYear
-        if (this.auxVar.fundPaymentPerYear < 0) {
-            this.auxVar.fundPaymentPerYear = 0
+        this.auxVar.interest = this.param.interestRate * this.var.principal
+        this.auxVar.fundPayment = this.param.mortgagePayment - this.var.rent
+        if (this.auxVar.fundPayment < 0) {
+            this.auxVar.fundPayment = 0
         }
 
-        this.auxVar.interestPerMonth = this.auxVar.interestPerYear / 12
-        this.auxVar.mortgagePerMonth = this.param.mortgagePerYear / 12
-        this.auxVar.rentPerMonth = this.var.rentPerYear / 12
-        this.auxVar.fundPaymentPerMonth = this.auxVar.fundPaymentPerYear / 12
+        this.auxVar.interestPerMonth = this.auxVar.interest / 12
+        this.auxVar.mortgagePaymentPerMonth = this.param.mortgagePayment / 12
+        this.auxVar.rentPerMonth = this.var.rent / 12
+        this.auxVar.fundPaymentPerMonth = this.auxVar.fundPayment / 12
 
         this.auxVar.propertyProfit =
             this.var.property -
@@ -67,55 +65,29 @@ class PropertyModel extends DynaPopModel {
             this.var.totalInterest
 
         this.auxVar.fundProfit =
-            this.var.totalFund - this.param.deposit - this.var.totalRent
+            this.var.fund - this.param.deposit - this.var.totalRent
     }
 
     calcDVars() {
-        this.dVar.totalInterest = this.auxVar.interestPerYear
-        this.dVar.property = this.param.propertyGrowthPerYear * this.var.property
+        this.dVar.totalInterest = this.auxVar.interest
+        this.dVar.property = this.param.propertyGrowthRate * this.var.property
         if (this.var.principal >= 0) {
             this.dVar.principal = -(
-                this.param.mortgagePerYear - this.auxVar.interestPerYear
+                this.param.mortgagePayment - this.auxVar.interest
             )
         } else {
             this.dVar.principal = 0
         }
-        this.dVar.totalPaidForPropertyAndInterest = this.param.mortgagePerYear
-        this.dVar.rentPerYear = this.param.inflationPerYear * this.var.rentPerYear
-        this.dVar.totalRent = this.var.rentPerYear
-        this.dVar.totalFund =
-            this.param.fundGrowthPerYear * this.var.totalFund + this.auxVar.fundPaymentPerYear
-        this.dVar.totalPaidForFundAndRent = this.auxVar.fundPaymentPerYear + this.var.rentPerYear
+        this.dVar.totalPaidForPropertyAndInterest = this.param.mortgagePayment
+        this.dVar.rent = this.param.rentInflationRate * this.var.rent
+        this.dVar.totalRent = this.var.rent
+        this.dVar.fund =
+            this.param.fundGrowthRate * this.var.fund + this.auxVar.fundPayment
+        this.dVar.totalPaidForFundAndRent = this.auxVar.fundPayment + this.var.rent
     }
 
     getGuiParams() {
         let guiParams = [
-            {comment: true, key: 'future guesstimates'},
-            {
-                key: 'fixedInterestRatePerYear',
-                value: 0.05,
-                interval: 0.001,
-                max: 0.18
-            },
-            {
-                key: 'propertyGrowthPerYear',
-                value: 0.045,
-                interval: 0.001,
-                max: 0.18,
-            },
-            {
-                key: 'inflationPerYear',
-                value: 0.015,
-                interval: 0.001,
-                max: 0.18
-            },
-            {
-                key: 'fundGrowthPerYear',
-                value: 0.06,
-                interval: 0.001,
-                max: 0.18
-            },
-            {comment: true, key: 'inital payments'},
             {
                 key: 'deposit',
                 value: 150000.0,
@@ -130,12 +102,38 @@ class PropertyModel extends DynaPopModel {
                 max: 1500000,
             },
             {
-                key: 'mortgageLengthYear',
+                key: 'propertyGrowthRate',
+                value: 0.045,
+                interval: 0.001,
+                max: 0.18,
+            },
+            {comment: true, key: 'morgtage parameters'},
+            {
+                key: 'mortgageLength',
                 value: 30,
                 interval: 1,
                 max: 100
             },
+            {
+                key: 'interestRate',
+                value: 0.05,
+                interval: 0.001,
+                max: 0.18
+            },
+            {comment: true, key: 'investment fund parameters'},
+            {
+                key: 'fundGrowthRate',
+                value: 0.06,
+                interval: 0.001,
+                max: 0.18
+            },
             {comment: true, key: 'rent parameters'},
+            {
+                key: 'rentInflationRate',
+                value: 0.015,
+                interval: 0.001,
+                max: 0.18
+            },
             {
                 key: 'initialRentPerMonth',
                 value: 2000,
@@ -155,39 +153,92 @@ class PropertyModel extends DynaPopModel {
             {
                 title: 'Property',
                 id: 'property-chart',
+                markdown:
+`
+There's that proverb which says rent money is dead money. But interest
+repayments for a property is also dead money. Maybe that money could
+have be better invested in a managed fund.
+
+$\\sqrt{3x-1}+(1+x)^2$
+
+So what is better in the long run - investing in property or investing
+in managed funds?
+
+### Property
+
+The problem is that it's hard to visualize interest repayments. So here
+we provide a visual way to compare the difference in strategies, whilst
+allowing an exploration of assumptions of the world at large.
+So let's compare the two
+
+-   capital growth of the property
+-   interest rate of the mortgage
+`,
                 keys: [
                     'property',
-                    'totalPaidForPropertyAndInterest',
                     'totalInterest',
                     'principal',
+                    'totalPaidForPropertyAndInterest',
                     'propertyProfit',
                 ],
             },
             {
                 title: 'Investment Fund',
+                markdown:
+`
+### Invest Fund and Renting
+
+An apt comparison is to compare a home-owner with a mortgage, with a
+renter who invests in a managed fund. This way you can pit rental
+payments versus mortgage interest payments. And incorporate startup
+amounts.
+
+More importantly, you can see the return on investment, profit made on
+all payments, which should be the point of comparison. Of course, the
+final profitability will also depend on the costs of sale (for a
+property) and captial gains tax (for managed funds).
+
+The actual result though depends very much on what you believe the
+future will be like (up to 30 years for mortgages). So it is important
+to see how the profit changes, when varying the four major variables
+describing the future:
+
+-   captial growth of the investment fund
+-   inflation which affects rental prices
+`,
                 id: 'fund-chart',
                 keys: [
-                    'totalFund',
-                    'totalPaidForFundAndRent',
+                    'fund',
                     'totalRent',
+                    'totalPaidForFundAndRent',
                     'fundProfit',
                 ],
             },
             {
                 title: 'Return on investment',
+                markdown:
+`
+### Comparing the ROI
+
+`,
                 id: 'roi-chart',
                 keys: [
                     'propertyProfit',
+                    'fundProfit',
                     'totalPaidForPropertyAndInterest',
                     'totalPaidForFundAndRent',
-                    'fundProfit',
                 ],
             },
             {
                 title: 'Monthly Expenses',
+                markdown:
+                    `
+### Monthly Expenses comparison
+
+`,
                 id: 'monthly-chart',
                 keys: [
-                    'mortgagePerMonth',
+                    'mortgagePaymentPerMonth',
                     'interestPerMonth',
                     'rentPerMonth',
                     'fundPaymentPerMonth',
