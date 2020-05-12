@@ -71,6 +71,7 @@ export default {
         },
     },
     async mounted() {
+        this.title = 'Epidemiology Models'
         this.models = []
         for (let EpiModel of epiModels) {
             this.models.push(new EpiModel())
@@ -82,7 +83,6 @@ export default {
     methods: {
         changeModel() {
             this.model = _.find(this.models, e => e.name === this.modelName)
-            this.title = 'Epi Models - the ' + this.model.modelType + ' model'
             this.charts = this.model.getCharts()
             this.sliders = this.model.getGuiParams()
             this.chartsContainer = new ChartsContainer('epi-charts')
@@ -94,13 +94,7 @@ export default {
         changeGraph() {
             this.model.importGuiParams(this.sliders)
             this.model.run()
-            let x = this.model.times
-            for (let chart of this.charts) {
-                for (let key of chart.keys) {
-                    let y = this.model.solution[key]
-                    this.chartsContainer.updateChart(chart.id, key, x, y)
-                }
-            }
+            this.chartsContainer.updateChartFromModel(this.model)
         },
     },
 }

@@ -36,7 +36,6 @@
 <script>
 import { ChartsContainer } from '../modules/charts-container'
 import { EconModel } from '../modules/econ-models'
-import _ from 'lodash'
 import Sliders from '../components/sliders'
 
 export default {
@@ -62,33 +61,7 @@ export default {
         changeGraph() {
             this.model.importGuiParams(this.sliders)
             this.model.run()
-            for (let chart of this.charts) {
-                if (chart.id === 'wagefn-chart') {
-                    let x = _.range(0.6, 1.1, 0.01)
-                    let y = _.map(x, this.model.fn.wageChange)
-                    this.chartsContainer.updateChart(
-                        chart.id,
-                        'wageChange',
-                        x,
-                        y
-                    )
-                } else if (chart.id === 'investfn-chart') {
-                    let x = _.range(-0.4, 0.2, 0.01)
-                    let y = _.map(x, this.model.fn.investmentChange)
-                    this.chartsContainer.updateChart(
-                        chart.id,
-                        'investmentChange',
-                        x,
-                        y
-                    )
-                } else {
-                    let x = this.model.times
-                    for (let key of chart.keys) {
-                        let y = this.model.solution[key]
-                        this.chartsContainer.updateChart(chart.id, key, x, y)
-                    }
-                }
-            }
+            this.chartsContainer.updateChartFromModel(this.model)
         },
     },
 }

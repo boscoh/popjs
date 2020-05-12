@@ -90,18 +90,37 @@ function getColor(name) {
  *
  */
 class ChartWidget {
-    constructor(id, chartData) {
-        this.id = id
-        this.$div = $(this.id)
+    constructor(config) {
+        this.config = config
+        this.id = config.id
+        this.$div = $(`#${this.id}`)
         this.$canvas = $('<canvas>')
         this.$div.append(this.$canvas)
-        if (!chartData) {
+        if (!config.chartData) {
             this.chartData = makeLineChartData()
         } else {
-            this.chartData = chartData
+            this.chartData = config.chartData
+        }
+        if (_.has(this.config, 'fn')) {
+            this.chartData.options.legend.display = false
         }
         this.keys = []
+        this.fn = null
         this.chart = new Chart(this.$canvas, this.chartData)
+
+        console.log(this.config, _.get(this.config, 'ylabel'), _.has(this.config, 'ylabel'))
+        this.setTitle(_.get(this.config, 'title', ''))
+        this.setXLabel(_.get(this.config, 'xlabel', ''))
+        this.setYLabel(_.get(this.config, 'ylabel', ''))
+        if (_.has(this.config, 'keys')) {
+            for (let key of this.config.keys) {
+                this.addDataset(key)
+            }
+        }
+        if (_.has(this.config, 'fn')) {
+            this.fn = this.config.fn
+            this.addDataset(this.config.fn)
+        }
     }
 
     getDatasets() {
@@ -189,26 +208,41 @@ class ChartsContainer {
                 .attr('id', chart.id)
                 .addClass('chart')
         )
-        let chartWidget = new ChartWidget(`#${chart.id}`)
-        if (_.has(chart, 'title')) {
-            chartWidget.setTitle(chart.title)
-        }
-        if (_.has(chart, 'xlabel')) {
-            chartWidget.setXLabel(chart.xlabel)
-        }
-        if (_.has(chart, 'ylabel')) {
-            chartWidget.setYLabel(chart.ylabel)
-        }
-        if (_.has(chart, 'keys')) {
-            for (let key of chart.keys) {
-                chartWidget.addDataset(key)
-            }
-        }
+        let chartWidget = new ChartWidget(chart)
         this.chartWidgets[chart.id] = chartWidget
     }
 
     updateChart(id, key, x, y) {
         this.chartWidgets[id].updateDataset(key, x, y)
+    }
+
+    updateChartFromModel(model) {
+        let x = model.times
+        for (let widget of _.values(this.chartWidgets)) {
+            if (widget.fn) {
+                let xlims = widget.config.xlims
+                let xmin = xlims[0]
+                let xmax = xlims[1]
+                let xstep = (xmax - xmin) / 100.
+                let x = _.range(xmin, xmax, xstep)
+                let y = _.map(x, model.fn[widget.fn])
+                this.updateChart(
+                    widget.id,
+                    widget.fn,
+                    x,
+                    y
+                )
+
+            } else {
+                for (let key of widget.keys) {
+                    if (key in model.solution) {
+                        let y = model.solution[key]
+                        this.updateChart(widget.id, key, x, y)
+                    }
+                }
+            }
+        }
+
     }
 }
 

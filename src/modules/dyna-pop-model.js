@@ -159,7 +159,6 @@ class DynaPopModel {
                 break
             }
         }
-        console.log(`integration status ${JSON.stringify(this.status)}`)
     }
 }
 

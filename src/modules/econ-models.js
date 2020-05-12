@@ -156,12 +156,6 @@ class EconModel extends DynaPopModel {
                 xlabel: 'year',
             },
             {
-                title: 'WAGE CHANGE',
-                id: 'wage-chart',
-                keys: ['wage', 'wageChange'],
-                xlabel: 'year',
-            },
-            {
                 title: 'INVESTMENT',
                 id: 'investment-chart',
                 keys: ['profit', 'investment', 'borrow'],
@@ -170,14 +164,20 @@ class EconModel extends DynaPopModel {
             {
                 title: 'WAGE-FUNCTION',
                 id: 'wagefn-chart',
-                keys: ['wageChange'],
+                fn: 'wageChange',
+                xlims: [0.6, 1.1],
+                ymin: 0,
                 xlabel: 'Employed Fraction',
+                ylabel: 'Wage Change'
             },
             {
                 title: 'INVESTMENT-FUNCTION',
                 id: 'investfn-chart',
-                keys: ['investmentChange'],
+                fn: 'investmentChange',
+                xlims: [-0.4, 0.2],
+                ymin: 0,
                 xlabel: 'Profit Rate',
+                ylabel: 'Investment Change'
             },
         ]
     }

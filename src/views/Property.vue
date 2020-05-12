@@ -69,13 +69,7 @@ export default {
         changeGraph() {
             this.model.importGuiParams(this.sliders)
             this.model.run()
-            let x = this.model.times
-            for (let chart of this.charts) {
-                for (let key of chart.keys) {
-                    let y = this.model.solution[key]
-                    this.chartsContainer.updateChart(chart.id, key, x, y)
-                }
-            }
+            this.chartsContainer.updateChartFromModel(this.model)
         },
     },
 }
