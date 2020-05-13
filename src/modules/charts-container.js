@@ -216,7 +216,7 @@ class ChartsContainer {
         this.chartWidgets[id].updateDataset(key, x, y)
     }
 
-    updateChartFromModel(model) {
+    updateFromModel(model) {
         let x = model.times
         for (let widget of _.values(this.chartWidgets)) {
             if (widget.fn) {

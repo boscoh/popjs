@@ -5,6 +5,7 @@ import Property from '../views/Property.vue'
 import Epi from '../views/Epi.vue'
 import Econ from '../views/Econ.vue'
 import State from '../views/State.vue'
+import Ecology from '../views/Ecology.vue'
 
 Vue.use(VueRouter)
 
@@ -18,6 +19,11 @@ const routes = [
         path: '/property',
         name: 'Property',
         component: Property,
+    },
+    {
+        path: '/ecology',
+        name: 'Ecology',
+        component: Ecology,
     },
     {
         path: '/state',

@@ -83,10 +83,9 @@ export default {
     methods: {
         changeModel() {
             this.model = _.find(this.models, e => e.name === this.modelName)
-            this.charts = this.model.getCharts()
             this.sliders = this.model.getGuiParams()
             this.chartsContainer = new ChartsContainer('epi-charts')
-            for (let chart of this.charts) {
+            for (let chart of this.model.getCharts()) {
                 this.chartsContainer.addChart(chart)
             }
             this.changeGraph()
@@ -94,7 +93,7 @@ export default {
         changeGraph() {
             this.model.importGuiParams(this.sliders)
             this.model.run()
-            this.chartsContainer.updateChartFromModel(this.model)
+            this.chartsContainer.updateFromModel(this.model)
         },
     },
 }

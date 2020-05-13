@@ -133,13 +133,55 @@ class EconModel extends DynaPopModel {
         return [
             {
                 title: 'INCOME',
+                markdown:
+`
+The Keen-Minksy model is the first attempt to model a macro-economy
+by converting basic macroeconomic identities into straight-forward
+coupled differential equations, which are formally identical to
+population ecology and epidemiological models.
+
+It takes the economic arguments originally made by Minsky about the
+tendency of capitalist to invest based on the profit rate, which will
+induce an instability in the banking system.
+
+This builds on the simple Goodwin model of the economy with regular
+business cycles, and the Keen differential identities that translate 
+Minsky intuitions into investment behavior in a simple analytical form.
+
+`
+                ,
                 id: 'output-chart',
                 keys: ['wages', 'profit', 'bank', 'output'],
                 xlabel: 'year',
             },
             {
                 title: 'CAPITAL',
-                id: 'debt-chart',
+                markdown:
+                    `
+$$labor = \\frac{output}{productivity}$$
+
+$$output = \\frac{capital}{capitalAccelerator}$$
+
+$$\\frac{d}{dt}(capital) = investment - depreciationRate \\times capital$$
+
+$$profit = output - wages - bankIncome$$
+$$investment = investmentFunction\\left[\\frac{profit}{capital}\\right]$$
+$$borrow = investment - profit$$
+$$\\frac{d}{dt}(debt) = interestRate \\times debt + borrow$$
+$$bankIncome = interestRate \\times debt$$
+
+Combining these equations, we get a form that fits the classic population 
+dynamics of the derivative of a output as a multiple of the output:
+
+$$\\frac{d}{dt}(output) = output \\times \\left( \\frac{investmentFunction\\left[\\frac{profit}{capital}\\right]}{capitalAccelerator} - depreciationRate \\right)$$
+
+$$\\frac{d}{dt}(wage) = wage \\times wageFunction \\left[ \\frac{labor}{population} \\right]$$
+
+$$\\frac{d}{dt}(productivity) = productivity \\times productivityGrowthRate$$
+
+$$\\frac{d}{dt}(population) = population \\times populationGrowthRate$$
+`
+                ,id: 'debt-chart',
                 keys: ['debt', 'capital', 'output'],
                 xlabel: 'year',
             },
@@ -165,7 +207,7 @@ class EconModel extends DynaPopModel {
                 title: 'WAGE-FUNCTION',
                 id: 'wagefn-chart',
                 fn: 'wageChange',
-                xlims: [0.6, 1.1],
+                xlims: [0.6, 1.05],
                 ymin: 0,
                 xlabel: 'Employed Fraction',
                 ylabel: 'Wage Change'
@@ -174,7 +216,7 @@ class EconModel extends DynaPopModel {
                 title: 'INVESTMENT-FUNCTION',
                 id: 'investfn-chart',
                 fn: 'investmentChange',
-                xlims: [-0.4, 0.2],
+                xlims: [-0.4, 0.15],
                 ymin: 0,
                 xlabel: 'Profit Rate',
                 ylabel: 'Investment Change'

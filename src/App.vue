@@ -19,6 +19,7 @@
             <v-spacer></v-spacer>
 
             <v-btn to="/" text router>Home</v-btn>
+            <v-btn to="/ecology" text router>Ecology</v-btn>
             <v-btn to="/state" text router>Demographic</v-btn>
             <v-btn to="/epi" text router>Epidemiology</v-btn>
             <v-btn to="/econ" text router>Economics</v-btn>

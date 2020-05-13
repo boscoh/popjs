@@ -14,12 +14,12 @@
 
             <v-flex xs8 md8 lg9>
                 <v-card style=" height: calc(100vh - 48px); overflow: auto;">
-                    <v-card-title class="display-1 mt-5">
-                        <p class="mt-5">&nbsp;</p>
-                        Property vs Funds
+                    <v-card-title class="display-2 mt-5">
+                        <p class="mt-5"></p>
+                        {{ title }}
                     </v-card-title>
-                    <v-card-text class="text-xs-left">
-                        <div id="charts" />
+                    <v-card-text>
+                        <div id="property-charts" />
                     </v-card-text>
                 </v-card>
             </v-flex>
@@ -32,6 +32,13 @@
 .narrow-column {
     max-width: 500px;
 }
+h1 {
+    margin-bottom: 0.3em
+}
+.chart {
+    height: 300px;
+    max-width: 700px;
+}
 </style>
 
 <script>
@@ -43,6 +50,7 @@ export default {
     components: { Sliders },
     data() {
         return {
+            title: 'Property vs Fund Analyzer',
             sliders: [],
         }
     },
@@ -57,10 +65,8 @@ export default {
     mounted() {
         this.model = new PropertyModel()
         this.sliders = this.model.getGuiParams()
-        this.charts = this.model.getCharts()
-        this.graphWidgets = {}
-        this.chartsContainer = new ChartsContainer('charts')
-        for (let chart of this.charts) {
+        this.chartsContainer = new ChartsContainer('property-charts')
+        for (let chart of this.model.getCharts()) {
             this.chartsContainer.addChart(chart)
         }
         this.changeGraph()
@@ -69,7 +75,7 @@ export default {
         changeGraph() {
             this.model.importGuiParams(this.sliders)
             this.model.run()
-            this.chartsContainer.updateChartFromModel(this.model)
+            this.chartsContainer.updateFromModel(this.model)
         },
     },
 }

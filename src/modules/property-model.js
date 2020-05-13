@@ -159,20 +159,35 @@ There's that proverb which says rent money is dead money. But interest
 repayments for a property is also dead money. Maybe that money could
 have be better invested in a managed fund.
 
-$\\sqrt{3x-1}+(1+x)^2$
 
 So what is better in the long run - investing in property or investing
 in managed funds?
 
-### Property
+# Property
 
 The problem is that it's hard to visualize interest repayments. So here
 we provide a visual way to compare the difference in strategies, whilst
 allowing an exploration of assumptions of the world at large.
-So let's compare the two
 
--   capital growth of the property
--   interest rate of the mortgage
+The first thing to do is express the changes in the property as a 
+differential equation. Property grows as:
+
+$$\\frac{d}{dt}(property) = property*propertyGrowthRate$$
+
+Now, after we have paid off the deposit, we are left with the principal.
+From the principal, the interestRate and length of the mortgage,
+we can calculate the mortgage payment per year:
+
+ $$mortgagePayment =  \\frac{principal * interestRate}{1 - interestRate * (1 + interestRate)^{-years})}$$
+
+The principal thus changes as:
+
+$$\\frac{d}{dt}(principal) = -(minimumPayment - principal * interestRate)$$
+
+Finally, the total interest is given:
+
+$$\\frac{d}{dt}(totalInterest) = principal * interestRate$$
+
 `,
                 keys: [
                     'property',
@@ -186,7 +201,7 @@ So let's compare the two
                 title: 'Investment Fund',
                 markdown:
 `
-### Invest Fund and Renting
+# Invest Fund and Renting
 
 An apt comparison is to compare a home-owner with a mortgage, with a
 renter who invests in a managed fund. This way you can pit rental
@@ -218,7 +233,7 @@ describing the future:
                 title: 'Return on investment',
                 markdown:
 `
-### Comparing the ROI
+# Comparing the ROI
 
 `,
                 id: 'roi-chart',
@@ -233,7 +248,7 @@ describing the future:
                 title: 'Monthly Expenses',
                 markdown:
                     `
-### Monthly Expenses comparison
+# Monthly Expenses comparison
 
 `,
                 id: 'monthly-chart',

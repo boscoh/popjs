@@ -3,14 +3,14 @@
         <p class="small mt-3 mb-1">
             PARAMETERS
         </p>
-        <div v-for="(slider, i) in sliders" :key="i">
+        <div v-for="(slider, i) in sliders" :key="i" style="margin-bottom: -10px">
             <div
                 v-if="'comment' in slider"
                 class="mt-5 text-capitalize font-italic"
+                style="margin-bottom: 10px; padding-top: 20px"
             >
                 {{ slider.label }}
             </div>
-
             <v-container v-else fluid class="d-inline-flex pa-0">
                 <div class="flex-grow-1 pt-2">
                     {{ slider.label }}
