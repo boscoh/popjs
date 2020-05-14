@@ -118,11 +118,15 @@ The Keen-Minksy model, developed by [Steve Keen](https://keenomics.s3.amazonaws.
 models the economy by converting basic macroeconomic identities into a set of
 coupled differential equations.
 
-It converts the economic arguments of the Goodwin Business cycle and
- the Minsky financial instability hypothesis into analytic forms that 
+It uses the economic arguments of the Goodwin Business cycle and
+ the Minsky financial instability hypothesis to generate analytic forms that 
  model the action of capitalists and bankers.
- 
-The source code to the model can be found [here](https://github.com/boscoh/popjs/blob/master/src/modules/econ-models.js).
+
+This is a powerful model that uses very clear and well-founded assumptions
+to demonstrate how economies fall into natural business cycles, and
+how economies can collapse from runaway debt.
+
+The source code to this implementation of the model can be found [here](https://github.com/boscoh/popjs/blob/master/src/modules/econ-models.js).
 
 ### The Actors in the Economy
 
@@ -172,7 +176,8 @@ technology:
 
 $$\\frac{d}{dt}(productivity) = productivity \\times productivityGrowthRate$$
 
-The number of employed - labor - depends on the other two actors. Labor
+The number of employed workers - labor - depends on the other two actors
+in the economy. Labor
 depends on how much capital is in the system, and changes in capital 
 depends on profitability, which in turn depends on wages:
 
@@ -182,8 +187,8 @@ We must explicitly introduce a model of how wage changes:
 
 $$\\frac{d}{dt}(wage) = wage \\times wageFunction \\left[ \\frac{labor}{population} \\right]$$
 
-And we use the Keen Wage Function that models the changes in the average
-wage as a function of the employment rate:
+We use the Keen Wage Function that models the upward pressure on
+wave as the employment fraction approaches 1.
                 `,
                 title: 'The Keen Wage Function',
                 id: 'wagefn-chart',
@@ -219,8 +224,8 @@ $$profit = output - wages - interest$$
 $$profitability = \\frac{profit}{capital}$$
 
 Based on the Minsky Hypothesis, a capitalist will want to invest
- depending on a positive profitability, which can be expressed
- as the Keen Investment Function that determines the desired
+ more when the profitability is positive. This can be expressed
+ through the Keen Investment Function that determines the desired
  investment as a function of profitability:
                 `,
                 title: 'The Keen Investment Function',
@@ -236,7 +241,7 @@ Based on the Minsky Hypothesis, a capitalist will want to invest
 Capital will then borrow the money needed for this investment from
 a bank, which will presumably generate further profits:
 
-$$borrow = investmentFunction\\left[profitability\\right] - profit$$
+$$borrow = investmentFunction\\left[profitability\\right] \\times output - profit$$
 
 This allows the model to generate the investment and borrowing
 behavior of the capitalist, and thus, we get the interest, which
