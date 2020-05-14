@@ -1,39 +1,26 @@
 import _ from 'lodash'
 import { FlowPopModel } from './flow-pop-model'
 
-class SirModel extends FlowPopModel {
+class EpiModel extends FlowPopModel {
     constructor() {
         super()
 
-        this.modelType = 'SIR'
-        this.name = 'Susceptible Infectious Recovered'
+        this.modelType = 'EPI'
+        this.name = 'Base EPI Model'
 
         this.param = {
             time: 100,
-            initPopulation: 50000,
-            initPrevalence: 3000,
+            initialPopulation: 50000,
+            initialPrevalence: 3000,
             recoverRate: 0.1,
             reproductionNumber: 1.5,
-            durationInfection: 10,
+            infectiousPeriod: 10,
         }
 
         this.var = {
             susceptible: 0,
             infectious: 0,
-            recovered: 0,
         }
-        this.auxVarFlows.push(['susceptible', 'infectious', 'rateForce'])
-        this.paramFlows.push(['infectious', 'recovered', 'recoverRate'])
-    }
-
-    initializeVars() {
-        this.param.recoverRate = 1 / this.param.durationInfection
-        this.param.contactRate =
-            this.param.reproductionNumber * this.param.recoverRate
-        this.var.infectious = this.param.initPrevalence
-        this.var.susceptible =
-            this.param.initPopulation - this.param.initPrevalence
-        this.var.recovered = 0
     }
 
     calcAuxVars() {
@@ -50,55 +37,106 @@ class SirModel extends FlowPopModel {
         let guiParams = [
             {
                 key: 'time',
-                value: 100,
                 max: 300,
-                interval: 1,
-                placeHolder: '',
-                label: 'Time',
-                decimal: 0,
             },
             {
                 key: 'reproductionNumber',
-                value: 1.5,
-                interval: 0.1,
                 max: 20,
-                placeHolder: '',
                 label: 'R0',
-                decimal: 1,
             },
             {
-                key: 'durationInfection',
-                value: 10,
-                interval: 1,
+                key: 'infectiousPeriod',
                 max: 100,
-                placeHolder: '',
                 label: 'Infectious Period (days)',
-                decimal: 0,
             },
             {
-                key: 'initPrevalence',
-                value: 3000,
+                key: 'initialPrevalence',
                 max: 100000,
-                placeHolder: '',
-                interval: 1,
                 label: 'Prevalence',
-                decimal: 0,
             },
             {
-                key: 'initPopulation',
-                value: 50000,
+                key: 'initialPopulation',
                 max: 100000,
-                interval: 1,
-                placeHolder: '',
                 label: 'Initial Population',
-                decimal: 0,
             },
         ]
+        for (let param of guiParams) {
+            this.fillGuiParam(param)
+        }
         return guiParams
+    }
+
+    getCharts() {
+        let charts = [
+            {
+                title: 'COMPARTMENTS',
+                id: 'compartment-chart',
+                keys: _.keys(this.var),
+                xlabel: 'days',
+            },
+            {
+                title: 'RN',
+                id: 'rn-chart',
+                keys: ['rn'],
+                xlabel: 'days',
+                markdown:
+`
+$$R_n = \\frac{susceptible}{population} \\times R_0$$
+`
+            }
+        ]
+        return charts
     }
 }
 
-class SisModel extends FlowPopModel {
+class SirModel extends EpiModel {
+    constructor() {
+        super()
+
+        this.modelType = 'SIR'
+        this.name = 'Susceptible Infectious Recovered'
+
+        this.param = {
+            time: 100,
+            initialPopulation: 50000,
+            initialPrevalence: 3000,
+            infectiousPeriod: 10,
+            recoverRate: 0.1,
+            reproductionNumber: 3,
+        }
+
+        this.var = {
+            susceptible: 0,
+            infectious: 0,
+            recovered: 0,
+        }
+        this.auxVarFlows.push(['susceptible', 'infectious', 'rateForce'])
+        this.paramFlows.push(['infectious', 'recovered', 'recoverRate'])
+    }
+
+    initializeRun() {
+        this.param.recoverRate = 1 / this.param.infectiousPeriod
+        this.param.contactRate =
+            this.param.reproductionNumber * this.param.recoverRate
+        this.var.infectious = this.param.initialPrevalence
+        this.var.susceptible =
+            this.param.initialPopulation - this.param.initialPrevalence
+        this.var.recovered = 0
+    }
+
+    getCharts () {
+        let charts = super.getCharts()
+        charts[0].markdown =
+`
+$$\\frac{d}{dt}susceptible = - susceptible \\times forceOfInfection$$
+$$\\frac{d}{dt}infectious = - infectious \\times recoverRate + susceptible \\times forceOfInfection $$
+$$\\frac{d}{dt}recovered = infectious \\times recoverRate$$
+`
+        return charts
+    }
+}
+
+class SisModel extends EpiModel {
     constructor() {
         super()
 
@@ -107,11 +145,11 @@ class SisModel extends FlowPopModel {
 
         this.param = {
             time: 100,
-            initPopulation: 50000,
-            initPrevalence: 3000,
+            initialPopulation: 50000,
+            initialPrevalence: 3000,
             recoverRate: 0.1,
-            reproductionNumber: 1.5,
-            durationInfection: 10,
+            reproductionNumber: 3,
+            infectiousPeriod: 10,
         }
 
         this.var = {
@@ -122,82 +160,18 @@ class SisModel extends FlowPopModel {
         this.paramFlows.push(['infectious', 'susceptible', 'recoverRate'])
     }
 
-    initializeVars() {
-        this.param.recoverRate = 1 / this.param.durationInfection
+    initializeRun() {
+        this.param.recoverRate = 1 / this.param.infectiousPeriod
         this.param.contactRate =
             this.param.reproductionNumber * this.param.recoverRate
 
-        for (let key of _.keys(this.var)) {
-            this.var[key] = 0
-        }
-        this.var.infectious = this.param.initPrevalence
+        this.var.infectious = this.param.initialPrevalence
         this.var.susceptible =
-            this.param.initPopulation - this.param.initPrevalence
-    }
-
-    calcAuxVars() {
-        this.auxVar.population = _.sum(_.values(this.var))
-        this.auxVar.rateForce =
-            (this.param.contactRate / this.auxVar.population) *
-            this.var.infectious
-        this.auxVar.rn =
-            (this.var.susceptible / this.auxVar.population) *
-            this.param.reproductionNumber
-    }
-
-    getGuiParams() {
-        let guiParams = [
-            {
-                key: 'time',
-                value: 100,
-                max: 300,
-                interval: 1,
-                placeHolder: '',
-                label: 'Time',
-                decimal: 0,
-            },
-            {
-                key: 'reproductionNumber',
-                value: 1.5,
-                max: 20,
-                interval: 0.1,
-                placeHolder: '',
-                label: 'R0',
-                decimal: 1,
-            },
-            {
-                key: 'durationInfection',
-                value: 10,
-                interval: 1,
-                max: 100,
-                placeHolder: '',
-                label: 'Infectious Period (days)',
-                decimal: 0,
-            },
-            {
-                key: 'initPrevalence',
-                value: 3000,
-                max: 100000,
-                interval: 1,
-                placeHolder: '',
-                label: 'Prevalence',
-                decimal: 0,
-            },
-            {
-                key: 'initPopulation',
-                value: 50000,
-                max: 100000,
-                interval: 1,
-                placeHolder: '',
-                label: 'Initial Population',
-                decimal: 0,
-            },
-        ]
-        return guiParams
+            this.param.initialPopulation - this.param.initialPrevalence
     }
 }
 
-class SEIRModel extends FlowPopModel {
+class SEIRModel extends EpiModel {
     constructor() {
         super()
 
@@ -205,14 +179,13 @@ class SEIRModel extends FlowPopModel {
         this.name = 'Susceptible Exposed Infections Recovered'
 
         this.param = {
-            time: 100,
-            initPopulation: 50000,
-            period: 0.1,
-            incubation: 0.01,
+            time: 500,
+            initialPopulation: 50000,
+            incubationRate: 0.01,
             caseFatality: 0.2,
-            initPrevalence: 5000,
+            initialPrevalence: 5000,
             reproductionNumber: 4,
-            durationInfection: 10,
+            infectiousPeriod: 10,
         }
 
         this.var = {
@@ -224,102 +197,68 @@ class SEIRModel extends FlowPopModel {
         }
         this.auxVarFlows.push(['susceptible', 'exposed', 'rateForce'])
         this.paramFlows.push(['exposed', 'infectious', 'incubationRate'])
-        this.paramFlows.push(['infectious', 'infectious', 'disDeath'])
+        this.paramFlows.push(['infectious', 'infectious', 'negativeDeathRate'])
         this.paramFlows.push(['infectious', 'recovered', 'recoverRate'])
         this.paramFlows.push(['infectious', 'dead', 'deathRate'])
     }
 
-    initializeVars() {
+    initializeRun() {
         this.param.deathRate =
-            this.param.caseFatality / this.param.durationInfection
+            this.param.caseFatality / this.param.infectiousPeriod
         this.param.recoverRate =
-            1 / this.param.durationInfection - this.param.deathRate
-        this.param.disDeath = -1 * this.param.caseFatality * this.param.period
-        this.param.incubationRate = this.param.incubation
+            1 / this.param.infectiousPeriod - this.param.deathRate
+        this.param.negativeDeathRate = -this.param.deathRate
         this.param.contactRate =
-            this.param.reproductionNumber * this.param.period
+            this.param.reproductionNumber / this.param.infectiousPeriod
 
         for (let key of _.keys(this.var)) {
             this.var[key] = 0
         }
-        this.var.infectious = this.param.initPrevalence
+        this.var.infectious = this.param.initialPrevalence
         this.var.susceptible =
-            this.param.initPopulation - this.param.initPrevalence
-    }
-
-    calcAuxVars() {
-        this.auxVar.population = _.sum(_.values(this.var))
-        this.auxVar.rateForce =
-            (this.param.contactRate / this.auxVar.population) *
-            this.var.infectious
-        this.auxVar.rn =
-            (this.var.susceptible / this.auxVar.population) *
-            this.param.reproductionNumber
+            this.param.initialPopulation - this.param.initialPrevalence
     }
 
     getGuiParams() {
         let guiParams = [
             {
                 key: 'time',
-                value: 100,
-                max: 300,
-                interval: 1,
-                placeHolder: '',
-                label: 'time',
-                decimal: 0,
+                max: 1000,
             },
             {
                 key: 'reproductionNumber',
-                value: 1.5,
                 max: 15,
-                interval: 0.1,
-                placeHolder: '',
                 label: 'R0',
-                decimal: 1,
             },
             {
-                key: 'durationInfection',
-                value: 10,
-                interval: 1,
+                key: 'infectiousPeriod',
                 max: 100,
-                placeHolder: '',
                 label: 'Infectious Period (days)',
-                decimal: 0,
             },
             {
                 key: 'caseFatality',
-                value: 0.2,
-                interval: 0.01,
                 max: 1,
-                placeHolder: '',
                 label: 'Case-Fatality Rate',
-                decimal: 2,
             },
             {
-                key: 'initPrevalence',
-                value: 3000,
+                key: 'initialPrevalence',
                 interval: 1,
-                max: 100000,
-                placeHolder: '',
                 label: 'Prevalence',
-                decimal: 0,
             },
             {
-                key: 'initPopulation',
-                value: 50000,
+                key: 'initialPopulation',
                 max: 100000,
-                interval: 1,
-                placeHolder: '',
                 label: 'Initial Population',
-                decimal: 0,
             },
         ]
-
+        for (let param of guiParams) {
+            this.fillGuiParam(param)
+        }
         return guiParams
     }
 }
 
-class SEIRSModel extends FlowPopModel {
+class SEIRSModel extends EpiModel {
     constructor() {
         super()
 
@@ -327,15 +266,14 @@ class SEIRSModel extends FlowPopModel {
         this.name = 'Susceptible Exposed Infections Recovered Susceptible'
 
         this.param = {
-            time: 100,
-            initPopulation: 50000,
-            period: 0.1,
-            incubation: 0.01,
+            time: 1500,
+            initialPopulation: 50000,
+            incubationRate: 0.01,
             caseFatality: 0.2,
-            initPrevalence: 3000,
-            reproductionNumber: 50,
+            initialPrevalence: 3000,
+            reproductionNumber: 5,
             immunityPeriod: 50,
-            durationInfection: 10,
+            infectiousPeriod: 10,
         }
 
         this.var = {
@@ -349,107 +287,69 @@ class SEIRSModel extends FlowPopModel {
         this.auxVarFlows.push(['susceptible', 'exposed', 'rateForce'])
 
         this.paramFlows.push(['exposed', 'infectious', 'incubationRate'])
-        this.paramFlows.push(['infectious', 'infectious', 'disDeath'])
+        this.paramFlows.push(['infectious', 'infectious', 'negativeDeathRate'])
         this.paramFlows.push(['infectious', 'recovered', 'recoverRate'])
         this.paramFlows.push(['recovered', 'susceptible', 'immunityLossRate'])
         this.paramFlows.push(['infectious', 'dead', 'deathRate'])
     }
 
-    initializeVars() {
+    initializeRun() {
         this.param.deathRate =
-            this.param.caseFatality / this.param.durationInfection
+            this.param.caseFatality / this.param.infectiousPeriod
+        this.param.negativeDeathRate = -this.param.deathRate
         this.param.recoverRate =
-            1 / this.param.durationInfection - this.param.deathRate
-        this.param.incubationRate = this.param.incubation
-        this.param.disDeath = -1 * this.param.caseFatality * this.param.period
+            1 / this.param.infectiousPeriod - this.param.deathRate
         this.param.contactRate =
-            this.param.reproductionNumber * this.param.period
+            this.param.reproductionNumber / this.param.infectiousPeriod
         this.param.immunityLossRate = 1 / this.param.immunityPeriod
 
         for (let key of _.keys(this.var)) {
             this.var[key] = 0
         }
-        this.var.infectious = this.param.initPrevalence
+        this.var.infectious = this.param.initialPrevalence
         this.var.susceptible =
-            this.param.initPopulation - this.param.initPrevalence
-    }
-
-    calcAuxVars() {
-        this.auxVar.population = _.sum(_.values(this.var))
-        this.auxVar.rateForce =
-            (this.param.contactRate / this.auxVar.population) *
-            this.var.infectious
-        this.auxVar.rn =
-            (this.var.susceptible / this.auxVar.population) *
-            this.param.reproductionNumber
+            this.param.initialPopulation - this.param.initialPrevalence
     }
 
     getGuiParams() {
         let guiParams = [
             {
                 key: 'time',
-                value: 100,
-                max: 300,
-                interval: 1,
-                placeHolder: '',
-                label: 'Time',
-                decimal: 0,
+                max: 3000,
             },
             {
                 key: 'reproductionNumber',
-                value: 1.5,
-                interval: 0.1,
                 max: 20,
-                placeHolder: '',
                 label: 'R0',
-                decimal: 1,
             },
             {
-                key: 'durationInfection',
-                value: 10,
-                interval: 1,
-                placeHolder: '',
+                key: 'infectiousPeriod',
+                max: 100,
                 label: 'Infectious Period (days)',
-                decimal: 0,
             },
             {
                 key: 'caseFatality',
-                value: 0.2,
-                interval: 0.01,
                 max: 1,
-                placeHolder: '',
                 label: 'Case-Fatality Rate',
-                decimal: 2,
             },
             {
                 key: 'immunityPeriod',
-                value: 50,
-                interval: 1,
                 max: 300,
-                placeHolder: '',
-                label: 'Immunity Period ',
-                decimal: 0,
             },
             {
-                key: 'initPrevalence',
-                value: 3000,
+                key: 'initialPrevalence',
                 max: 100000,
-                interval: 1,
-                placeHolder: '',
                 label: 'Prevalence',
-                decimal: 0,
             },
             {
-                key: 'initPopulation',
-                value: 50000,
+                key: 'initialPopulation',
                 max: 100000,
-                interval: 1,
-                placeHolder: '',
                 label: 'Initial Population',
-                decimal: 0,
             },
         ]
-
+        for (let param of guiParams) {
+            this.fillGuiParam(param)
+        }
         return guiParams
     }
 }

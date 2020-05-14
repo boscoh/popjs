@@ -57,21 +57,4 @@ export class FlowPopModel extends DynaPopModel {
         }
     }
 
-    getCharts () {
-        let charts = [
-            {
-                title: 'COMPARTMENTS',
-                id: 'compartment-chart',
-                keys: _.keys(this.var),
-                xlabel: 'days',
-            },
-        ]
-        charts.push({
-            title: 'RN',
-            id: 'rn-chart',
-            keys: ['rn'],
-            xlabel: 'days',
-        })
-        return charts
-    }
 }

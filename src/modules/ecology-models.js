@@ -1,4 +1,3 @@
-import _ from 'lodash'
 import { DynaPopModel } from './dyna-pop-model'
 
 class EcologyModel extends DynaPopModel {
@@ -17,10 +16,9 @@ class EcologyModel extends DynaPopModel {
         this.dt = 0.1
     }
 
-    initializeVars() {
+    initializeRun() {
         this.var.predator = this.param.initialPrey
         this.var.prey = this.param.initialPredator
-        console.log(this.var)
     }
 
     calcDVars() {
@@ -60,18 +58,9 @@ class EcologyModel extends DynaPopModel {
                 max: 2,
             },
         ]
-
         for (let param of guiParams) {
-            if (!_.has(param, 'label')) {
-                param.label = _.startCase(param.key)
-            }
-            if (_.has(param, 'max') && !_.has(param, 'interval')) {
-                let exp = _.floor(Math.log10(param.max))
-                param.interval = Math.pow(10, exp - 2)
-            }
-            param.value = this.param[param.key]
+            this.fillGuiParam(param)
         }
-
         return guiParams
     }
 
@@ -82,12 +71,11 @@ class EcologyModel extends DynaPopModel {
                 id: 'predator-prey-chart',
                 keys: ['predator', 'prey'],
                 xlabel: 'year',
-                markdown:
-`
+                markdown: `
 $$\\frac{d}{dt}prey = preyGrowthRate \\times prey  - predationRate \\times prey \\times predator$$ 
 
 $$\\frac{d}{dt}predator = digestionRate \\times prey \\times predator - predatorDeathRate \\times predator$$
-`
+`,
             },
         ]
     }

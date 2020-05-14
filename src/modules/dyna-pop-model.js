@@ -45,6 +45,17 @@ class DynaPopModel {
         this.yCutoff = 1e10
     }
 
+    fillGuiParam(param) {
+        if (!_.has(param, 'label')) {
+            param.label = _.startCase(param.key)
+        }
+        if (_.has(param, 'max') && !_.has(param, 'interval')) {
+            let exp = _.floor(Math.log10(param.max))
+            param.interval = Math.pow(10, exp - 2)
+        }
+        param.value = this.param[param.key]
+    }
+
     getGuiParams() {
         // return [{key: <string>, value: <float-string>}]
     }
@@ -64,7 +75,7 @@ class DynaPopModel {
     /**
      * To be overriden
      */
-    initializeVars() {
+    initializeRun() {
         // set vars[key] values
     }
 
@@ -144,7 +155,7 @@ class DynaPopModel {
     }
 
     run() {
-        this.initializeVars()
+        this.initializeRun()
         this.calcAuxVars()
         this.calcDVars()
         this.resetSolutions()

@@ -1,4 +1,3 @@
-import _ from 'lodash'
 import { DynaPopModel } from './dyna-pop-model'
 
 class StateModel extends DynaPopModel {
@@ -17,7 +16,7 @@ class StateModel extends DynaPopModel {
         this.dt = 1
     }
 
-    initializeVars() {
+    initializeRun() {
         this.fn.carryCapacityFromStateRevenue = revenue =>
             1 +
             this.param.carryCapacityDiff *
@@ -72,16 +71,8 @@ class StateModel extends DynaPopModel {
                 max: 50,
             },
         ]
-
         for (let param of guiParams) {
-            if (!_.has(param, 'label')) {
-                param.label = _.startCase(param.key)
-            }
-            if (_.has(param, 'max') && !_.has(param, 'interval')) {
-                let exp = _.floor(Math.log10(param.max))
-                param.interval = Math.pow(10, exp - 2)
-            }
-            param.value = this.param[param.key]
+            this.fillGuiParam(param)
         }
         return guiParams
     }

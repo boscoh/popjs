@@ -3,7 +3,6 @@
  * Created by boscoh on 9/5/20.
  */
 
-import _ from 'lodash'
 import { DynaPopModel } from './dyna-pop-model'
 
 function getMinimumPayment(principal, rate, nPeriod) {
@@ -11,7 +10,7 @@ function getMinimumPayment(principal, rate, nPeriod) {
 }
 
 class PropertyModel extends DynaPopModel {
-    constructor(params) {
+    constructor() {
         const defaultParams = {
             initialProperty: 600000.0,
             deposit: 150000.0,
@@ -22,12 +21,11 @@ class PropertyModel extends DynaPopModel {
             rentInflationRate: 0.015,
             fundGrowthRate: 6,
         }
-        super(params)
-        this.param = _.assign(defaultParams, params)
+        super(defaultParams)
         this.dt = 1
     }
 
-    initializeVars() {
+    initializeRun() {
         this.param.time = this.param.mortgageLength
         let initialPrincipal = this.param.initialProperty - this.param.deposit
         this.param.mortgagePayment = getMinimumPayment(
@@ -83,67 +81,51 @@ class PropertyModel extends DynaPopModel {
         this.dVar.totalRent = this.var.rent
         this.dVar.fund =
             this.param.fundGrowthRate * this.var.fund + this.auxVar.fundPayment
-        this.dVar.totalPaidForFundAndRent = this.auxVar.fundPayment + this.var.rent
+        this.dVar.totalPaidForFundAndRent =
+            this.auxVar.fundPayment + this.var.rent
     }
 
     getGuiParams() {
         let guiParams = [
             {
                 key: 'deposit',
-                value: 150000.0,
-                interval: 1000,
-                max: 1500000
+                max: 1500000,
             },
-            {comment: true, key: 'property parameters'},
+            { comment: true, key: 'property parameters' },
             {
                 key: 'initialProperty',
-                value: 600000.0,
-                interval: 10000,
                 max: 1500000,
             },
             {
                 key: 'propertyGrowthRate',
-                value: 0.045,
-                interval: 0.001,
                 max: 0.18,
             },
-            {comment: true, key: 'morgtage parameters'},
+            { comment: true, key: 'morgtage parameters' },
             {
                 key: 'mortgageLength',
-                value: 30,
-                interval: 1,
-                max: 100
+                max: 100,
             },
             {
                 key: 'interestRate',
-                value: 0.05,
-                interval: 0.001,
-                max: 0.18
+                max: 0.18,
             },
-            {comment: true, key: 'investment fund parameters'},
+            { comment: true, key: 'investment fund parameters' },
             {
                 key: 'fundGrowthRate',
-                value: 0.06,
-                interval: 0.001,
-                max: 0.18
+                max: 0.18,
             },
-            {comment: true, key: 'rent parameters'},
+            { comment: true, key: 'rent parameters' },
             {
                 key: 'rentInflationRate',
-                value: 0.015,
-                interval: 0.001,
-                max: 0.18
+                max: 0.18,
             },
             {
                 key: 'initialRentPerMonth',
-                value: 2000,
-                interval: 100,
-                max: 15000
+                max: 15000,
             },
         ]
-
-        for (let slider of guiParams) {
-            slider.label = _.startCase(slider.key)
+        for (let param of guiParams) {
+            this.fillGuiParam(param)
         }
         return guiParams
     }
@@ -153,8 +135,7 @@ class PropertyModel extends DynaPopModel {
             {
                 title: 'Property',
                 id: 'property-chart',
-                markdown:
-`
+                markdown: `
 There's that proverb which says rent money is dead money. But interest
 repayments for a property is also dead money. Maybe that money could
 have be better invested in a managed fund.
@@ -199,8 +180,7 @@ $$\\frac{d}{dt}(totalInterest) = principal * interestRate$$
             },
             {
                 title: 'Investment Fund',
-                markdown:
-`
+                markdown: `
 # Invest Fund and Renting
 
 An apt comparison is to compare a home-owner with a mortgage, with a
@@ -231,8 +211,7 @@ describing the future:
             },
             {
                 title: 'Return on investment',
-                markdown:
-`
+                markdown: `
 # Comparing the ROI
 
 `,
@@ -246,8 +225,7 @@ describing the future:
             },
             {
                 title: 'Monthly Expenses',
-                markdown:
-                    `
+                markdown: `
 # Monthly Expenses comparison
 
 `,
