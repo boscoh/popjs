@@ -188,7 +188,7 @@ We must explicitly introduce a model of how wage changes:
 $$\\frac{d}{dt}(wage) = wage \\times wageFunction \\left[ \\frac{labor}{population} \\right]$$
 
 We use the Keen Wage Function that models the upward pressure on
-wave as the employment fraction approaches 1.
+the wage as the employment fraction approaches 1.
                 `,
                 title: 'The Keen Wage Function',
                 id: 'wagefn-chart',
