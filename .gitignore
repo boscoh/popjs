@@ -8,3 +8,4 @@ run.sh
 upload.sh
 build.sh
 .idea
+dist

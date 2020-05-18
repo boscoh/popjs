@@ -10,7 +10,8 @@ Population dynamics models use calculus in
  of population behavior, from explosive growth,
   equilibrium, cycles and catastrophic collapse.
 
-Source code <https://github.com/boscoh/popjs>
+Source code: <https://github.com/boscoh/popjs>
+Demo: <https://boscoh.com/popjs>
 
 Built on Vue, Vuetify and RK45.js for integration.
 
