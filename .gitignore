@@ -4,3 +4,7 @@ yarn.lock
 node_modules
 src/config.js
 package-lock.json
+run.sh
+upload.sh
+build.sh
+.idea
