@@ -15,10 +15,11 @@
             <v-flex xs8 md8 lg9>
                 <v-card style=" height: calc(100vh - 48px); overflow: auto;">
                     <v-card-title class="display-1 mt-3">
+                        <br />
                         {{ title }}
                     </v-card-title>
                     <v-card-text>
-                        <div id="demo-charts" row wrap />
+                        <div id="demo-charts" />
                     </v-card-text>
                 </v-card>
             </v-flex>

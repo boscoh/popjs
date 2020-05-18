@@ -285,8 +285,6 @@ interest payments.
                 keys: ['debt', 'capital', 'output', 'interest'],
                 xlabel: 'year',
             },
-
-
         ]
     }
 }

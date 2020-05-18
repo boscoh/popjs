@@ -60,21 +60,18 @@
                 <div v-else>
                     <v-container fluid class="d-inline-flex pa-0">
                         <div class="flex-grow-1 pt-2">
-                            <div class="ml-2">{{ slider.label }}</div>
                             <v-slider
-                                style="margin-top: -10px"
                                 v-model="slider.value"
                                 :max="slider.max"
                                 :step="slider.interval"
                                 hide-details
                                 @change="change()"
                             />
-                        </div>
-                    </v-container>
-                    <v-container>
-                        <div class="pl-0 flex-grow-0 mb-n2">
+                            <div style="margin-top: -10px" class="ml-2">
+                                {{ slider.label }}
+                            </div>
                             <v-text-field
-                                class="mt-n6 pt-0"
+                                class="mt-n1 ml-2 mb-3 pt-0"
                                 type="number"
                                 step="any"
                                 v-model="slider.value"

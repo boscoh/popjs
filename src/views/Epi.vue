@@ -16,11 +16,15 @@
             </v-flex>
 
             <v-flex xs8 md8 lg9>
-                <v-card style=" height: calc(100vh - 48px); overflow: auto;">
+                <v-card
+                    class="pb-5"
+                    style=" height: calc(100vh - 48px); overflow: auto;"
+                >
                     <v-card-title class="display-1 mt-3">
+                        <br />
                         {{ title }}
                     </v-card-title>
-                    <v-card-text class="text-md-left text-lg-left text-sm-left">
+                    <v-card-text>
                         These models represent the simplest types of models used
                         in epidemiological modelling.
                         <div class="pa-3"></div>

@@ -13,7 +13,7 @@
             </div>
 
             <v-toolbar-title class="title shrink mt-1 hidden-sm-and-down">
-                Dynamic Models
+                PopJS Modeling
             </v-toolbar-title>
 
             <v-spacer></v-spacer>

@@ -13,8 +13,12 @@
             </v-flex>
 
             <v-flex xs8 md8 lg9>
-                <v-card style=" height: calc(100vh - 48px); overflow: auto;">
-                    <v-card-title class="display-2 mt-5">
+                <v-card
+                    class="pb-5"
+                    style=" height: calc(100vh - 48px); overflow: auto;"
+                >
+                    <v-card-title class="display-1 mt-5">
+                        <br />
                         {{ title }}
                     </v-card-title>
                     <v-card-text>

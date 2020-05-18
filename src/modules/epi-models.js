@@ -79,11 +79,13 @@ class EpiModel extends FlowPopModel {
                 id: 'rn-chart',
                 keys: ['rn'],
                 xlabel: 'days',
-                markdown:
-`
+                markdown: `
+To see the strength of the disease, it is best to look
+ the effective reproductive number:
+
 $$R_n = \\frac{susceptible}{population} \\times R_0$$
-`
-            }
+`,
+            },
         ]
         return charts
     }
@@ -124,10 +126,28 @@ class SirModel extends EpiModel {
         this.var.recovered = 0
     }
 
-    getCharts () {
+    getCharts() {
         let charts = super.getCharts()
-        charts[0].markdown =
-`
+        charts[0].markdown = `
+The SIR model is the most basic epidemiological model of 
+a transmissible disease. It consists of 3 populations (called
+compartments): 
+
+- Susceptible patients don't have the disease,
+- Infectious have caught the disease and can transmit it,  
+- Recovered patients are immune      
+
+<br>  
+The transmissability of disease is through the force of infection:
+
+$$forceOfInfection = \\frac{infectious}{population} \\times \\frac{R_0}{durationPeriod}$$
+
+where R<sub>0</sub> is the number of people an infectious person would 
+infect
+
+The resultant change equations are balanced growth/decline equations where
+the decline in one population results in growth in another population:
+
 $$\\frac{d}{dt}susceptible = - susceptible \\times forceOfInfection$$
 $$\\frac{d}{dt}infectious = - infectious \\times recoverRate + susceptible \\times forceOfInfection $$
 $$\\frac{d}{dt}recovered = infectious \\times recoverRate$$
@@ -197,7 +217,6 @@ class SEIRModel extends EpiModel {
         }
         this.auxVarFlows.push(['susceptible', 'exposed', 'rateForce'])
         this.paramFlows.push(['exposed', 'infectious', 'incubationRate'])
-        this.paramFlows.push(['infectious', 'infectious', 'negativeDeathRate'])
         this.paramFlows.push(['infectious', 'recovered', 'recoverRate'])
         this.paramFlows.push(['infectious', 'dead', 'deathRate'])
     }
@@ -207,7 +226,6 @@ class SEIRModel extends EpiModel {
             this.param.caseFatality / this.param.infectiousPeriod
         this.param.recoverRate =
             1 / this.param.infectiousPeriod - this.param.deathRate
-        this.param.negativeDeathRate = -this.param.deathRate
         this.param.contactRate =
             this.param.reproductionNumber / this.param.infectiousPeriod
 
@@ -287,7 +305,6 @@ class SEIRSModel extends EpiModel {
         this.auxVarFlows.push(['susceptible', 'exposed', 'rateForce'])
 
         this.paramFlows.push(['exposed', 'infectious', 'incubationRate'])
-        this.paramFlows.push(['infectious', 'infectious', 'negativeDeathRate'])
         this.paramFlows.push(['infectious', 'recovered', 'recoverRate'])
         this.paramFlows.push(['recovered', 'susceptible', 'immunityLossRate'])
         this.paramFlows.push(['infectious', 'dead', 'deathRate'])
@@ -296,7 +313,6 @@ class SEIRSModel extends EpiModel {
     initializeRun() {
         this.param.deathRate =
             this.param.caseFatality / this.param.infectiousPeriod
-        this.param.negativeDeathRate = -this.param.deathRate
         this.param.recoverRate =
             1 / this.param.infectiousPeriod - this.param.deathRate
         this.param.contactRate =

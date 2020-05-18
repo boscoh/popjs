@@ -2,14 +2,14 @@ import { DynaPopModel } from './dyna-pop-model'
 import _ from 'lodash'
 
 export class FlowPopModel extends DynaPopModel {
-    constructor () {
+    constructor() {
         super()
         this.auxVarFlows = []
         this.paramFlows = []
         this.dt = 1
     }
 
-    calcDVars () {
+    calcDVars() {
         let flows = []
 
         for (let [from, to, auxVarKey] of this.auxVarFlows) {
@@ -32,7 +32,7 @@ export class FlowPopModel extends DynaPopModel {
         }
     }
 
-    preRunCheck () {
+    preRunCheck() {
         this.calcAuxVars()
         this.calcDVars()
         let auxVarKeys = _.keys(this.auxVar)
@@ -41,7 +41,7 @@ export class FlowPopModel extends DynaPopModel {
             if (!_.includes(auxVarKeys, auxVarEventKey)) {
                 console.log(
                     `Error: ${auxVarEventKey} of this.auxVarFlows not ` +
-                    `found in this.calcAuxVars`
+                        `found in this.calcAuxVars`
                 )
             }
         }
@@ -51,10 +51,9 @@ export class FlowPopModel extends DynaPopModel {
             if (!_.includes(paramKeys, paramEventKey)) {
                 console.log(
                     `Error: ${paramEventKey} of this.paramFlows not ` +
-                    `found in this.param`
+                        `found in this.param`
                 )
             }
         }
     }
-
 }

@@ -148,11 +148,9 @@ class DynaPopModel {
                 this.solution[key].push(null)
             }
         }
-
     }
 
-    preRunCheck() {
-    }
+    preRunCheck() {}
 
     run() {
         this.initializeRun()

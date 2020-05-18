@@ -1,9 +1,9 @@
 import $ from 'jquery'
 import Chart from 'chart.js'
 import _ from 'lodash'
-const md = require('markdown-it')()
-const mk = require('markdown-it-katex')
 
+const md = require('markdown-it')('commonmark')
+const mk = require('markdown-it-katex')
 md.use(mk)
 
 /**
@@ -108,7 +108,11 @@ class ChartWidget {
         this.fn = null
         this.chart = new Chart(this.$canvas, this.chartData)
 
-        console.log(this.config, _.get(this.config, 'ylabel'), _.has(this.config, 'ylabel'))
+        console.log(
+            this.config,
+            _.get(this.config, 'ylabel'),
+            _.has(this.config, 'ylabel')
+        )
         this.setTitle(_.get(this.config, 'title', ''))
         this.setXLabel(_.get(this.config, 'xlabel', ''))
         this.setYLabel(_.get(this.config, 'ylabel', ''))
@@ -198,9 +202,9 @@ class ChartsContainer {
     addChart(chart) {
         if (_.has(chart, 'markdown')) {
             this.$div.append(
-                $('<div>').addClass('narrow-column').append(
-                    md.render(chart.markdown)
-                )
+                $('<div>')
+                    .addClass('narrow-column')
+                    .append(md.render(chart.markdown))
             )
         }
         this.$div.append(
@@ -223,16 +227,10 @@ class ChartsContainer {
                 let xlims = widget.config.xlims
                 let xmin = xlims[0]
                 let xmax = xlims[1]
-                let xstep = (xmax - xmin) / 100.
+                let xstep = (xmax - xmin) / 100
                 let x = _.range(xmin, xmax, xstep)
                 let y = _.map(x, model.fn[widget.fn])
-                this.updateChart(
-                    widget.id,
-                    widget.fn,
-                    x,
-                    y
-                )
-
+                this.updateChart(widget.id, widget.fn, x, y)
             } else {
                 for (let key of widget.keys) {
                     if (key in model.solution) {
@@ -242,7 +240,6 @@ class ChartsContainer {
                 }
             }
         }
-
     }
 }
 
