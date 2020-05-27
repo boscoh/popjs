@@ -140,13 +140,16 @@ compartments):
 <br>  
 The transmissability of disease is through the force of infection:
 
-$$forceOfInfection = \\frac{infectious}{population} \\times \\frac{R_0}{durationPeriod}$$
+$$forceOfInfection = \\frac{infectious}{population} \\times \\frac{R_0}{infectiousPeriod}$$
 
-where R<sub>0</sub> is the number of people an infectious person would 
-infect
+$$recoverRate = \\frac{1}{infectiousPerod}$$
 
-The resultant change equations are balanced growth/decline equations where
-the decline in one population results in growth in another population:
+where $R_0$ is the total number of people an infectious person would 
+infect during the infectious period.
+
+This type of model is often called a compartmental model
+as the change equations are balanced growth/decline equations where
+the decline in one compartment (population) results in growth in another compartment:
 
 $$\\frac{d}{dt}susceptible = - susceptible \\times forceOfInfection$$
 $$\\frac{d}{dt}infectious = - infectious \\times recoverRate + susceptible \\times forceOfInfection $$

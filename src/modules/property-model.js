@@ -18,7 +18,7 @@ class PropertyModel extends DynaPopModel {
             years: 30,
             propertyGrowthRate: 0.045,
             initialRentPerMonth: 2000,
-            rentInflationRate: 0.015,
+            inflationRate: 0.015,
             fundGrowthRate: 0.08,
         }
         super(defaultParams)
@@ -77,7 +77,7 @@ class PropertyModel extends DynaPopModel {
             this.dVar.principal = 0
         }
         this.dVar.totalPaidForPropertyAndInterest = this.param.payment
-        this.dVar.rent = this.param.rentInflationRate * this.var.rent
+        this.dVar.rent = this.param.inflationRate * this.var.rent
         this.dVar.totalRent = this.var.rent
         this.dVar.fund =
             this.param.fundGrowthRate * this.var.fund + this.auxVar.fundPayment
@@ -116,7 +116,7 @@ class PropertyModel extends DynaPopModel {
             },
             { comment: true, key: 'rent parameters' },
             {
-                key: 'rentInflationRate',
+                key: 'inflationRate',
                 max: 0.18,
             },
             {
@@ -191,7 +191,7 @@ put the deposit in an investment fund.
 Then we take the standard mortgage payment as the equivalent of our income.
 We put a chunk of that income into rent, where rents typically grows with inflation:
 
-$$\\frac{d}{dt}(rent) = rentInflationRate \\times rent$$
+$$\\frac{d}{dt}(rent) = inflationRate \\times rent$$
 
 $$\\frac{d}{dt}(totalRent) = rent$$
 

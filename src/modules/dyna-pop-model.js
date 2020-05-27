@@ -6,8 +6,8 @@ function makeExponentialFunction(xVal, yVal, scale, yMin) {
     return x => yDiff * Math.exp((scale * (x - xVal)) / yDiff) + yMin
 }
 
-function makeLinearFunction(intercept, slope) {
-    return x => intercept + slope * x
+function makeLinearFunction(slope, xZero) {
+    return x => slope * (x - xZero)
 }
 
 function makeInverseSquareFunction(A, B, C, D) {
