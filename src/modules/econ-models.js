@@ -1,82 +1,102 @@
-import { makeExponentialFunction, DynaPopModel } from './dyna-pop-model'
+import {
+    makeExponentialFunction,
+    DynaPopModel,
+    makeLinearFunction,
+} from './dyna-pop-model'
 
 class EconModel extends DynaPopModel {
     constructor() {
         const params = {
-            time: 120,
-            initialEmployedFraction: 0.9,
+            time: 200,
             productivityGrowthRate: 0.015,
             populationGrowthRate: 0.02,
-            depreciationRate: 0.06,
             capitalAccelerator: 3,
-            baseInterestRate: 0.03,
-            interestRateMultiplier: 0.0,
+            depreciationRate: 0.06,
+            initialWage: 0.85,
+            initialLaborFraction: 0.61,
+            interestRate: 0.04,
         }
         super(params)
         this.modelType = 'Keen-Minsky Financial Instability Model'
-        this.dt = 0.1
-        this.fn.wageChange = makeExponentialFunction(0.95, 0.0, 0.5, -0.01)
-        this.fn.investmentChange = makeExponentialFunction(0.05, 0.05, 1.75, 0)
+        this.yCutoff = 1e6
+        this.dt = 0.05
+
+        this.fn.wageFn = makeExponentialFunction(0.95, 0.0, 0.5, -0.01)
+        this.fn.investFn = makeExponentialFunction(0.05, 0.05, 1.75, 0)
+
+        this.fn.wageFn = makeLinearFunction(4, 0.6)
+        this.fn.investFn = makeLinearFunction(10, 0.03)
     }
 
     initializeRun() {
-        this.var.wage = 0.8
+        this.var.wage = this.param.initialWage
         this.var.productivity = 1
-        this.var.population = 50
-        this.var.debt = 0
+        this.var.population = 100
+        this.var.laborFraction = this.param.initialLaborFraction
         this.var.output =
-            this.param.initialEmployedFraction *
-            this.var.population *
-            this.var.productivity
+            this.var.laborFraction * this.var.population * this.var.productivity
+        this.var.laborShare = this.var.wage / this.var.productivity
+        this.var.debtRatio = 0
     }
 
     calcAuxVars() {
-        this.auxVar.labor = this.var.output / this.var.productivity
-        this.auxVar.laborFraction = this.auxVar.labor / this.var.population
-
-        this.auxVar.wages = this.var.wage * this.auxVar.labor
-        this.auxVar.debtRatio = this.var.debt / this.var.output
-        this.auxVar.interestRate =
-            this.param.baseInterestRate +
-            this.param.interestRateMultiplier * this.auxVar.debtRatio
-        this.auxVar.interest = this.auxVar.interestRate * this.var.debt
-        this.auxVar.profit =
-            this.var.output - this.auxVar.wages - this.auxVar.interest
-
-        this.auxVar.wageShare = this.auxVar.wages / this.var.output
-        this.auxVar.bankShare = this.auxVar.interest / this.var.output
-        this.auxVar.profitShare =
-            1 - this.auxVar.wageShare - this.auxVar.bankShare
+        this.auxVar.labor = this.var.laborFraction * this.var.population
+        this.auxVar.wageDelta = this.fn.wageFn(this.var.laborFraction)
+        this.auxVar.laborWages = this.var.wage * this.auxVar.labor
 
         this.auxVar.capital = this.var.output * this.param.capitalAccelerator
-        this.auxVar.profitability = this.auxVar.profit / this.auxVar.capital
-        this.auxVar.investmentChange = this.fn.investmentChange(
-            this.auxVar.profitability
-        )
-        this.auxVar.investment = this.auxVar.investmentChange * this.var.output
-        this.auxVar.borrow = this.auxVar.investment - this.auxVar.profit
 
-        this.auxVar.wageChange = this.fn.wageChange(this.auxVar.laborFraction)
+        this.auxVar.bankShare = this.param.interestRate * this.var.debtRatio
+        this.auxVar.capitalShare =
+            1 - this.var.laborShare - this.auxVar.bankShare
+        this.auxVar.profitRate =
+            this.auxVar.capitalShare / this.param.capitalAccelerator
+
+        this.auxVar.investDelta = this.fn.investFn(this.auxVar.profitRate)
+        this.auxVar.realGrowthRate =
+            this.auxVar.investDelta / this.param.capitalAccelerator -
+            this.param.depreciationRate
+
+        this.auxVar.debt = this.var.debtRatio * this.var.output
+        this.auxVar.bankIncome = this.auxVar.bankShare * this.var.output
+        this.auxVar.capitalProfit = this.auxVar.capitalShare * this.var.output
+
+        this.auxVar.investment = this.auxVar.investDelta * this.var.output
+        this.auxVar.borrow = this.auxVar.investment - this.auxVar.capitalProfit
     }
 
     calcDVars() {
-        this.dVar.output =
-            this.var.output *
-            (this.auxVar.investmentChange / this.param.capitalAccelerator -
-                this.param.depreciationRate)
-        this.dVar.wage = this.auxVar.wageChange * this.var.wage
+        this.dVar.wage = this.auxVar.wageDelta * this.var.wage
+
         this.dVar.productivity =
             this.param.productivityGrowthRate * this.var.productivity
+
         this.dVar.population =
             this.param.populationGrowthRate * this.var.population
-        this.dVar.debt = this.auxVar.borrow
+
+        this.dVar.laborFraction =
+            this.var.laborFraction *
+            (this.auxVar.realGrowthRate -
+                this.param.productivityGrowthRate -
+                this.param.populationGrowthRate)
+
+        this.dVar.output = this.var.output * this.auxVar.realGrowthRate
+
+        this.dVar.laborShare =
+            this.var.laborShare *
+            (this.auxVar.wageDelta - this.param.productivityGrowthRate)
+
+        this.dVar.debtRatio =
+            this.auxVar.investDelta -
+            this.auxVar.capitalShare -
+            this.var.debtRatio * this.auxVar.realGrowthRate
     }
 
     getGuiParams() {
         let guiParams = [
-            { key: 'time', max: 300 },
+            { key: 'time', max: 500 },
             {
-                key: 'initialEmployedFraction',
+                key: 'initialLaborFraction',
                 max: 1.0,
             },
             {
@@ -96,11 +116,7 @@ class EconModel extends DynaPopModel {
                 max: 0.1,
             },
             {
-                key: 'baseInterestRate',
-                max: 0.2,
-            },
-            {
-                key: 'interestRateMultiplier',
+                key: 'interestRate',
                 max: 0.2,
             },
         ]
@@ -112,6 +128,12 @@ class EconModel extends DynaPopModel {
 
     getCharts() {
         return [
+            {
+                title: 'Test',
+                id: 'test-chart1',
+                keys: ['laborShare', 'capitalShare', 'bankShare'],
+                xlabel: 'year',
+            },
             {
                 markdown: `
 The Keen-Minksy model, developed by [Steve Keen](https://keenomics.s3.amazonaws.com/debtdeflation_media/papers/PaperPrePublicationProof.pdf), 
@@ -148,7 +170,7 @@ Skipping ahead, the model generates the evolution of the incomes
                 `,
                 title: 'Income of the 3 classes',
                 id: 'output-chart',
-                keys: ['wages', 'profit', 'interest'],
+                keys: ['laborWages', 'capitalProfit', 'bankIncome'],
                 xlabel: 'year',
             },
             {
@@ -160,7 +182,7 @@ is a key feature of the model that potentially, the banking sector
                 `,
                 title: 'The Share between the Classes',
                 id: 'share-chart',
-                keys: ['wageShare', 'profitShare', 'bankShare'],
+                keys: ['laborShare', 'capitalShare', 'bankShare'],
                 xlabel: 'year',
             },
             {
@@ -181,7 +203,7 @@ in the economy. Labor
 depends on how much capital is in the system, and changes in capital 
 depends on profitability, which in turn depends on wages:
 
-$$wages = labor \\times wage$$
+$$laborWages = labor \\times wage$$
 
 We must explicitly introduce a model of how wage changes:
 
@@ -192,7 +214,7 @@ the wage as the employment fraction approaches 1.
                 `,
                 title: 'The Keen Wage Function',
                 id: 'wagefn-chart',
-                fn: 'wageChange',
+                fn: 'wageFn',
                 xlims: [0.6, 1.05],
                 ymin: 0,
                 xlabel: 'Employed Fraction',
@@ -219,7 +241,7 @@ the typical business cycle.
 
 The behaviour of capitalists is modeled as a reaction to profitability.
 
-$$profit = output - wages - interest$$
+$$profit = output - laborWages - interest$$
 
 $$profitability = \\frac{profit}{capital}$$
 
@@ -230,7 +252,7 @@ Based on the Minsky Hypothesis, a capitalist will want to invest
                 `,
                 title: 'The Keen Investment Function',
                 id: 'investfn-chart',
-                fn: 'investmentChange',
+                fn: 'investFn',
                 xlims: [-0.4, 0.15],
                 ymin: 0,
                 xlabel: 'profitability',
@@ -249,7 +271,7 @@ becomes the income of the bank.
                 `,
                 title: 'What drives Investment',
                 id: 'investment-chart',
-                keys: ['profit', 'investment', 'borrow', 'interest'],
+                keys: ['capitalProfit', 'investment', 'borrow', 'bankIncome'],
                 xlabel: 'year',
             },
             {

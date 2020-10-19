@@ -24,6 +24,7 @@
                             style="margin-top: -10px"
                             v-model="slider.value"
                             :max="slider.max"
+                            :min="slider.min ? slider.min : 0"
                             :step="slider.interval"
                             hide-details
                             @change="change()"
@@ -63,6 +64,7 @@
                             <v-slider
                                 v-model="slider.value"
                                 :max="slider.max"
+                                :min="slider.min ? slider.min : 0"
                                 :step="slider.interval"
                                 hide-details
                                 @change="change()"

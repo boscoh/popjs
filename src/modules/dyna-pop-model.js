@@ -1,5 +1,6 @@
 import _ from 'lodash'
-import rk45 from './rk45'
+//https://github.com/giannotr/runge-kutta-js
+import rungeKutta from 'runge-kutta'
 
 function makeExponentialFunction(xVal, yVal, scale, yMin) {
     let yDiff = yVal - yMin
@@ -114,29 +115,6 @@ class DynaPopModel {
 
     calcDVars() {}
 
-    // integrateDtWithEuler() {
-    //     let vec = this.getVec()
-    //     let dVec = this.getDVec(vec)
-    //     let newVec = []
-    //     for (let i = 0; i < vec.length; i += 1) {
-    //         newVec.push(vec[i] + dVec[i] * this.dt)
-    //     }
-    //     this.setVec(newVec)
-    //     this.calcAuxVars()
-    // }
-
-    integrateDtWithRungeKutta() {
-        this.integrator = new rk45.System()
-        this.integrator.setStart(0.0) // Initial start time, t=0.
-        this.integrator.setStop(this.dt) // Time at which we want a solution, t=2.
-        this.integrator.setInitX(this.getVec()) // y(0) -- value of y when t=0.
-        this.integrator.setFn(v => this.getDVec(v)) // Differential equation we're solving.
-        this.integrator.solve()
-        this.status = this.integrator.getStatus()
-        this.setVec(this.integrator.newX)
-        this.calcAuxVars()
-    }
-
     pushToSolution(d) {
         for (let key of _.keys(d)) {
             if (!(key in this.solution)) {
@@ -152,6 +130,38 @@ class DynaPopModel {
 
     preRunCheck() {}
 
+    runWithEuler() {
+        for (let i = 0; i < this.times.length; i += 1) {
+            this.calcAuxVars()
+            this.calcDVars()
+            for (let k of this.varKeys) {
+                this.var[k] = this.var[k] + this.dVar[k] * this.dt
+            }
+            this.calcAuxVars()
+            this.pushToSolution(this.var)
+            this.pushToSolution(this.auxVar)
+            if (_.some(_.values(this.var), y => y > this.yCutoff)) {
+                break
+            }
+        }
+    }
+
+    runRungeKutta() {
+        const maxTime = Math.round(_.max(this.times) / this.dt) * this.dt
+        const output = rungeKutta(
+            (t, y) => this.getDVec(y),
+            this.getVec(),
+            [0, maxTime],
+            this.dt
+        )
+        for (let vec of output) {
+            this.setVec(vec)
+            this.calcAuxVars()
+            this.pushToSolution(this.var)
+            this.pushToSolution(this.auxVar)
+        }
+    }
+
     run() {
         this.initializeRun()
         this.calcAuxVars()
@@ -160,14 +170,7 @@ class DynaPopModel {
         this.times = _.range(0, this.param.time, this.dt)
         this.varKeys = _.keys(this.dVar)
         this.preRunCheck()
-        for (let time of this.times) {
-            this.integrateDtWithRungeKutta(time, this.dt)
-            this.pushToSolution(this.var)
-            this.pushToSolution(this.auxVar)
-            if (_.some(_.values(this.var), y => y > this.yCutoff)) {
-                break
-            }
-        }
+        this.runRungeKutta()
     }
 }
 

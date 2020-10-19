@@ -10,6 +10,7 @@ class EpiModel extends FlowPopModel {
 
         this.param = {
             time: 100,
+            dtExponent: -1,
             initialPopulation: 50000,
             initialPrevalence: 3000,
             recoverRate: 0.1,
@@ -39,6 +40,7 @@ class EpiModel extends FlowPopModel {
                 key: 'time',
                 max: 300,
             },
+            { key: 'dtExponent', max: 3, min: -3 },
             {
                 key: 'reproductionNumber',
                 max: 20,
@@ -100,6 +102,7 @@ class SirModel extends EpiModel {
 
         this.param = {
             time: 100,
+            dtExponent: -1,
             initialPopulation: 50000,
             initialPrevalence: 3000,
             infectiousPeriod: 10,
@@ -117,6 +120,7 @@ class SirModel extends EpiModel {
     }
 
     initializeRun() {
+        this.dt = Math.pow(10, this.param.dtExponent)
         this.param.recoverRate = 1 / this.param.infectiousPeriod
         this.param.contactRate =
             this.param.reproductionNumber * this.param.recoverRate
@@ -168,6 +172,7 @@ class SisModel extends EpiModel {
 
         this.param = {
             time: 100,
+            dtExponent: -1,
             initialPopulation: 50000,
             initialPrevalence: 3000,
             recoverRate: 0.1,
@@ -184,6 +189,7 @@ class SisModel extends EpiModel {
     }
 
     initializeRun() {
+        this.dt = Math.pow(10, this.param.dtExponent)
         this.param.recoverRate = 1 / this.param.infectiousPeriod
         this.param.contactRate =
             this.param.reproductionNumber * this.param.recoverRate
@@ -203,6 +209,7 @@ class SEIRModel extends EpiModel {
 
         this.param = {
             time: 500,
+            dtExponent: -1,
             initialPopulation: 50000,
             incubationRate: 0.01,
             caseFatality: 0.2,
@@ -225,6 +232,7 @@ class SEIRModel extends EpiModel {
     }
 
     initializeRun() {
+        this.dt = Math.pow(10, this.param.dtExponent)
         this.param.deathRate =
             this.param.caseFatality / this.param.infectiousPeriod
         this.param.recoverRate =
@@ -246,6 +254,7 @@ class SEIRModel extends EpiModel {
                 key: 'time',
                 max: 1000,
             },
+            { key: 'dtExponent', max: 3, min: -3 },
             {
                 key: 'reproductionNumber',
                 max: 15,
@@ -288,6 +297,7 @@ class SEIRSModel extends EpiModel {
 
         this.param = {
             time: 1500,
+            dtExponent: -1,
             initialPopulation: 50000,
             incubationRate: 0.01,
             caseFatality: 0.2,
@@ -314,6 +324,7 @@ class SEIRSModel extends EpiModel {
     }
 
     initializeRun() {
+        this.dt = Math.pow(10, this.param.dtExponent)
         this.param.deathRate =
             this.param.caseFatality / this.param.infectiousPeriod
         this.param.recoverRate =
@@ -336,6 +347,7 @@ class SEIRSModel extends EpiModel {
                 key: 'time',
                 max: 3000,
             },
+            { key: 'dtExponent', max: 3, min: -3 },
             {
                 key: 'reproductionNumber',
                 max: 20,
