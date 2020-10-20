@@ -1,6 +1,6 @@
 <template>
     <v-app>
-        <v-app-bar app light color="white">
+        <v-app-bar app light flat color="white">
             <div class="d-flex align-center">
                 <v-icon
                     alt="Vuetify Logo"
@@ -13,17 +13,32 @@
             </div>
 
             <v-toolbar-title class="title shrink mt-1 hidden-sm-and-down">
-                PopJS Modeling
+                PopJS
             </v-toolbar-title>
 
             <v-spacer></v-spacer>
 
-            <v-btn to="/" text router>Home</v-btn>
-            <v-btn to="/ecology" text router>Ecology</v-btn>
-            <v-btn to="/state" text router>Demographic</v-btn>
-            <v-btn to="/epi" text router>Epidemiology</v-btn>
-            <v-btn to="/econ" text router>Economics</v-btn>
-            <v-btn to="/property" text router>Property</v-btn>
+            <v-menu offset-y>
+                <template v-slot:activator="{ on, attrs }">
+                    <v-btn color="light" light v-bind="attrs" v-on="on">
+                        Models
+                    </v-btn>
+                </template>
+                <v-list>
+                    <v-list-item to="/" router
+                        ><v-list-item-title
+                            >Home</v-list-item-title
+                        ></v-list-item
+                    >
+                    <v-list-item
+                        v-for="(item, index) in items"
+                        :key="index"
+                        :to="item.to"
+                    >
+                        <v-list-item-title>{{ item.title }}</v-list-item-title>
+                    </v-list-item>
+                </v-list>
+            </v-menu>
         </v-app-bar>
 
         <v-content>
@@ -35,9 +50,16 @@
 <script>
 export default {
     name: 'App',
-
-    data: () => ({
-        //
-    }),
+    data () {
+        return {
+            items: [
+                { to: '/ecologymodel', title: 'Ecology' },
+                { to: '/statemodel', title: 'Demographic' },
+                { to: '/sirmodel', title: 'Epidemiology' },
+                { to: '/econmodel', title: 'Economics' },
+                { to: '/propertymodel', title: 'Property' },
+            ],
+        }
+    },
 }
 </script>

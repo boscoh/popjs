@@ -1,8 +1,21 @@
 <template>
     <v-container fluid class="pa-0 pt-1">
-        <v-layout>
-            <v-flex xs12 sm12 md4 lg4 class="mx-auto pa-3 pt-5">
-                <br />
+        <v-row no-gutters>
+          <v-flex
+              xs4
+              md4
+              lg3
+              class="mt-5 pt-5"
+              style="height: calc(100vh - 48px); overflow: auto;"
+          >
+          </v-flex>
+
+          <v-flex
+              xs8
+              md8
+              lg9
+              class="pa-4 pb-5 mt-5"
+          >
                 <p class="display-2 font-weight-light mt-5">
                     PopJS
                 </p>
@@ -12,9 +25,15 @@
 
                 <div v-html="rawHtml"></div>
             </v-flex>
-        </v-layout>
+        </v-row>
     </v-container>
 </template>
+
+<style>
+p {
+  max-width: 500px;
+};
+</style>
 
 <script>
 import markdownIt from 'markdown-it'
@@ -22,18 +41,18 @@ import katex from 'markdown-it-katex'
 let md = markdownIt('commonmark').use(katex)
 export default {
     name: 'Home',
-    data() {
+    data () {
         return {
             rawHtml: md.render(`
 
 
 PopJS is a javascript engine to develop
- population dynamics models purely in the
+ population dynamics index purely in the
 front-end.
 
 Source code: &lt;<https://github.com/boscoh/popjs>&gt;
 
-Population dynamics models use calculus in
+Population dynamics index use calculus in
  simple differential equations to model a wide variety
  of population behavior, from explosive growth,
   equilibrium, cycles and catastrophic collapse.

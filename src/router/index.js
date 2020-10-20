@@ -1,11 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
-import Property from '../views/Property.vue'
-import Epi from '../views/Epi.vue'
-import Econ from '../views/Econ.vue'
-import State from '../views/State.vue'
-import Ecology from '../views/Ecology.vue'
+import PopModel from '@/components/pop-model'
+import models from '@/models/index'
 
 Vue.use(VueRouter)
 
@@ -15,32 +12,18 @@ const routes = [
         name: 'Home',
         component: Home,
     },
-    {
-        path: '/property',
-        name: 'Property',
-        component: Property,
-    },
-    {
-        path: '/ecology',
-        name: 'Ecology',
-        component: Ecology,
-    },
-    {
-        path: '/state',
-        name: 'State',
-        component: State,
-    },
-    {
-        path: '/epi',
-        name: 'Epi',
-        component: Epi,
-    },
-    {
-        path: '/econ',
-        name: 'Econ',
-        component: Econ,
-    },
 ]
+
+for (let name in models) {
+    routes.push({
+        path: '/' + name.toLowerCase(),
+        name: name.toLowerCase(),
+        component: {
+            components: { PopModel },
+            template: `<pop-model name="${name}"></pop-model>`,
+        },
+    })
+}
 
 const router = new VueRouter({
     routes,

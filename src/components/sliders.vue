@@ -96,7 +96,7 @@ export default {
         callback: Function,
     },
     methods: {
-        change() {
+        change () {
             this.callback()
         },
     },

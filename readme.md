@@ -2,10 +2,10 @@
 # PopJs - Population Dynamics Modeling
 
 PopJS is a javascript engine to develop
- population dynamics models purely in the
+ population dynamics index purely in the
 front-end.
 
-Population dynamics models use calculus in
+Population dynamics index use calculus in
  simple differential equations to model a wide variety
  of population behavior, from explosive growth,
   equilibrium, cycles and catastrophic collapse.
