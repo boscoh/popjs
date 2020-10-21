@@ -1,6 +1,6 @@
-import { DynaPopModel } from './dyna-pop-model'
+import { PopModel } from './pop-model'
 
-class EcologyModel extends DynaPopModel {
+class EcologyModel extends PopModel {
     constructor() {
         const params = {
             time: 200,
@@ -68,23 +68,23 @@ class EcologyModel extends DynaPopModel {
         return [
             {
                 markdown: `
-The first complex population model (1925), uses these sets of coupled equation to
-reproduce the periodic rise and fall of populations in the wild. These
-equations are also used in studying auto-catalytic chemical reactions.
-
-The Lokta-Volterra equations follow two populations, a prey population with an endogenous
-growth function where the prey presumably takes in nutrients from an abundant
-environment, but will also die from the predator attack it, as represented
-by the predation rate.
- 
-$$\\frac{d}{dt}(prey) = preyGrowthRate \\times prey  - predationRate \\times prey \\times predator$$ 
-
-In contrast, the predator relies totally on the prey as its food source, which
- is represented by the digestion rate, which determines how many prey a predator
- has to eat before it can produce a new predator. Finally, we need to include
- an explicit death rate for the predator:
-
-$$\\frac{d}{dt}(predator) = digestionRate \\times prey \\times predator - predatorDeathRate \\times predator$$
+                    The first complex population model (1925), uses these sets of coupled equation to
+                    reproduce the periodic rise and fall of populations in the wild. These
+                    equations are also used in studying auto-catalytic chemical reactions.
+                    
+                    The Lokta-Volterra equations follow two populations, a prey population with an endogenous
+                    growth function where the prey presumably takes in nutrients from an abundant
+                    environment, but will also die from the predator attack it, as represented
+                    by the predation rate.
+                     
+                    $$\\frac{d}{dt}(prey) = preyGrowthRate \\times prey  - predationRate \\times prey \\times predator$$ 
+                    
+                    In contrast, the predator relies totally on the prey as its food source, which
+                     is represented by the digestion rate, which determines how many prey a predator
+                     has to eat before it can produce a new predator. Finally, we need to include
+                     an explicit death rate for the predator:
+                    
+                    $$\\frac{d}{dt}(predator) = digestionRate \\times prey \\times predator - predatorDeathRate \\times predator$$
                 `,
                 title: 'Ecology',
                 id: 'predator-prey-chart',

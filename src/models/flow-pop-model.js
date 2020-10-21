@@ -1,7 +1,7 @@
-import { DynaPopModel } from './dyna-pop-model'
+import { PopModel } from './pop-model'
 import _ from 'lodash'
 
-export class FlowPopModel extends DynaPopModel {
+export class FlowPopModel extends PopModel {
     constructor() {
         super()
         this.auxVarFlows = []

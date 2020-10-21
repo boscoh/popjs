@@ -21,16 +21,17 @@
                   border-left: 1px solid #EEE;
                   overflow: auto;"
             >
-              <div
-                  class="pa-4 mt-5">
-                  <div class="display-2 narrow-column font-weight-light mt-5 mb-3">
+                <div class="pa-4 mt-5">
+                    <div
+                        class="display-2 narrow-column font-weight-light mt-5 mb-3"
+                    >
                         {{ title }}
                     </div>
                     <div :id="chartsId" row wrap />
-                    <br>
-                    <br>
-                    <br>
-                    <br>
+                    <br />
+                    <br />
+                    <br />
+                    <br />
                 </div>
             </v-flex>
         </v-row>
@@ -67,25 +68,25 @@ export default {
             },
             deep: true,
         },
-        $route(to) {
+        $route (to) {
             this.build(to.name)
-        }
+        },
     },
-    mounted() {
-      this.build(this.name)
+    mounted () {
+        this.build(this.name)
     },
     methods: {
-      build (name) {
-        console.log('PopModel.mounted', name)
-        this.model = new ModelClass[name]
-        this.title = this.model.title
-        this.sliders = this.model.getGuiParams()
-        this.chartsContainer = new ChartsContainer(this.chartsId)
-        for (let chart of this.model.getCharts()) {
-          this.chartsContainer.addChart(chart)
-        }
-        this.changeGraph()
-      },
+        build (name) {
+            console.log('PopModel.mounted', name)
+            this.model = new ModelClass[name]()
+            this.title = this.model.title
+            this.sliders = this.model.getGuiParams()
+            this.chartsContainer = new ChartsContainer(this.chartsId)
+            for (let chart of this.model.getCharts()) {
+                this.chartsContainer.addChart(chart)
+            }
+            this.changeGraph()
+        },
         changeGraph () {
             this.model.importGuiParams(this.sliders)
             this.model.run()

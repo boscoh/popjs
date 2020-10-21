@@ -3,13 +3,13 @@
  * Created by boscoh on 9/5/20.
  */
 
-import { DynaPopModel } from './dyna-pop-model'
+import { PopModel } from './pop-model'
 
 function getMinimumPayment(principal, rate, nPeriod) {
     return (rate * principal) / (1.0 - Math.pow(1.0 + rate, -nPeriod))
 }
 
-class PropertyModel extends DynaPopModel {
+class PropertyModel extends PopModel {
     constructor() {
         const defaultParams = {
             initialProperty: 600000.0,

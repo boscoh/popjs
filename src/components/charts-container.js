@@ -1,6 +1,7 @@
 import $ from 'jquery'
 import Chart from 'chart.js'
 import _ from 'lodash'
+import dedent from 'dedent'
 
 const md = require('markdown-it')('commonmark')
 const mk = require('markdown-it-katex')
@@ -205,7 +206,7 @@ class ChartsContainer {
             this.$div.append(
                 $('<div>')
                     .addClass('narrow-column')
-                    .append(md.render(chart.markdown))
+                    .append(md.render(dedent(chart.markdown)))
             )
         }
         this.$div.append(

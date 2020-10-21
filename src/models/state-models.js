@@ -1,6 +1,6 @@
-import { DynaPopModel } from './dyna-pop-model'
+import { PopModel } from './pop-model'
 
-class StateModel extends DynaPopModel {
+class StateModel extends PopModel {
     constructor() {
         const params = {
             time: 600,

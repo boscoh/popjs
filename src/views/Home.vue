@@ -1,21 +1,16 @@
 <template>
     <v-container fluid class="pa-0 pt-1">
         <v-row no-gutters>
-          <v-flex
-              xs4
-              md4
-              lg3
-              class="mt-5 pt-5"
-              style="height: calc(100vh - 48px); overflow: auto;"
-          >
-          </v-flex>
+            <v-flex
+                xs4
+                md4
+                lg3
+                class="mt-5 pt-5"
+                style="height: calc(100vh - 48px); overflow: auto;"
+            >
+            </v-flex>
 
-          <v-flex
-              xs8
-              md8
-              lg9
-              class="pa-4 pb-5 mt-5"
-          >
+            <v-flex xs8 md8 lg9 class="pa-4 pb-5 mt-5">
                 <p class="display-2 font-weight-light mt-5">
                     PopJS
                 </p>
@@ -31,8 +26,8 @@
 
 <style>
 p {
-  max-width: 500px;
-};
+    max-width: 500px;
+}
 </style>
 
 <script>

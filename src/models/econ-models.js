@@ -1,10 +1,10 @@
 import {
     makeExponentialFunction,
-    DynaPopModel,
+    PopModel,
     makeLinearFunction,
-} from './dyna-pop-model'
+} from './pop-model'
 
-class EconModel extends DynaPopModel {
+class EconModel extends PopModel {
     constructor() {
         const params = {
             time: 200,
