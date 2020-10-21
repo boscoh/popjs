@@ -1,27 +1,30 @@
 <template>
     <v-app>
-        <v-app-bar app light flat color="white">
+        <v-flex
+            offset-xs4
+            xs8
+            offset-md4
+            md8
+            offset-lg3
+            lg9
+            class="pt-5 pl-3"
+            >
             <div class="d-flex align-center">
-                <v-icon
-                    alt="Vuetify Logo"
-                    class="shrink mr-2"
-                    contain
-                    width="40"
-                >
-                    mdi-chart-timeline-variant
-                </v-icon>
             </div>
-
-            <v-toolbar-title class="title shrink mt-1 hidden-sm-and-down">
-                PopJS
-            </v-toolbar-title>
-
-            <v-spacer></v-spacer>
 
             <v-menu offset-y>
                 <template v-slot:activator="{ on, attrs }">
                     <v-btn color="light" light v-bind="attrs" v-on="on">
-                        Models
+
+                      <v-icon
+                          alt="Vuetify Logo"
+                          class="shrink mr-2"
+                          contain
+                          width="40"
+                      >
+                        mdi-chart-timeline-variant
+                      </v-icon>
+                      PopJS::Models
                     </v-btn>
                 </template>
                 <v-list>
@@ -39,7 +42,7 @@
                     </v-list-item>
                 </v-list>
             </v-menu>
-        </v-app-bar>
+        </v-flex>
 
         <v-content style="overflow: hidden">
             <router-view></router-view>
