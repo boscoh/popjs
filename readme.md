@@ -12,7 +12,7 @@ Population dynamics index use calculus in
 
 Source code: <https://github.com/boscoh/popjs>
 
-Demo: <https://boscoh.com/popjs>
+Demo: <https://boscoh.github.io/popjs>
 
 Built on Vue, Vuetify and RK45.js for integration.
 

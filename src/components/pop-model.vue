@@ -22,7 +22,6 @@
                   overflow: auto;"
             >
                 <div class="pa-4 mt-5">
-
                     <div
                         class="
                             display-2
@@ -35,9 +34,9 @@
                     </div>
 
                     <div v-if="link">
-                      <a :href="link">[javascript source]</a>
-                      <br>
-                      <br>
+                        <a :href="link">[javascript source]</a>
+                        <br />
+                        <br />
                     </div>
 
                     <div :id="chartsId" row wrap />

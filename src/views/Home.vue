@@ -33,32 +33,29 @@ p {
 <script>
 import markdownIt from 'markdown-it'
 import katex from 'markdown-it-katex'
+import dedent from 'dedent'
 let md = markdownIt('commonmark').use(katex)
+
 export default {
     name: 'Home',
     data () {
         return {
-            rawHtml: md.render(`
+            rawHtml: md.render(dedent`
+                PopJS is a javascript engine to develop
+                 population dynamics index purely in the
+                front-end.
 
+                Source: &lt;<https://github.com/boscoh/popjs>&gt;
 
-PopJS is a javascript engine to develop
- population dynamics index purely in the
-front-end.
+                Population dynamics index use calculus in
+                 simple differential equations to model a wide variety
+                 of population behavior, from explosive growth,
+                  equilibrium, cycles and catastrophic collapse.
 
-Source code: &lt;<https://github.com/boscoh/popjs>&gt;
+                Built on Vue, Vuetify using Runge-Kutta for integration.
 
-Population dynamics index use calculus in
- simple differential equations to model a wide variety
- of population behavior, from explosive growth,
-  equilibrium, cycles and catastrophic collapse.
-
-
-Built on Vue, Vuetify using the RK45.js
-library for Runge-Kutta-Fehlberg method for integration.
-
-&copy; 2020 [Bosco Ho](https://boscoh.com)
-
-            `),
+                &copy; 2020 [Bosco Ho](https://boscoh.com)
+           `),
         }
     },
 }

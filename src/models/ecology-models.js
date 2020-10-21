@@ -1,7 +1,7 @@
 import { PopModel } from './pop-model'
 
 class EcologyModel extends PopModel {
-    constructor() {
+    constructor () {
         const params = {
             time: 200,
             initialPrey: 10,
@@ -18,12 +18,12 @@ class EcologyModel extends PopModel {
         this.dt = 0.1
     }
 
-    initializeRun() {
+    initializeRun () {
         this.var.predator = this.param.initialPrey
         this.var.prey = this.param.initialPredator
     }
 
-    calcDVars() {
+    calcDVars () {
         this.dVar.prey =
             this.var.prey * this.param.preyGrowthRate -
             this.param.predationRate * this.var.prey * this.var.predator
@@ -32,7 +32,7 @@ class EcologyModel extends PopModel {
             this.var.predator * this.param.predatorDeathRate
     }
 
-    getGuiParams() {
+    getGuiParams () {
         let guiParams = [
             { key: 'time', max: 300 },
             {
@@ -66,7 +66,7 @@ class EcologyModel extends PopModel {
         return guiParams
     }
 
-    getCharts() {
+    getCharts () {
         return [
             {
                 markdown: `

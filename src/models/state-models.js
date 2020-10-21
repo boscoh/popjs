@@ -85,17 +85,17 @@ class StateModel extends PopModel {
         return [
             {
                 markdown: `
-Demographic models examine the endogenous evolution of a state, based on different key factors.
-This particular model is Peter Turchin's Demographic Fiscal State Model and provides a simple model of how a state can
-improve the carrying capacity of its environment, which augments the population, but also precipitates a sudden decline.
- 
-First, a state can organize a population to produce more food, which improves the growth rate of the population. This is
-represented by the surplus:
-
-$$\\frac{d}{dt}(population) = populationGrowthRate \\times population \\times surplus $$
-
-The model makes simple assumptions about how the surplus relates to 
-the carrying capacity and state revenue. In general the model shows how a state follows a simple growth and sudden decline simply due to internal dynamics
+                    Demographic models examine the endogenous evolution of a state, based on different key factors.
+                    This particular model is Peter Turchin's Demographic Fiscal State Model and provides a simple model of how a state can
+                    improve the carrying capacity of its environment, which augments the population, but also precipitates a sudden decline.
+                     
+                    First, a state can organize a population to produce more food, which improves the growth rate of the population. This is
+                    represented by the surplus:
+                    
+                    $$\\frac{d}{dt}(population) = populationGrowthRate \\times population \\times surplus $$
+                    
+                    The model makes simple assumptions about how the surplus relates to 
+                    the carrying capacity and state revenue. In general the model shows how a state follows a simple growth and sudden decline simply due to internal dynamics
                 `,
                 title: 'People',
                 id: 'people-chart',
@@ -104,14 +104,14 @@ the carrying capacity and state revenue. In general the model shows how a state 
             },
             {
                 markdown: `
-First we postulate a simple function of how revenue
-improves the carrying capacity. It is a simple monotoically
-increasing function that saturates to a given carrying
-capacity, modeling the fact that there is an upper limit 
-to how much the carrying capacity can be improved
-
-$$ carryingCapacityFunction = 1 + capacityDiff \\times \\left( \\frac{revenue}{ revenueAtHalfCapacity + revenue}  \\right)$$
-`,
+                    First we postulate a simple function of how revenue
+                    improves the carrying capacity. It is a simple monotoically
+                    increasing function that saturates to a given carrying
+                    capacity, modeling the fact that there is an upper limit 
+                    to how much the carrying capacity can be improved
+                    
+                    $$ carryingCapacityFunction = 1 + capacityDiff \\times \\left( \\frac{revenue}{ revenueAtHalfCapacity + revenue}  \\right)$$
+                `,
                 title: 'Carrying Capacity Function',
                 id: 'carry-capacity-chart',
                 fn: 'carryCapacityFromStateRevenue',
@@ -122,15 +122,15 @@ $$ carryingCapacityFunction = 1 + capacityDiff \\times \\left( \\frac{revenue}{ 
             },
             {
                 markdown: `
-We define an expression for the surplus such that a 
-surplus will be produced if the population is
-below the carrying capacity, but if the 
-population rises above the carrying capacity, crops will 
-fail and the surplus will go negative. 
-
-The surplus evolves over time as:
-
-$$surplus = maxSurplus \\times \\left(  1 - \\frac{ population } { carryingCapacityFunction } \\right) $$
+                    We define an expression for the surplus such that a 
+                    surplus will be produced if the population is
+                    below the carrying capacity, but if the 
+                    population rises above the carrying capacity, crops will 
+                    fail and the surplus will go negative. 
+                    
+                    The surplus evolves over time as:
+                    
+                    $$surplus = maxSurplus \\times \\left(  1 - \\frac{ population } { carryingCapacityFunction } \\right) $$
                 `,
                 title: 'Surplus',
                 id: 'surplus-chart',
@@ -139,13 +139,13 @@ $$surplus = maxSurplus \\times \\left(  1 - \\frac{ population } { carryingCapac
             },
             {
                 markdown: `
-For the state to improve the carrying capacity, it must have
-sufficient revenue collected from the population. This revenue
-is defined as a fraction of the surplus produced by the population. As
-well, the state is assume to spend some of the revenue on 
-the population, and this is the expenditure.
-
-$$\\frac{d}{dt}(revenue) = tax \\times population \\times surplus - expenditurePerCapita * population$$
+                    For the state to improve the carrying capacity, it must have
+                    sufficient revenue collected from the population. This revenue
+                    is defined as a fraction of the surplus produced by the population. As
+                    well, the state is assume to spend some of the revenue on 
+                    the population, and this is the expenditure.
+                    
+                    $$\\frac{d}{dt}(revenue) = tax \\times population \\times surplus - expenditurePerCapita * population$$
                 `,
                 title: 'Revenue',
                 id: 'revenue-chart',

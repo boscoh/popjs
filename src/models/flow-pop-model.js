@@ -2,14 +2,14 @@ import { PopModel } from './pop-model'
 import _ from 'lodash'
 
 export class FlowPopModel extends PopModel {
-    constructor() {
+    constructor () {
         super()
         this.auxVarFlows = []
         this.paramFlows = []
         this.dt = 1
     }
 
-    calcDVars() {
+    calcDVars () {
         let flows = []
 
         for (let [from, to, auxVarKey] of this.auxVarFlows) {
@@ -32,7 +32,7 @@ export class FlowPopModel extends PopModel {
         }
     }
 
-    preRunCheck() {
+    preRunCheck () {
         this.calcAuxVars()
         this.calcDVars()
         let auxVarKeys = _.keys(this.auxVar)
