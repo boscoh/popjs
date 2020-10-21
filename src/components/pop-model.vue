@@ -1,40 +1,43 @@
 <template>
-    <v-container fluid class="pa-0">
+    <v-container fluid class="pa-0" style="overflow: hidden">
         <v-row row wrap no-gutters>
             <v-flex
                 xs4
                 md4
                 lg3
-                class="mt-5 pt-5"
-                style="height: calc(100vh - 48px); overflow: auto;"
+                style="margin-top: 30px; height: calc(100vh - 85px); overflow: auto;"
             >
-                  <div class="pa-3">
-                      <sliders :sliders="sliders"></sliders>
-                  </div>
+                <div class="pa-3">
+                    <sliders :sliders="sliders"></sliders>
+                </div>
             </v-flex>
 
             <v-flex
                 xs8
                 md8
                 lg9
-                class="pa-4 pb-5 mt-5"
-                style="height: calc(100vh - 48px); border-left: 1px solid #EEE; overflow: auto;"
+                style="
+                  height: calc(100vh - 60px);
+                  border-left: 1px solid #EEE;
+                  overflow: auto;"
             >
-                <div class="display-2 narrow-column font-weight-light mt-5 mb-3">
-                    {{ title }}
+              <div
+                  class="pa-4 mt-5">
+                  <div class="display-2 narrow-column font-weight-light mt-5 mb-3">
+                        {{ title }}
+                    </div>
+                    <div :id="chartsId" row wrap />
+                    <br>
+                    <br>
+                    <br>
+                    <br>
                 </div>
-                <div :id="chartsId" row wrap />
             </v-flex>
         </v-row>
     </v-container>
 </template>
 
 <style>
-/deep/ .chart {
-    height: 300px;
-    min-width: 400px;
-    max-width: 600px;
-}
 .narrow-column {
     max-width: 500px;
 }

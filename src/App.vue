@@ -41,7 +41,7 @@
             </v-menu>
         </v-app-bar>
 
-        <v-content>
+        <v-content style="overflow: hidden">
             <router-view></router-view>
         </v-content>
     </v-app>
