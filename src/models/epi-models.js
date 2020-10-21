@@ -7,10 +7,12 @@ class SirModel extends FlowPopModel {
 
         this.name = 'SIR'
         this.title = 'Susceptible Infectious Recovered'
+        this.dt = 0.1
+        this.link =
+            'https://github.com/boscoh/popjs/blob/master/src/models/epi-models.js'
 
         this.param = {
             time: 100,
-            dtExponent: -1,
             initialPopulation: 50000,
             initialPrevalence: 3000,
             infectiousPeriod: 10,
@@ -29,7 +31,6 @@ class SirModel extends FlowPopModel {
     }
 
     initializeRun() {
-        this.dt = Math.pow(10, this.param.dtExponent)
         this.param.recoverRate = 1 / this.param.infectiousPeriod
         this.param.contactRate =
             this.param.reproductionNumber * this.param.recoverRate
@@ -56,7 +57,6 @@ class SirModel extends FlowPopModel {
                 key: 'time',
                 max: 300,
             },
-            { key: 'dtExponent', max: 3, min: -3 },
             {
                 key: 'reproductionNumber',
                 max: 20,
@@ -117,7 +117,7 @@ class SirModel extends FlowPopModel {
                     $$\\frac{d}{dt}susceptible = - susceptible \\times forceOfInfection$$
                     $$\\frac{d}{dt}infectious = - infectious \\times recoverRate + susceptible \\times forceOfInfection $$
                     $$\\frac{d}{dt}recovered = infectious \\times recoverRate$$
-                `,
+                    `,
             },
             {
                 title: 'RN',
@@ -126,7 +126,7 @@ class SirModel extends FlowPopModel {
                 xlabel: 'days',
                 markdown: `
                     To see the strength of the disease, it is best to look
-                     the effective reproductive number:
+                    the effective reproductive number:
                     
                     $$R_n = \\frac{susceptible}{population} \\times R_0$$
                     `,

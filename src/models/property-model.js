@@ -22,6 +22,8 @@ class PropertyModel extends PopModel {
             fundGrowthRate: 0.08,
         }
         super(defaultParams)
+        this.link =
+            'https://github.com/boscoh/popjs/blob/master/src/models/property-model.js'
         this.title = 'Property Vs Fund Analyzer'
         this.dt = 1
     }

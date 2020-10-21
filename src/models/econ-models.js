@@ -17,6 +17,8 @@ class EconModel extends PopModel {
             interestRate: 0.04,
         }
         super(params)
+        this.link =
+            'https://github.com/boscoh/popjs/blob/master/src/models/econ-models.js'
         this.title = 'Keen-Minsky Financial Instability Model'
         this.yCutoff = 1e6
         this.dt = 0.05

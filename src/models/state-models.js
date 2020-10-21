@@ -12,6 +12,8 @@ class StateModel extends PopModel {
             carryCapacityDiff: 3,
         }
         super(params)
+        this.link =
+            'https://github.com/boscoh/popjs/blob/master/src/models/state-models.js'
         this.title = 'Turchin Demographic Fiscal Model'
         this.dt = 1
     }

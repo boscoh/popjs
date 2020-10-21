@@ -12,6 +12,8 @@ class EcologyModel extends PopModel {
             predatorDeathRate: 0.2,
         }
         super(params)
+        this.link =
+            'https://github.com/boscoh/popjs/blob/master/src/models/ecology-models.js'
         this.title = 'Lokta Volterra Predator-Prey Model'
         this.dt = 0.1
     }

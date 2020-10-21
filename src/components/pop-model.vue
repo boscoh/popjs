@@ -22,12 +22,26 @@
                   overflow: auto;"
             >
                 <div class="pa-4 mt-5">
+
                     <div
-                        class="display-2 narrow-column font-weight-light mt-5 mb-3"
+                        class="
+                            display-2
+                            narrow-column
+                            font-weight-light
+                            mt-5
+                            mb-3"
                     >
                         {{ title }}
                     </div>
+
+                    <div v-if="link">
+                      <a :href="link">[javascript source]</a>
+                      <br>
+                      <br>
+                    </div>
+
                     <div :id="chartsId" row wrap />
+
                     <br />
                     <br />
                     <br />
@@ -56,6 +70,7 @@ export default {
     data () {
         return {
             title: '',
+            link: '',
             chartsId: `${this.name}-charts`,
             modelName: this.name,
             sliders: [],
@@ -80,6 +95,7 @@ export default {
             console.log('PopModel.mounted', name)
             this.model = new ModelClass[name]()
             this.title = this.model.title
+            this.link = this.model.link ? this.model.link : ''
             this.sliders = this.model.getGuiParams()
             this.chartsContainer = new ChartsContainer(this.chartsId)
             for (let chart of this.model.getCharts()) {
