@@ -30,7 +30,7 @@
 </template>
 
 <style>
-.chart {
+/deep/ .chart {
     height: 300px;
     min-width: 400px;
     max-width: 600px;
@@ -43,7 +43,7 @@
 <script>
 import { ChartsContainer } from './charts-container'
 import Sliders from './sliders'
-import models from '@/models/index'
+import ModelClass from '@/models/index'
 
 export default {
     name: 'PopModel',
@@ -53,6 +53,7 @@ export default {
         return {
             title: '',
             chartsId: `${this.name}-charts`,
+            modelName: this.name,
             sliders: [],
         }
     },
@@ -63,18 +64,25 @@ export default {
             },
             deep: true,
         },
+        $route(to) {
+            this.build(to.name)
+        }
     },
-    async mounted () {
-        this.model = models[this.name]
+    mounted() {
+      this.build(this.name)
+    },
+    methods: {
+      build (name) {
+        console.log('PopModel.mounted', name)
+        this.model = new ModelClass[name]
         this.title = this.model.title
         this.sliders = this.model.getGuiParams()
         this.chartsContainer = new ChartsContainer(this.chartsId)
         for (let chart of this.model.getCharts()) {
-            this.chartsContainer.addChart(chart)
+          this.chartsContainer.addChart(chart)
         }
         this.changeGraph()
-    },
-    methods: {
+      },
         changeGraph () {
             this.model.importGuiParams(this.sliders)
             this.model.run()

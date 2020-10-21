@@ -109,6 +109,7 @@ class ChartWidget {
         this.chart = new Chart(this.$canvas, this.chartData)
 
         console.log(
+            'ChartWidget.constructor',
             this.config,
             _.get(this.config, 'ylabel'),
             _.has(this.config, 'ylabel')
@@ -211,7 +212,13 @@ class ChartsContainer {
             $('<div>')
                 .attr('id', chart.id)
                 .addClass('chart')
+                .css({
+                    height: '300px',
+                    'min-width': '400px',
+                    'max-width': '600px',
+                })
         )
+
         let chartWidget = new ChartWidget(chart)
         this.chartWidgets[chart.id] = chartWidget
     }

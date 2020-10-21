@@ -25,7 +25,7 @@
                     </v-btn>
                 </template>
                 <v-list>
-                    <v-list-item to="/" router
+                    <v-list-item to="/" text router
                         ><v-list-item-title
                             >Home</v-list-item-title
                         ></v-list-item
