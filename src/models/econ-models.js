@@ -131,6 +131,19 @@ class EconModel extends PopModel {
     getCharts() {
         return [
             {
+                markdown: `
+                    The Keen-Minksy model, developed by [Steve Keen](https://keenomics.s3.amazonaws.com/debtdeflation_media/papers/PaperPrePublicationProof.pdf), 
+                    models the economy by converting basic macroeconomic identities into a set of
+                    coupled differential equations. It demonstrates the causal
+                    factors that determine how economies fall into natural business cycles, and
+                    how economies can collapse from runaway debt.
+
+                    In this model, there are three actors - labor, capital and bank.
+                    The model generates the evolution of the relative incomes
+                    of labor (wages), capital (profit) and bank (interest), based purely
+                    on endogenous self-interacting dynamics.
+
+                `,
                 title: 'Test',
                 id: 'test-chart1',
                 keys: ['laborShare', 'capitalShare', 'bankShare'],
@@ -138,57 +151,26 @@ class EconModel extends PopModel {
             },
             {
                 markdown: `
-                    The Keen-Minksy model, developed by [Steve Keen](https://keenomics.s3.amazonaws.com/debtdeflation_media/papers/PaperPrePublicationProof.pdf), 
-                    models the economy by converting basic macroeconomic identities into a set of
-                    coupled differential equations.
-                    
-                    It uses the economic arguments of the Goodwin Business cycle and
-                     the Minsky financial instability hypothesis to generate analytic forms that 
-                     model the action of capitalists and bankers.
-                    
-                    This is a powerful model that uses very clear and well-founded assumptions
-                    to demonstrate how economies fall into natural business cycles, and
-                    how economies can collapse from runaway debt.
-                    
-                    The source code to this implementation of the model can be found [here](https://github.com/boscoh/popjs/blob/master/src/modules/econ-models.js).
-                    
-                    ### The Actors in the Economy
-                    
-                    In this model, there are three actors - labor, capital and bank, and all
-                    three affect the output of the total economy. The relationship 
-                    between output, labor and capital are intertwined by these standard macro relationships 
+                    The model converts standard macro relationships
+                    into differential equations, a method pioneered in
+                    the Goodwin Business cycle model.
                     
                     $$output = labor \\times productivity$$
                     $$capital = output \\times capitalAccelerator$$
                     $$\\frac{d}{dt}(capital) = investment - depreciationRate \\times capital$$
                     
-                    However further equations are needed to represent how investment relates to
-                    the banking sector. 
-                    
-                    Skipping ahead, the model generates the evolution of the incomes
-                     of labor (wages), capital (profit) and bank (interest), based purely
-                     on endogenous self-interacting dynamics.
+                    Further equations are needed to represent how investment relates to
+                    the banking sector, and these will use the Minsky financial instability
+                    hypothesis based on investor sentiment.
                 `,
                 title: 'Income of the 3 classes',
                 id: 'output-chart',
-                keys: ['laborWages', 'capitalProfit', 'bankIncome'],
+                keys: ['laborWages', 'capitalProfit', 'bankIncome', 'debt'],
                 xlabel: 'year',
             },
             {
                 markdown: `
-                    To see the dynamics between the actors, it is easier to compare
-                    the relative income, where population growth has been normalized. It
-                    is a key feature of the model that potentially, the banking sector
-                     will overwhelm the entire economy and drive down wages and profit.
-                `,
-                title: 'The Share between the Classes',
-                id: 'share-chart',
-                keys: ['laborShare', 'capitalShare', 'bankShare'],
-                xlabel: 'year',
-            },
-            {
-                markdown: `
-                    ### The Workers
+                    WORKERS
                     
                     In our model, we have a typical population:
                     
@@ -238,7 +220,7 @@ class EconModel extends PopModel {
             },
             {
                 markdown: `
-                    ### The Profit Drive of Capital
+                    PROFIT DRIVE OF CAPITAL
                     
                     The behaviour of capitalists is modeled as a reaction to profitability.
                     
@@ -277,7 +259,7 @@ class EconModel extends PopModel {
             },
             {
                 markdown: `
-                    ### The Bank
+                    THE BANK
                     
                     Once we can model capitalists' propensity to borrow, we have a model
                     of the banking sector, and thus it's impact on the economy.
