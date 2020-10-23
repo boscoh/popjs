@@ -18,11 +18,6 @@
                     </v-btn>
                 </template>
                 <v-list>
-                    <v-list-item to="/" text router
-                        ><v-list-item-title
-                            >Home</v-list-item-title
-                        ></v-list-item
-                    >
                     <v-list-item
                         v-for="(item, index) in items"
                         :key="index"
@@ -41,18 +36,15 @@
 </template>
 
 <script>
+import models from '@/models/index'
+
+let items = [{to: '/', title: 'Home'}]
+for (let m of models) {
+  items.push({to: m.path, title: m.name})
+}
+
 export default {
     name: 'App',
-    data () {
-        return {
-            items: [
-                { to: '/ecologymodel', title: 'Ecology' },
-                { to: '/statemodel', title: 'Demographic' },
-                { to: '/sirmodel', title: 'Epidemiology' },
-                { to: '/econmodel', title: 'Economics' },
-                { to: '/propertymodel', title: 'Property' },
-            ],
-        }
-    },
+    data () {return {items}},
 }
 </script>

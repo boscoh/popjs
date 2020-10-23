@@ -58,9 +58,10 @@
 </style>
 
 <script>
+import _ from "lodash"
 import { ChartsContainer } from './charts-container'
 import Sliders from './sliders'
-import ModelClass from '@/models/index'
+import models from '@/models/index'
 
 export default {
     name: 'PopModel',
@@ -92,7 +93,8 @@ export default {
     methods: {
         build (name) {
             console.log('PopModel.mounted', name)
-            this.model = new ModelClass[name]()
+            let model = _.find(models, {name})
+            this.model = new model.ModelClass
             this.title = this.model.title
             this.link = this.model.link ? this.model.link : ''
             this.sliders = this.model.getGuiParams()

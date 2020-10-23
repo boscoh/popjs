@@ -15,12 +15,12 @@ const routes = [
 ]
 
 console.log(models)
-for (let name in models) {
+for (let m of models) {
     routes.push({
-        path: '/' + name,
-        name,
+        path: m.path,
+        name: m.name,
         component: PopModel,
-        props: { name },
+        props: { name: m.name },
     })
 }
 

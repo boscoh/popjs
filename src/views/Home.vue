@@ -18,7 +18,20 @@
                     Population Dynamics Modeling
                 </p>
 
-                <div v-html="rawHtml"></div>
+                <div v-html="preHtml"></div>
+
+                <div
+                    v-for="(route, i) in routes"
+                    :key="i"
+                    class="mb-3"
+                >
+                  <v-btn :to="route.path">
+                    {{route.name}}
+                  </v-btn>
+                </div>
+
+              <div v-html="postHtml"></div>
+
             </v-flex>
         </v-row>
     </v-container>
@@ -34,13 +47,24 @@ p {
 import markdownIt from 'markdown-it'
 import katex from 'markdown-it-katex'
 import dedent from 'dedent'
+import models from '@/models/index'
+
 let md = markdownIt('commonmark').use(katex)
+
+let routes = []
+for (let m of models) {
+  routes.push({
+    path: m.path,
+    name: m.name,
+  })
+}
 
 export default {
     name: 'Home',
     data () {
         return {
-            rawHtml: md.render(dedent`
+            routes,
+            preHtml: md.render(dedent`
                 PopJS is a javascript engine to develop
                  population dynamics index purely in the
                 front-end.
@@ -52,6 +76,8 @@ export default {
                  of population behavior, from explosive growth,
                   equilibrium, cycles and catastrophic collapse.
 
+           `),
+          postHtml: md.render(dedent`
                 Built on Vue, Vuetify using Runge-Kutta for integration.
 
                 &copy; 2020 [Bosco Ho](https://boscoh.com)

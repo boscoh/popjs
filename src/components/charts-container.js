@@ -111,12 +111,7 @@ class ChartWidget {
         this.fn = null
         this.chart = new Chart(this.$canvas, this.chartData)
 
-        console.log(
-            'ChartWidget.constructor',
-            this.config,
-            _.get(this.config, 'ylabel'),
-            _.has(this.config, 'ylabel')
-        )
+        console.log('ChartWidget.constructor', this.config)
         this.setTitle(_.get(this.config, 'title', ''))
         this.setXLabel(_.get(this.config, 'xlabel', ''))
         this.setYLabel(_.get(this.config, 'ylabel', ''))
