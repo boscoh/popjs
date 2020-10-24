@@ -159,7 +159,7 @@ class ChartWidget {
         }
         const iDataset = datasets.length
         const newDataset = {
-            label: name,
+            label: _.startCase(name),
             data: newDatasetData,
             fill: false,
             backgroundColor: getColor(iDataset),

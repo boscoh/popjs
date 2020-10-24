@@ -1,12 +1,12 @@
 <template>
-    <v-container fluid style="overflow: hidden">
+    <v-container fluid class="pa-0" style="overflow: hidden">
         <v-row no-gutters>
             <v-col
                 xs="4"
                 sm="4"
                 md="4"
                 lg="3"
-                style="height: calc(100vh - 85px); overflow: auto;"
+                style="height: calc(100vh - 80px); overflow: auto;"
             >
                 <div class="pa-4" style="margin-top: 30px; margin-bottom: 3em">
                     <sliders :sliders="sliders"></sliders>
@@ -19,7 +19,7 @@
                 md="8"
                 lg="9"
                 style="
-                  height: calc(100vh - 60px);
+                  height: calc(100vh - 75px);
                   border-left: 1px solid #EEE;
                   overflow: auto;"
             >
