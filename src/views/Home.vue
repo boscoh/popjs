@@ -20,18 +20,13 @@
 
                 <div v-html="preHtml"></div>
 
-                <div
-                    v-for="(route, i) in routes"
-                    :key="i"
-                    class="mb-3"
-                >
-                  <v-btn :to="route.path">
-                    {{route.name}}
-                  </v-btn>
+                <div v-for="(route, i) in routes" :key="i" class="mb-3">
+                    <v-btn :to="route.path">
+                        {{ route.name }}
+                    </v-btn>
                 </div>
 
-              <div v-html="postHtml"></div>
-
+                <div v-html="postHtml"></div>
             </v-flex>
         </v-row>
     </v-container>
@@ -53,10 +48,10 @@ let md = markdownIt('commonmark').use(katex)
 
 let routes = []
 for (let m of models) {
-  routes.push({
-    path: m.path,
-    name: m.name,
-  })
+    routes.push({
+        path: m.path,
+        name: m.name,
+    })
 }
 
 export default {
@@ -77,7 +72,7 @@ export default {
                   equilibrium, cycles and catastrophic collapse.
 
            `),
-          postHtml: md.render(dedent`
+            postHtml: md.render(dedent`
                 Built on Vue, Vuetify using Runge-Kutta for integration.
 
                 &copy; 2020 [Bosco Ho](https://boscoh.com)

@@ -38,13 +38,15 @@
 <script>
 import models from '@/models/index'
 
-let items = [{to: '/', title: 'Home'}]
+let items = [{ to: '/', title: 'Home' }]
 for (let m of models) {
-  items.push({to: m.path, title: m.name})
+    items.push({ to: m.path, title: m.name })
 }
 
 export default {
     name: 'App',
-    data () {return {items}},
+    data () {
+        return { items }
+    },
 }
 </script>

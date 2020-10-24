@@ -2,7 +2,7 @@ import _ from 'lodash'
 import { FlowPopModel } from './flow-pop-model'
 
 class SirModel extends FlowPopModel {
-    constructor() {
+    constructor () {
         super()
 
         this.name = 'SIR'
@@ -30,7 +30,7 @@ class SirModel extends FlowPopModel {
         this.paramFlows.push(['infectious', 'recovered', 'recoverRate'])
     }
 
-    initializeRun() {
+    initializeRun () {
         this.param.recoverRate = 1 / this.param.infectiousPeriod
         this.param.contactRate =
             this.param.reproductionNumber * this.param.recoverRate
@@ -41,7 +41,7 @@ class SirModel extends FlowPopModel {
         this.var.recovered = 0
     }
 
-    calcAuxVars() {
+    calcAuxVars () {
         this.auxVar.population = _.sum(_.values(this.var))
         this.auxVar.rateForce =
             (this.param.contactRate / this.auxVar.population) *
@@ -51,7 +51,7 @@ class SirModel extends FlowPopModel {
             this.param.reproductionNumber
     }
 
-    getGuiParams() {
+    getGuiParams () {
         let guiParams = [
             {
                 key: 'time',
@@ -84,11 +84,10 @@ class SirModel extends FlowPopModel {
         return guiParams
     }
 
-    getCharts() {
+    getCharts () {
         return [
             {
                 title: 'COMPARTMENTS',
-                id: 'compartment-chart',
                 keys: _.keys(this.var),
                 xlabel: 'days',
                 markdown: `
@@ -120,7 +119,6 @@ class SirModel extends FlowPopModel {
             },
             {
                 title: 'RN',
-                id: 'rn-chart',
                 keys: ['rn'],
                 xlabel: 'days',
                 markdown: `

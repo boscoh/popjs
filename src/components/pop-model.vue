@@ -9,10 +9,10 @@
             >
                 <div class="pa-3">
                     <sliders :sliders="sliders"></sliders>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
+                    <br />
+                    <br />
+                    <br />
+                    <br />
                 </div>
             </v-flex>
 
@@ -61,7 +61,7 @@
 </style>
 
 <script>
-import _ from "lodash"
+import _ from 'lodash'
 import { ChartsContainer } from './charts-container'
 import Sliders from './sliders'
 import models from '@/models/index'
@@ -96,14 +96,14 @@ export default {
     methods: {
         build (name) {
             console.log('PopModel.mounted', name)
-            let model = _.find(models, {name})
-            this.model = new model.ModelClass
+            let model = _.find(models, { name })
+            this.model = new model.ModelClass()
             this.title = this.model.title
             this.link = this.model.link ? this.model.link : ''
             this.sliders = this.model.getGuiParams()
             this.chartsContainer = new ChartsContainer(this.chartsId)
             for (let chart of this.model.getCharts()) {
-              this.chartsContainer.addChart(chart)
+                this.chartsContainer.addChart(chart)
             }
             this.changeGraph()
         },

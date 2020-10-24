@@ -1,7 +1,7 @@
 import { PopModel } from './pop-model'
 
 class StateModel extends PopModel {
-    constructor() {
+    constructor () {
         const params = {
             time: 600,
             maxSurplus: 1,
@@ -18,7 +18,7 @@ class StateModel extends PopModel {
         this.dt = 1
     }
 
-    initializeRun() {
+    initializeRun () {
         this.fn.carryCapacityFromStateRevenue = revenue =>
             1 +
             this.param.carryCapacityDiff *
@@ -27,7 +27,7 @@ class StateModel extends PopModel {
         this.var.revenue = 0
     }
 
-    calcAuxVars() {
+    calcAuxVars () {
         let s = this.var.revenue > 0 ? this.var.revenue : 0
         this.auxVar.carryingCapacityFunction = this.fn.carryCapacityFromStateRevenue(
             s
@@ -37,7 +37,7 @@ class StateModel extends PopModel {
             (1 - this.var.population / this.auxVar.carryingCapacityFunction)
     }
 
-    calcDVars() {
+    calcDVars () {
         this.dVar.population =
             this.param.populationGrowthRate *
             this.var.population *
@@ -51,7 +51,7 @@ class StateModel extends PopModel {
         }
     }
 
-    getGuiParams() {
+    getGuiParams () {
         let guiParams = [
             { key: 'time', max: 1000 },
             {
@@ -81,7 +81,7 @@ class StateModel extends PopModel {
         return guiParams
     }
 
-    getCharts() {
+    getCharts () {
         return [
             {
                 markdown: `
@@ -98,7 +98,6 @@ class StateModel extends PopModel {
                     the carrying capacity and state revenue. In general the model shows how a state follows a simple growth and sudden decline simply due to internal dynamics
                 `,
                 title: 'People',
-                id: 'people-chart',
                 keys: ['population', 'carryingCapacityFunction'],
                 xlabel: 'year',
             },
@@ -113,7 +112,6 @@ class StateModel extends PopModel {
                     $$ carryingCapacityFunction = 1 + capacityDiff \\times \\left( \\frac{revenue}{ revenueAtHalfCapacity + revenue}  \\right)$$
                 `,
                 title: 'Carrying Capacity Function',
-                id: 'carry-capacity-chart',
                 fn: 'carryCapacityFromStateRevenue',
                 xlims: [0, 100],
                 ymin: 0,
@@ -133,7 +131,6 @@ class StateModel extends PopModel {
                     $$surplus = maxSurplus \\times \\left(  1 - \\frac{ population } { carryingCapacityFunction } \\right) $$
                 `,
                 title: 'Surplus',
-                id: 'surplus-chart',
                 keys: ['surplus'],
                 xlabel: 'year',
             },
@@ -148,7 +145,6 @@ class StateModel extends PopModel {
                     $$\\frac{d}{dt}(revenue) = tax \\times population \\times surplus - expenditurePerCapita * population$$
                 `,
                 title: 'Revenue',
-                id: 'revenue-chart',
                 keys: ['revenue'],
                 xlabel: 'year',
             },

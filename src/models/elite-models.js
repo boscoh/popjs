@@ -125,19 +125,19 @@ class EliteModel extends PopModel {
             {
                 markdown: `
 
-                The Elite Demographic State model from Peter Turchin provides
-                a concrete model for the rise and fall of states. The state
-                has three major components:
+                    The Elite Demographic State model from Peter Turchin provides
+                    a concrete model for the rise and fall of states. The state
+                    has three major components:
+    
+                    1. Producers make the food, and increase if there is enough food
+                    2. Elites extract food from the producers but are prone to infighting
+                    3. The State improves the productivity of producers and pacifies elite infighting
+            
+                    The producer population will rise and fall depending on the
+                    surplus produced, which depends on how many elites are
+                    extracting wealth, and on the productivity improvements due to the state:
 
-                1. Producers make the food, and increase if there is enough food
-                2. Elites extract food from the producers but are prone to infighting
-                3. The State improves the productivity of producers and pacifies elite infighting
-        
-                The producer population will rise and fall depending on the
-                surplus produced, which depends on how many elites are
-                extracting wealth, and on the productivity improvements due to the state:
-
-            `,
+                `,
                 title: 'people',
                 keys: ['producer', 'elite', 'state'],
                 ymax_cutoff: 100,
@@ -145,38 +145,38 @@ class EliteModel extends PopModel {
             {
                 markdown: `
 
-                ### Share of Production
-    
-                The amount of resources produced is:
-    
-                $$ totalProduct = producer \\times productionRate $$
-    
-                where the production rate can be improved by the
-                state through the production decline function (discussed below)
-                $$ productionRate = 
-                             maxProductionRate
-                             \\times 
-                                \\left[
-                                  1 - prodDeclineFn(state)
-                                   \\times producer
-                                \\right]
-                $$
-    
-                Here, we use a greedy elite model where all the product will
-                be extracted if the elite numbers grows large enough, leading to
-                the elite fraction for the total product:
-    
-                $$ eliteFraction = 
-                          \\frac
-                            { elite }
-                            {1 - eliteAtHalfExtraction \\times elite}
-                $$
-    
-                $$ eliteShare = totalProduct \\times eliteFraction $$
-    
-                This leaves the producers:
-    
-                $$ producerShare = totalProduct - eliteShare $$
+                    ### Share of Production
+        
+                    The amount of resources produced is:
+        
+                    $$ totalProduct = producer \\times productionRate $$
+        
+                    where the production rate can be improved by the
+                    state through the production decline function (discussed below)
+                    $$ productionRate = 
+                                 maxProductionRate
+                                 \\times 
+                                    \\left[
+                                      1 - prodDeclineFn(state)
+                                       \\times producer
+                                    \\right]
+                    $$
+        
+                    Here, we use a greedy elite model where all the product will
+                    be extracted if the elite numbers grows large enough, leading to
+                    the elite fraction for the total product:
+        
+                    $$ eliteFraction = 
+                              \\frac
+                                { elite }
+                                {1 - eliteAtHalfExtraction \\times elite}
+                    $$
+        
+                    $$ eliteShare = totalProduct \\times eliteFraction $$
+        
+                    This leaves the producers:
+        
+                    $$ producerShare = totalProduct - eliteShare $$
     
                 `,
                 title: 'Production Rate',
@@ -186,30 +186,28 @@ class EliteModel extends PopModel {
             {
                 markdown: `
 
-                When expressed per capita, we can see the relative
-                wealth of producers versus elites over time.
-    
+                    When expressed per capita, we can see the relative
+                    wealth of producers versus elites over time.
+        
                 `,
                 title: 'Earnings Per Capita',
-                id: 'earning-chart',
                 keys: ['productPerProducer', 'productPerElite'],
                 ymin: 0,
             },
             {
                 markdown: `
 
-                ### State improves production
-    
-                As the State gets stronger, it will be able to improve
-                production. This is expressed through the Production
-                Decline Function which defines how the state softens the
-                production decline. The production decline measures
-                the decline in the production rate due to over-crowding
-                as the producer population nears the carrying capacity.
+                    ### State improves production
+        
+                    As the State gets stronger, it will be able to improve
+                    production. This is expressed through the Production
+                    Decline Function which defines how the state softens the
+                    production decline. The production decline measures
+                    the decline in the production rate due to over-crowding
+                    as the producer population nears the carrying capacity.
     
                 `,
                 fn: 'prodDeclineFn',
-                id: 'prod-decline-chart',
                 xlims: [0, 1],
                 ymin: 0,
                 var: 'state',
@@ -217,51 +215,49 @@ class EliteModel extends PopModel {
             {
                 markdown: `
 
-                Thus we can see how as state revenue increases, the
-                effective carrying capacity increases.
+                    Thus we can see how as state revenue increases, the
+                    effective carrying capacity increases.
     
                 `,
                 title: 'State Action on Producer Capacity',
-                id: 'state-prod-chart',
                 keys: ['producer', 'carry', 'state'],
                 ymin: 0,
             },
             {
                 markdown: `
 
-                ### Pacification of Elite infighting
+                    ### Pacification of Elite infighting
+        
+                    In the model, the intrinsic maxEliteDeath is quite high as
+                    elites will fight amongst themselves for
+                    resources. However, as the state increases strength,
+                    the state can impose peace on the elites, and this is reflected
+                    in:
     
-                In the model, the intrinsic maxEliteDeath is quite high as
-                elites will fight amongst themselves for
-                resources. However, as the state increases strength,
-                the state can impose peace on the elites, and this is reflected
-                in:
-
-                $$ stateModifiedFraction = 1 
-                        - 
-                        \\frac
-                            {state}
-                            {stateAtHalfPeace + state}
-                $$
-
-                resulting in a lower elite death rate:
+                    $$ stateModifiedFraction = 1 
+                            - 
+                            \\frac
+                                {state}
+                                {stateAtHalfPeace + state}
+                    $$
     
-                $$ eliteDeathRate = maxEliteDeath
-                            \\times stateModifiedFraction
-                $$
-    
-                The deaths of elites obviously depends also
-                on the number of elites that have managed
-                to grow due to extraction of resources from
-                the producers:
-    
-                $$ eliteDeath = elite 
-                            \\times eliteDeathRate
-                $$
+                    resulting in a lower elite death rate:
+        
+                    $$ eliteDeathRate = maxEliteDeath
+                                \\times stateModifiedFraction
+                    $$
+        
+                    The deaths of elites obviously depends also
+                    on the number of elites that have managed
+                    to grow due to extraction of resources from
+                    the producers:
+        
+                    $$ eliteDeath = elite 
+                                \\times eliteDeathRate
+                    $$
     
                 `,
                 title: 'State Action on Elites',
-                id: 'state-elite-chart',
                 keys: ['eliteDeathRate', 'eliteDeath', 'state'],
                 ymin: 0,
             },

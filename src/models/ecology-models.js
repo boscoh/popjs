@@ -89,7 +89,6 @@ class EcologyModel extends PopModel {
                     $$\\frac{d}{dt}(predator) = digestionRate \\times prey \\times predator - predatorDeathRate \\times predator$$
                 `,
                 title: 'Ecology',
-                id: 'predator-prey-chart',
                 keys: ['predator', 'prey'],
                 xlabel: 'year',
             },

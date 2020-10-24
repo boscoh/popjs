@@ -5,7 +5,7 @@ import {
 } from './pop-model'
 
 class EconModel extends PopModel {
-    constructor() {
+    constructor () {
         const params = {
             time: 200,
             productivityGrowthRate: 0.015,
@@ -30,7 +30,7 @@ class EconModel extends PopModel {
         this.fn.investFn = makeLinearFunction(10, 0.03)
     }
 
-    initializeRun() {
+    initializeRun () {
         this.var.wage = this.param.initialWage
         this.var.productivity = 1
         this.var.population = 100
@@ -41,7 +41,7 @@ class EconModel extends PopModel {
         this.var.debtRatio = 0
     }
 
-    calcAuxVars() {
+    calcAuxVars () {
         this.auxVar.labor = this.var.laborFraction * this.var.population
         this.auxVar.wageDelta = this.fn.wageFn(this.var.laborFraction)
         this.auxVar.laborWages = this.var.wage * this.auxVar.labor
@@ -67,7 +67,7 @@ class EconModel extends PopModel {
         this.auxVar.borrow = this.auxVar.investment - this.auxVar.capitalProfit
     }
 
-    calcDVars() {
+    calcDVars () {
         this.dVar.wage = this.auxVar.wageDelta * this.var.wage
 
         this.dVar.productivity =
@@ -94,7 +94,7 @@ class EconModel extends PopModel {
             this.var.debtRatio * this.auxVar.realGrowthRate
     }
 
-    getGuiParams() {
+    getGuiParams () {
         let guiParams = [
             { key: 'time', max: 500 },
             {
@@ -128,7 +128,7 @@ class EconModel extends PopModel {
         return guiParams
     }
 
-    getCharts() {
+    getCharts () {
         return [
             {
                 markdown: `
@@ -145,7 +145,6 @@ class EconModel extends PopModel {
 
                 `,
                 title: 'Test',
-                id: 'test-chart1',
                 keys: ['laborShare', 'capitalShare', 'bankShare'],
                 xlabel: 'year',
             },
@@ -164,7 +163,6 @@ class EconModel extends PopModel {
                     hypothesis based on investor sentiment.
                 `,
                 title: 'Income of the 3 classes',
-                id: 'output-chart',
                 keys: ['laborWages', 'capitalProfit', 'bankIncome', 'debt'],
                 xlabel: 'year',
             },
@@ -196,7 +194,6 @@ class EconModel extends PopModel {
                     the wage as the employment fraction approaches 1.
                 `,
                 title: 'The Keen Wage Function',
-                id: 'wagefn-chart',
                 fn: 'wageFn',
                 xlims: [0.6, 1.05],
                 ymin: 0,
@@ -214,7 +211,6 @@ class EconModel extends PopModel {
                     the typical business cycle.
                 `,
                 title: 'Workers in the Population',
-                id: 'pop-chart',
                 keys: ['population', 'labor'],
                 xlabel: 'year',
             },
@@ -234,7 +230,6 @@ class EconModel extends PopModel {
                     investment as a function of profitability:
                 `,
                 title: 'The Keen Investment Function',
-                id: 'investfn-chart',
                 fn: 'investFn',
                 xlims: [-0.4, 0.15],
                 ymin: 0,
@@ -253,7 +248,6 @@ class EconModel extends PopModel {
                     becomes the income of the bank.
                 `,
                 title: 'What drives Investment',
-                id: 'investment-chart',
                 keys: ['capitalProfit', 'investment', 'borrow', 'bankIncome'],
                 xlabel: 'year',
             },
@@ -285,7 +279,6 @@ class EconModel extends PopModel {
                     interest payments.
                 `,
                 title: 'The Banking system in the Economy',
-                id: 'debt-chart',
                 keys: ['debt', 'capital', 'output', 'interest'],
                 xlabel: 'year',
             },
