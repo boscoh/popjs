@@ -1,10 +1,11 @@
 <template>
     <v-container fluid class="pa-0" style="overflow: hidden">
         <v-row row wrap no-gutters>
-            <v-flex
-                xs4
-                md4
-                lg3
+            <v-col
+                xs="4"
+                sm="4"
+                md="4"
+                lg="3"
                 style="margin-top: 30px; height: calc(100vh - 85px); overflow: auto;"
             >
                 <div class="pa-3">
@@ -14,12 +15,13 @@
                     <br />
                     <br />
                 </div>
-            </v-flex>
+            </v-col>
 
-            <v-flex
-                xs8
-                md8
-                lg9
+            <v-col
+                xs="4"
+                sm="8"
+                md="8"
+                lg="9"
                 style="
                   height: calc(100vh - 60px);
                   border-left: 1px solid #EEE;
@@ -49,7 +51,7 @@
                     <br />
                     <br />
                 </div>
-            </v-flex>
+            </v-col>
         </v-row>
     </v-container>
 </template>

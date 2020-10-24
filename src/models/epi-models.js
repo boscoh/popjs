@@ -1,8 +1,65 @@
 import _ from 'lodash'
-import { FlowPopModel } from './flow-pop-model'
+import { PopModel } from '@/models/pop-model'
+
+class FlowPopModel extends PopModel {
+    constructor() {
+        super()
+        this.auxVarFlows = []
+        this.paramFlows = []
+        this.dt = 1
+    }
+
+    calcDVars() {
+        let flows = []
+
+        for (let [from, to, auxVarKey] of this.auxVarFlows) {
+            let val = this.auxVar[auxVarKey] * this.var[from]
+            flows.push([from, to, val])
+        }
+
+        for (let [from, to, paramKey] of this.paramFlows) {
+            let val = this.param[paramKey] * this.var[from]
+            flows.push([from, to, val])
+        }
+
+        for (let key of _.keys(this.dVar)) {
+            this.dVar[key] = 0
+        }
+
+        for (let [from, to, val] of flows) {
+            this.dVar[from] -= val
+            this.dVar[to] += val
+        }
+    }
+
+    preRunCheck() {
+        this.calcAuxVars()
+        this.calcDVars()
+        let auxVarKeys = _.keys(this.auxVar)
+        for (let auxVarEvent of this.auxVarFlows) {
+            let auxVarEventKey = auxVarEvent[2]
+            if (!_.includes(auxVarKeys, auxVarEventKey)) {
+                console.log(
+                    `Error: ${auxVarEventKey} of this.auxVarFlows not ` +
+                        `found in this.calcAuxVars`
+                )
+            }
+        }
+        let paramKeys = _.keys(this.param)
+        for (let paramEvent of this.paramFlows) {
+            let paramEventKey = paramEvent[2]
+            if (!_.includes(paramKeys, paramEventKey)) {
+                console.log(
+                    `Error: ${paramEventKey} of this.paramFlows not ` +
+                        `found in this.param`
+                )
+            }
+        }
+    }
+}
 
 class SirModel extends FlowPopModel {
-    constructor () {
+    constructor() {
         super()
 
         this.name = 'SIR'
@@ -30,7 +87,7 @@ class SirModel extends FlowPopModel {
         this.paramFlows.push(['infectious', 'recovered', 'recoverRate'])
     }
 
-    initializeRun () {
+    initializeRun() {
         this.param.recoverRate = 1 / this.param.infectiousPeriod
         this.param.contactRate =
             this.param.reproductionNumber * this.param.recoverRate
@@ -41,7 +98,7 @@ class SirModel extends FlowPopModel {
         this.var.recovered = 0
     }
 
-    calcAuxVars () {
+    calcAuxVars() {
         this.auxVar.population = _.sum(_.values(this.var))
         this.auxVar.rateForce =
             (this.param.contactRate / this.auxVar.population) *
@@ -51,7 +108,7 @@ class SirModel extends FlowPopModel {
             this.param.reproductionNumber
     }
 
-    getGuiParams () {
+    getGuiParams() {
         let guiParams = [
             {
                 key: 'time',
@@ -84,7 +141,7 @@ class SirModel extends FlowPopModel {
         return guiParams
     }
 
-    getCharts () {
+    getCharts() {
         return [
             {
                 title: 'COMPARTMENTS',
