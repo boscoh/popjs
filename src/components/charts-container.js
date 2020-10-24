@@ -111,7 +111,11 @@ class ChartWidget {
         this.fn = null
         this.chart = new Chart(this.$canvas, this.chartData)
 
-        console.log('ChartWidget.constructor', this.config)
+        console.log(
+            'ChartWidget.constructor',
+            this.config.id,
+            `"${this.config.title}`
+        )
         this.setTitle(_.get(this.config, 'title', ''))
         this.setXLabel(_.get(this.config, 'xlabel', ''))
         this.setYLabel(_.get(this.config, 'ylabel', ''))
@@ -200,6 +204,14 @@ class ChartsContainer {
     }
 
     addChart(chart) {
+        if (!chart.id) {
+            if (chart.title) {
+                chart.id =
+                    chart.title.replace(' ', '-').toLowerCase() + '-chart'
+            } else {
+                chart.id = Math.random() + '-chart'
+            }
+        }
         if (_.has(chart, 'markdown')) {
             this.$div.append(
                 $('<div>')

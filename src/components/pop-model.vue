@@ -9,6 +9,10 @@
             >
                 <div class="pa-3">
                     <sliders :sliders="sliders"></sliders>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
                 </div>
             </v-flex>
 
@@ -24,9 +28,8 @@
                 <div class="pa-4 mt-5">
                     <div
                         class="
-                            display-2
+                            display-1
                             narrow-column
-                            font-weight-light
                             mt-5
                             mb-3"
                     >
@@ -34,7 +37,7 @@
                     </div>
 
                     <div v-if="link">
-                        <a :href="link">[javascript source]</a>
+                        <v-btn small :href="link">javascript source</v-btn>
                         <br />
                         <br />
                     </div>
@@ -100,7 +103,7 @@ export default {
             this.sliders = this.model.getGuiParams()
             this.chartsContainer = new ChartsContainer(this.chartsId)
             for (let chart of this.model.getCharts()) {
-                this.chartsContainer.addChart(chart)
+              this.chartsContainer.addChart(chart)
             }
             this.changeGraph()
         },

@@ -11,7 +11,7 @@
             </v-flex>
 
             <v-flex xs8 md8 lg9 class="pa-4 pb-5 mt-5">
-                <p class="display-2 font-weight-light mt-5">
+                <p class="display-2 mt-5">
                     PopJS
                 </p>
                 <p class="mt-5 font-weight-bold text-uppercase">
