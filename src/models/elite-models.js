@@ -1,17 +1,7 @@
-import { PopModel } from './pop-model'
-
-function make_approach_fn (y_init, y_final, x_at_midpoint) {
-    const diff_g = y_final - y_init
-    return function (x) {
-        if (x < 0) {
-            return y_init
-        }
-        return y_init + diff_g * (x / (x_at_midpoint + x))
-    }
-}
+import { makeApproachFn, PopModel } from './pop-model'
 
 class EliteModel extends PopModel {
-    constructor () {
+    constructor() {
         super()
         this.param.time = 400
         this.param.maxProductionRate = 2
@@ -36,19 +26,19 @@ class EliteModel extends PopModel {
         this.dt = 1
     }
 
-    initializeRun () {
+    initializeRun() {
         this.var.producer = this.param.initProducer
         this.var.elite = this.param.initElite
         this.var.state = this.param.initState
 
-        this.fn.prodDeclineFn = make_approach_fn(
+        this.fn.prodDeclineFn = makeApproachFn(
             this.param.initProdDecline,
             this.param.finalStateProdDecline,
             this.param.stateAtHalfCarry
         )
     }
 
-    calcAuxVars () {
+    calcAuxVars() {
         this.auxVar.prodDecline = this.fn.prodDeclineFn(this.var.state)
 
         this.auxVar.totalProduct =
@@ -81,7 +71,7 @@ class EliteModel extends PopModel {
             this.auxVar.producerShare / this.var.producer
     }
 
-    calcDVars () {
+    calcDVars() {
         this.dVar.producer =
             this.param.producerBirth * this.auxVar.producerShare -
             this.param.producerDeath * this.var.producer
@@ -100,7 +90,7 @@ class EliteModel extends PopModel {
         }
     }
 
-    getGuiParams () {
+    getGuiParams() {
         let guiParams = []
         for (let key in this.param) {
             if (key === 'dt') {
@@ -120,7 +110,7 @@ class EliteModel extends PopModel {
         return guiParams
     }
 
-    getCharts () {
+    getCharts() {
         return [
             {
                 markdown: `

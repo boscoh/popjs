@@ -2,14 +2,14 @@ import _ from 'lodash'
 import { PopModel } from '@/models/pop-model'
 
 class FlowPopModel extends PopModel {
-    constructor() {
+    constructor () {
         super()
         this.auxVarFlows = []
         this.paramFlows = []
         this.dt = 1
     }
 
-    calcDVars() {
+    calcDVars () {
         let flows = []
 
         for (let [from, to, auxVarKey] of this.auxVarFlows) {
@@ -32,7 +32,7 @@ class FlowPopModel extends PopModel {
         }
     }
 
-    preRunCheck() {
+    preRunCheck () {
         this.calcAuxVars()
         this.calcDVars()
         let auxVarKeys = _.keys(this.auxVar)
@@ -59,7 +59,7 @@ class FlowPopModel extends PopModel {
 }
 
 class SirModel extends FlowPopModel {
-    constructor() {
+    constructor () {
         super()
 
         this.name = 'SIR'
@@ -87,7 +87,7 @@ class SirModel extends FlowPopModel {
         this.paramFlows.push(['infectious', 'recovered', 'recoverRate'])
     }
 
-    initializeRun() {
+    initializeRun () {
         this.param.recoverRate = 1 / this.param.infectiousPeriod
         this.param.contactRate =
             this.param.reproductionNumber * this.param.recoverRate
@@ -98,7 +98,7 @@ class SirModel extends FlowPopModel {
         this.var.recovered = 0
     }
 
-    calcAuxVars() {
+    calcAuxVars () {
         this.auxVar.population = _.sum(_.values(this.var))
         this.auxVar.rateForce =
             (this.param.contactRate / this.auxVar.population) *
@@ -108,7 +108,7 @@ class SirModel extends FlowPopModel {
             this.param.reproductionNumber
     }
 
-    getGuiParams() {
+    getGuiParams () {
         let guiParams = [
             {
                 key: 'time',
@@ -141,7 +141,7 @@ class SirModel extends FlowPopModel {
         return guiParams
     }
 
-    getCharts() {
+    getCharts () {
         return [
             {
                 title: 'COMPARTMENTS',

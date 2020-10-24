@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
-import PopModel from '@/components/pop-model'
+import Home from '@/components/Home.vue'
+import PopModel from '@/components/PopModel'
 import models from '@/models/index'
 
 Vue.use(VueRouter)
