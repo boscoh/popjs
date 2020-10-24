@@ -130,7 +130,7 @@ class EliteModel extends PopModel {
                 `,
                 title: 'people',
                 keys: ['producer', 'elite', 'state'],
-                ymax_cutoff: 100,
+                yMax: 100,
             },
             {
                 markdown: `

@@ -98,7 +98,7 @@ export default {
     methods: {
         change () {
             if (this.callback) {
-              this.callback()
+                this.callback()
             }
         },
     },

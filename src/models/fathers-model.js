@@ -6,7 +6,8 @@ class FathersModel extends PopModel {
         super()
         this.integrateMethod = 'runWithEuler'
         this.param.time = 150
-        this.dt = 0.1
+        this.dt = 0.5
+        this.yCutoff = 1e5
 
         this.param.nAge = 25
 
@@ -187,16 +188,11 @@ class FathersModel extends PopModel {
                     $$
                 `,
                 title: 'All',
-                keys: [
-                    'naive_total',
-                    'radical_total',
-                    'radical_total_delayed',
-                    'moderate_total',
-                ],
+                keys: ['naive_total', 'radical_total', 'moderate_total'],
             },
-            // { title: 'Naive Age Groups', keys: this.pops.naive },
-            // { title: 'Radical Age Groups', keys: this.pops.radical },
-            // { title: 'Moderate Age Groups', keys: this.pops.moderate },
+            { title: 'Naive Age Groups', keys: this.pops.naive },
+            { title: 'Radical Age Groups', keys: this.pops.radical },
+            { title: 'Moderate Age Groups', keys: this.pops.moderate },
         ]
     }
 }
