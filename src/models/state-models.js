@@ -1,7 +1,7 @@
 import { PopModel } from './pop-model'
 
 class StateModel extends PopModel {
-    constructor () {
+    constructor() {
         const params = {
             time: 600,
             maxSurplus: 1,
@@ -18,7 +18,7 @@ class StateModel extends PopModel {
         this.dt = 1
     }
 
-    initializeRun () {
+    initializeRun() {
         this.fn.carryCapacityFromStateRevenue = revenue =>
             1 +
             this.param.carryCapacityDiff *
@@ -27,7 +27,7 @@ class StateModel extends PopModel {
         this.var.revenue = 0
     }
 
-    calcAuxVars () {
+    calcAuxVars() {
         let s = this.var.revenue > 0 ? this.var.revenue : 0
         this.auxVar.carryingCapacityFunction = this.fn.carryCapacityFromStateRevenue(
             s
@@ -37,7 +37,7 @@ class StateModel extends PopModel {
             (1 - this.var.population / this.auxVar.carryingCapacityFunction)
     }
 
-    calcDVars () {
+    calcDVars() {
         this.dVar.population =
             this.param.populationGrowthRate *
             this.var.population *
@@ -51,8 +51,8 @@ class StateModel extends PopModel {
         }
     }
 
-    getGuiParams () {
-        let guiParams = [
+    getGuiParams() {
+        return [
             { key: 'time', max: 1000 },
             {
                 key: 'maxSurplus',
@@ -75,13 +75,9 @@ class StateModel extends PopModel {
                 max: 50,
             },
         ]
-        for (let param of guiParams) {
-            this.fillGuiParam(param)
-        }
-        return guiParams
     }
 
-    getCharts () {
+    getCharts() {
         return [
             {
                 markdown: `

@@ -1,36 +1,30 @@
-import {
-    makeExponentialFunction,
-    PopModel,
-    makeLinearFunction,
-} from './pop-model'
+import { PopModel, makeLinearFunction } from './pop-model'
 
 class EconModel extends PopModel {
-    constructor () {
-        const params = {
-            time: 200,
-            productivityGrowthRate: 0.015,
-            populationGrowthRate: 0.02,
-            capitalAccelerator: 3,
-            depreciationRate: 0.06,
-            initialWage: 0.85,
-            initialLaborFraction: 0.61,
-            interestRate: 0.04,
-        }
-        super(params)
+    constructor() {
+        super()
         this.link =
             'https://github.com/boscoh/popjs/blob/master/src/models/econ-models.js'
         this.title = 'Keen-Minsky Financial Instability Model'
-        this.yCutoff = 1e6
+        this.yCutoff = 1e10
         this.dt = 0.05
+        this.param.time = 200
+        this.param.productivityGrowthRate = 0.015
+        this.param.populationGrowthRate = 0.02
+        this.param.capitalAccelerator = 3
+        this.param.depreciationRate = 0.06
+        this.param.initialWage = 0.85
+        this.param.initialLaborFraction = 0.61
+        this.param.interestRate = 0.04
+    }
 
-        this.fn.wageFn = makeExponentialFunction(0.95, 0.0, 0.5, -0.01)
-        this.fn.investFn = makeExponentialFunction(0.05, 0.05, 1.75, 0)
+    initializeRun() {
+        // this.fn.wageFn = makeExponentialFunction(0.95, 0.0, 0.5, -0.01)
+        // this.fn.investFn = makeExponentialFunction(0.05, 0.05, 1.75, 0)
 
         this.fn.wageFn = makeLinearFunction(4, 0.6)
         this.fn.investFn = makeLinearFunction(10, 0.03)
-    }
 
-    initializeRun () {
         this.var.wage = this.param.initialWage
         this.var.productivity = 1
         this.var.population = 100
@@ -41,7 +35,7 @@ class EconModel extends PopModel {
         this.var.debtRatio = 0
     }
 
-    calcAuxVars () {
+    calcAuxVars() {
         this.auxVar.labor = this.var.laborFraction * this.var.population
         this.auxVar.wageDelta = this.fn.wageFn(this.var.laborFraction)
         this.auxVar.laborWages = this.var.wage * this.auxVar.labor
@@ -67,7 +61,7 @@ class EconModel extends PopModel {
         this.auxVar.borrow = this.auxVar.investment - this.auxVar.capitalProfit
     }
 
-    calcDVars () {
+    calcDVars() {
         this.dVar.wage = this.auxVar.wageDelta * this.var.wage
 
         this.dVar.productivity =
@@ -94,8 +88,8 @@ class EconModel extends PopModel {
             this.var.debtRatio * this.auxVar.realGrowthRate
     }
 
-    getGuiParams () {
-        let guiParams = [
+    getGuiParams() {
+        return [
             { key: 'time', max: 500 },
             {
                 key: 'initialLaborFraction',
@@ -122,17 +116,14 @@ class EconModel extends PopModel {
                 max: 0.2,
             },
         ]
-        for (let param of guiParams) {
-            this.fillGuiParam(param)
-        }
-        return guiParams
     }
 
-    getCharts () {
+    getCharts() {
         return [
             {
                 markdown: `
-                    The Keen-Minksy model, developed by [Steve Keen](https://keenomics.s3.amazonaws.com/debtdeflation_media/papers/PaperPrePublicationProof.pdf), 
+                    The Keen-Minksy model, developed by [Steve Keen]
+                    (https://keenomics.s3.amazonaws.com/debtdeflation_media/papers/PaperPrePublicationProof.pdf), 
                     models the economy by converting basic macroeconomic identities into a set of
                     coupled differential equations. It demonstrates the causal
                     factors that determine how economies fall into natural business cycles, and
@@ -158,6 +149,10 @@ class EconModel extends PopModel {
                     $$capital = output \\times capitalAccelerator$$
                     $$\\frac{d}{dt}(capital) = investment - depreciationRate \\times capital$$
                     
+                    The capital accelerator reflects the productive capacity
+                    of capital and incorporates technological improvements of
+                    machinery, processes and land.
+                    
                     Further equations are needed to represent how investment relates to
                     the banking sector, and these will use the Minsky financial instability
                     hypothesis based on investor sentiment.
@@ -168,14 +163,14 @@ class EconModel extends PopModel {
             },
             {
                 markdown: `
-                    WORKERS
+                    ### Workers
                     
                     In our model, we have a typical population:
                     
                     $$\\frac{d}{dt}(population) = population \\times populationGrowthRate$$
                     
                     Productivity is assumed to increase steadily due to innovations in
-                    technology:
+                    technology to worker efficiencies:
                     
                     $$\\frac{d}{dt}(productivity) = productivity \\times productivityGrowthRate$$
                     
@@ -196,7 +191,6 @@ class EconModel extends PopModel {
                 title: 'The Keen Wage Function',
                 fn: 'wageFn',
                 xlims: [0.6, 1.05],
-                ymin: 0,
                 xlabel: 'Employed Fraction',
                 ylabel: 'Wage Change',
             },
@@ -216,7 +210,7 @@ class EconModel extends PopModel {
             },
             {
                 markdown: `
-                    PROFIT DRIVE OF CAPITAL
+                    ### Profit Drive of Capital
                     
                     The behaviour of capitalists is modeled as a reaction to profitability.
                     
@@ -232,7 +226,6 @@ class EconModel extends PopModel {
                 title: 'The Keen Investment Function',
                 fn: 'investFn',
                 xlims: [-0.4, 0.15],
-                ymin: 0,
                 xlabel: 'profitability',
                 ylabel: 'Investment Change',
             },
@@ -253,7 +246,7 @@ class EconModel extends PopModel {
             },
             {
                 markdown: `
-                    THE BANK
+                    ### The Bank
                     
                     Once we can model capitalists' propensity to borrow, we have a model
                     of the banking sector, and thus it's impact on the economy.

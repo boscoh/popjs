@@ -11,7 +11,7 @@ md.use(mk)
  * Functions to generate chartJs data for model
  */
 
-function makeLineChartData(title, xAxisLabel, yAxisLabel) {
+function makeLineChartData (title, xAxisLabel, yAxisLabel) {
     return {
         type: 'line',
         data: {
@@ -79,7 +79,7 @@ const colors = [
 
 const seenNames = []
 
-function getColor(name) {
+function getColor (name) {
     let i = seenNames.indexOf(name)
     if (i < 0) {
         seenNames.push(name)
@@ -94,7 +94,7 @@ function getColor(name) {
  *
  */
 class ChartWidget {
-    constructor(config) {
+    constructor (config) {
         this.config = config
         this.id = config.id
         this.$div = $(`#${this.id}`)
@@ -138,15 +138,15 @@ class ChartWidget {
         }
     }
 
-    getDatasets() {
+    getDatasets () {
         return this.chartData.data.datasets
     }
 
-    getChartOptions() {
+    getChartOptions () {
         return this.chartData.options
     }
 
-    addDataset(name, xValues, yValues) {
+    addDataset (name, xValues, yValues) {
         const datasets = this.getDatasets()
         const newDatasetData = []
         if (xValues && yValues) {
@@ -175,7 +175,7 @@ class ChartWidget {
         return iDataset
     }
 
-    updateDataset(key, xValues, yValues) {
+    updateDataset (key, xValues, yValues) {
         const data = []
         for (let i = 0; i < xValues.length; i += 1) {
             data.push({
@@ -189,29 +189,29 @@ class ChartWidget {
         this.chart.update()
     }
 
-    setTitle(title) {
+    setTitle (title) {
         const options = this.getChartOptions()
         options.title.text = title
     }
 
-    setXLabel(xLabel) {
+    setXLabel (xLabel) {
         const options = this.getChartOptions()
         options.scales.xAxes[0].scaleLabel.labelString = xLabel
     }
 
-    setYLabel(yLabel) {
+    setYLabel (yLabel) {
         const options = this.getChartOptions()
         options.scales.yAxes[0].scaleLabel.labelString = yLabel
     }
 }
 
 class ChartsContainer {
-    constructor(divId) {
+    constructor (divId) {
         this.chartWidgets = {}
         this.$div = $(`#${divId}`).empty()
     }
 
-    addChart(chart) {
+    addChart (chart) {
         if (!chart.id) {
             if (chart.title) {
                 chart.id = _.kebabCase(chart.title) + '-chart'
@@ -243,11 +243,11 @@ class ChartsContainer {
         this.chartWidgets[chart.id] = chartWidget
     }
 
-    updateChart(id, key, x, y) {
+    updateChart (id, key, x, y) {
         this.chartWidgets[id].updateDataset(key, x, y)
     }
 
-    updateFromModel(model) {
+    updateFromModel (model) {
         const x = model.times
         for (const widget of _.values(this.chartWidgets)) {
             if (widget.fn) {

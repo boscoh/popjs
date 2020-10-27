@@ -92,7 +92,11 @@ export default {
             this.model = new model.ModelClass()
             this.title = this.model.title
             this.link = this.model.link ? this.model.link : ''
-            this.sliders = this.model.getGuiParams()
+            let params = this.model.getGuiParams()
+            for (let param of params) {
+              this.model.fillGuiParam(param)
+            }
+            this.sliders = params
             this.chartsContainer = new ChartsContainer(this.chartsId)
             for (let chart of this.model.getCharts()) {
                 this.chartsContainer.addChart(chart)

@@ -91,23 +91,7 @@ class EliteModel extends PopModel {
     }
 
     getGuiParams() {
-        let guiParams = []
-        for (let key in this.param) {
-            if (key === 'dt') {
-                continue
-            }
-            let val = this.param[key]
-            if (val > 0) {
-                val = 5 * val
-            } else if (val === 0) {
-                val = 1
-            }
-            guiParams.push({ key, max: val })
-        }
-        for (let param of guiParams) {
-            this.fillGuiParam(param)
-        }
-        return guiParams
+        return this.getDefaultGuiParams()
     }
 
     getCharts() {
