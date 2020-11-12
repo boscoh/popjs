@@ -1,7 +1,7 @@
 import { makeApproachFn, PopModel } from './pop-model'
 
 class EliteModel extends PopModel {
-    constructor() {
+    constructor () {
         super()
         this.param.time = 400
         this.param.maxProductionRate = 2
@@ -26,7 +26,7 @@ class EliteModel extends PopModel {
         this.dt = 1
     }
 
-    initializeRun() {
+    initializeRun () {
         this.var.producer = this.param.initProducer
         this.var.elite = this.param.initElite
         this.var.state = this.param.initState
@@ -38,7 +38,7 @@ class EliteModel extends PopModel {
         )
     }
 
-    calcAuxVars() {
+    calcAuxVars () {
         this.auxVar.prodDecline = this.fn.prodDeclineFn(this.var.state)
 
         this.auxVar.totalProduct =
@@ -71,7 +71,7 @@ class EliteModel extends PopModel {
             this.auxVar.producerShare / this.var.producer
     }
 
-    calcDVars() {
+    calcDVars () {
         this.dVar.producer =
             this.param.producerBirth * this.auxVar.producerShare -
             this.param.producerDeath * this.var.producer
@@ -90,11 +90,11 @@ class EliteModel extends PopModel {
         }
     }
 
-    getGuiParams() {
+    getGuiParams () {
         return this.getDefaultGuiParams()
     }
 
-    getCharts() {
+    getCharts () {
         return [
             {
                 markdown: `

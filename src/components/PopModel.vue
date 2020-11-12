@@ -94,7 +94,7 @@ export default {
             this.link = this.model.link ? this.model.link : ''
             let params = this.model.getGuiParams()
             for (let param of params) {
-              this.model.fillGuiParam(param)
+                this.model.fillGuiParam(param)
             }
             this.sliders = params
             this.chartsContainer = new ChartsContainer(this.chartsId)

@@ -5,12 +5,12 @@
 
 import { PopModel } from './pop-model'
 
-function getMinimumPayment(principal, rate, nPeriod) {
+function getMinimumPayment (principal, rate, nPeriod) {
     return (rate * principal) / (1.0 - Math.pow(1.0 + rate, -nPeriod))
 }
 
 class PropertyModel extends PopModel {
-    constructor() {
+    constructor () {
         const defaultParams = {
             initialProperty: 600000.0,
             deposit: 150000.0,
@@ -28,7 +28,7 @@ class PropertyModel extends PopModel {
         this.dt = 1
     }
 
-    initializeRun() {
+    initializeRun () {
         this.param.time = this.param.years
         let initialPrincipal = this.param.initialProperty - this.param.deposit
         this.param.payment = getMinimumPayment(
@@ -47,7 +47,7 @@ class PropertyModel extends PopModel {
         this.var.totalPaidForPropertyAndInterest = this.param.deposit
     }
 
-    calcAuxVars() {
+    calcAuxVars () {
         this.auxVar.interestRate = this.param.interestRate * this.var.principal
         this.auxVar.fundPayment = this.param.payment - this.var.rent
         if (this.auxVar.fundPayment < 0) {
@@ -69,7 +69,7 @@ class PropertyModel extends PopModel {
             this.var.fund - this.param.deposit - this.var.totalRent
     }
 
-    calcDVars() {
+    calcDVars () {
         this.dVar.totalInterest = this.auxVar.interestRate
         this.dVar.property = this.param.propertyGrowthRate * this.var.property
         if (this.var.principal >= 0) {
@@ -88,7 +88,7 @@ class PropertyModel extends PopModel {
             this.auxVar.fundPayment + this.var.rent
     }
 
-    getGuiParams() {
+    getGuiParams () {
         return [
             {
                 key: 'deposit',
@@ -129,7 +129,7 @@ class PropertyModel extends PopModel {
         ]
     }
 
-    getCharts() {
+    getCharts () {
         let charts = [
             {
                 title: 'Property',

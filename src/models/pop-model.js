@@ -2,35 +2,35 @@ import _ from 'lodash'
 //https://github.com/giannotr/runge-kutta-js
 import { integrateRungeKuttaStep } from './runge-kutta'
 
-function makeExponentialFunction(xVal, yVal, scale, yMin) {
+function makeExponentialFunction (xVal, yVal, scale, yMin) {
     let yDiff = yVal - yMin
     return x => yDiff * Math.exp((scale * (x - xVal)) / yDiff) + yMin
 }
 
-function makeLinearFunction(slope, xZero) {
+function makeLinearFunction (slope, xZero) {
     return x => slope * (x - xZero)
 }
 
-function makeApproachFn(yInit, yFinal, xMidpoint) {
+function makeApproachFn (yInit, yFinal, xMidpoint) {
     const yDiff = yFinal - yInit
-    return function(x) {
+    return function (x) {
         if (x < 0) {
             return yInit
         }
         return yInit + yDiff * (x / (xMidpoint + x))
     }
 }
-function makeInverseSquareFunction(A, B, C, D) {
-    return function(x) {
+function makeInverseSquareFunction (A, B, C, D) {
+    return function (x) {
         // x_min = B / C
         let num = B - C * x
         return A / num / num - D
     }
 }
 
-function getCutoffFn(fn, xMax) {
+function getCutoffFn (fn, xMax) {
     let yMax = fn(xMax)
-    return function(x) {
+    return function (x) {
         if (x > xMax) {
             return yMax
         }
@@ -43,7 +43,7 @@ function getCutoffFn(fn, xMax) {
 }
 
 class PopModel {
-    constructor(params) {
+    constructor (params) {
         this.param = _.assign({}, params)
         this.var = {}
         this.solution = {}
@@ -56,7 +56,7 @@ class PopModel {
         this.integrateMethod = 'runWithRungeKutta'
     }
 
-    fillGuiParam(param) {
+    fillGuiParam (param) {
         if (!_.has(param, 'label')) {
             param.label = _.startCase(param.key)
         }
@@ -67,7 +67,7 @@ class PopModel {
         param.value = this.param[param.key]
     }
 
-    getDefaultGuiParams() {
+    getDefaultGuiParams () {
         let guiParams = []
         for (let key in this.param) {
             if (key === 'dt') {
@@ -84,11 +84,11 @@ class PopModel {
         return guiParams
     }
 
-    getGuiParams() {
+    getGuiParams () {
         // return [{key: <string>, value: <float-string>}]
     }
 
-    importGuiParams(guiParams) {
+    importGuiParams (guiParams) {
         for (let param of guiParams) {
             if ('key' in param && 'value' in param) {
                 this.param[param.key] = parseFloat(param.value)
@@ -96,24 +96,24 @@ class PopModel {
         }
     }
 
-    getCharts() {
+    getCharts () {
         // return [{key: <string>, value: <float-string>}]
     }
 
     /**
      * To be overriden
      */
-    initializeRun() {
+    initializeRun () {
         // set vars[key] values
     }
 
-    resetSolutions() {
+    resetSolutions () {
         for (let solnValues of _.values(this.solution)) {
             solnValues.length = 0
         }
     }
 
-    getVec() {
+    getVec () {
         let result = []
         for (let k of this.varKeys) {
             result.push(this.var[k])
@@ -121,13 +121,13 @@ class PopModel {
         return result
     }
 
-    setVec(vec) {
+    setVec (vec) {
         for (let i = 0; i < vec.length; i += 1) {
             this.var[this.varKeys[i]] = vec[i]
         }
     }
 
-    getDVec(vec) {
+    getDVec (vec) {
         this.setVec(vec)
         this.calcAuxVars()
         this.calcDVars()
@@ -138,11 +138,11 @@ class PopModel {
         return result
     }
 
-    calcAuxVars() {}
+    calcAuxVars () {}
 
-    calcDVars() {}
+    calcDVars () {}
 
-    pushToSolution(d) {
+    pushToSolution (d) {
         for (let key of _.keys(d)) {
             if (!(key in this.solution)) {
                 this.solution[key] = []
@@ -155,9 +155,9 @@ class PopModel {
         }
     }
 
-    preRunCheck() {}
+    preRunCheck () {}
 
-    runWithEuler() {
+    runWithEuler () {
         for (let i = 0; i < this.times.length; i += 1) {
             this.calcAuxVars()
             this.calcDVars()
@@ -172,7 +172,7 @@ class PopModel {
         }
     }
 
-    runWithRungeKutta() {
+    runWithRungeKutta () {
         const f = (t, y) => this.getDVec(y)
         const maxTime = _.max(this.times)
         let t = 0
@@ -190,7 +190,7 @@ class PopModel {
         }
     }
 
-    run() {
+    run () {
         this.initializeRun()
         this.varKeys = _.keys(this.var)
         this.calcAuxVars()
