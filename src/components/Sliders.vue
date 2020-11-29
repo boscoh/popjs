@@ -27,7 +27,7 @@
                             :min="slider.min ? slider.min : 0"
                             :step="slider.interval"
                             hide-details
-                            @change="change()"
+                            @change="changeSlider()"
                         />
                     </div>
                     <div class="pl-4 flex-grow-0">
@@ -36,8 +36,8 @@
                             style="width: 7em"
                             type="number"
                             step="any"
-                            v-model="slider.value"
-                            @keypress="change()"
+                            v-model="slider.inputValue"
+                            v-on:keypress.enter="changeInput()"
                         >
                         </v-text-field>
                     </div>
@@ -66,8 +66,7 @@
                                 :max="slider.max"
                                 :min="slider.min ? slider.min : 0"
                                 :step="slider.interval"
-                                hide-details
-                                @change="change()"
+                                @change="changeSlider()"
                             />
                             <div style="margin-top: -10px" class="ml-2">
                                 {{ slider.label }}
@@ -76,8 +75,8 @@
                                 class="mt-n1 ml-2 mb-3 pt-0"
                                 type="number"
                                 step="any"
-                                v-model="slider.value"
-                                @keypress="change()"
+                                v-model="slider.inputValue"
+                                v-on:keypress.enter="changeInput()"
                             >
                             </v-text-field>
                         </div>
@@ -96,8 +95,21 @@ export default {
         callback: Function,
     },
     methods: {
-        change () {
+        changeSlider() {
             if (this.callback) {
+                console.log('changeSlider')
+                for (let slider of this.sliders) {
+                    slider.inputValue = slider.value
+                }
+                this.callback()
+            }
+        },
+        changeInput() {
+            if (this.callback) {
+                console.log('changeInput')
+                for (let slider of this.sliders) {
+                    slider.value = slider.inputValue
+                }
                 this.callback()
             }
         },

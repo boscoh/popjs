@@ -9,7 +9,7 @@
                 style="height: calc(100vh - 80px); overflow: auto;"
             >
                 <div class="pa-4" style="margin-top: 30px; margin-bottom: 3em">
-                    <sliders :sliders="sliders"></sliders>
+                    <sliders :sliders="sliders" :callback="changeGraph"></sliders>
                 </div>
             </v-col>
 
@@ -72,12 +72,12 @@ export default {
         }
     },
     watch: {
-        sliders: {
-            handler () {
-                this.changeGraph()
-            },
-            deep: true,
-        },
+        // sliders: {
+        //     handler () {
+        //         this.changeGraph()
+        //     },
+        //     deep: true,
+        // },
         $route (to) {
             this.build(to.name)
         },
@@ -104,6 +104,7 @@ export default {
             this.changeGraph()
         },
         changeGraph () {
+            console.log('changeGraph')
             this.model.importGuiParams(this.sliders)
             this.model.run()
             this.chartsContainer.updateFromModel(this.model)
