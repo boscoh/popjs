@@ -2,7 +2,7 @@ import _ from 'lodash'
 import { PopModel } from '@/models/pop-model'
 
 class FathersModel extends PopModel {
-    constructor () {
+    constructor() {
         super()
         this.integrateMethod = 'runWithEuler'
         this.param.time = 150
@@ -25,7 +25,7 @@ class FathersModel extends PopModel {
         this.initializeRun()
     }
 
-    initializeRun () {
+    initializeRun() {
         this.param.nAge = _.parseInt(this.param.nAge)
 
         this.pops = {}
@@ -49,7 +49,7 @@ class FathersModel extends PopModel {
         }
     }
 
-    calcAuxVars () {
+    calcAuxVars() {
         for (let group of this.groups) {
             let vals = _.filter(_.map(this.pops[group], k => this.var[k]))
             this.auxVar[`${group}_total`] = _.sum(vals)
@@ -77,7 +77,7 @@ class FathersModel extends PopModel {
                 this.param.aversion * this.auxVar.moderate_total)
     }
 
-    calcDVars () {
+    calcDVars() {
         this.dVar = {}
 
         for (let k of this.varKeys) {
@@ -100,11 +100,11 @@ class FathersModel extends PopModel {
         }
     }
 
-    getGuiParams () {
+    getGuiParams() {
         return this.getDefaultGuiParams()
     }
 
-    getCharts () {
+    getCharts() {
         return [
             {
                 markdown: `
@@ -174,7 +174,10 @@ class FathersModel extends PopModel {
                 title: 'All',
                 keys: ['naive_total', 'radical_total', 'moderate_total'],
             },
-            { title: 'Naive Age Groups', keys: this.pops.naive },
+            {
+                title: 'Naive Age Groups',
+                keys: this.pops.naive,
+            },
             { title: 'Radical Age Groups', keys: this.pops.radical },
             { title: 'Moderate Age Groups', keys: this.pops.moderate },
         ]
