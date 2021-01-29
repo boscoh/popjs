@@ -124,8 +124,8 @@ class FathersModel extends PopModel {
 
                     The model carries a number of age groups for each category of people.
 
-                    $$ naive_0, naive_1, ..., naive_{nAge} \\newline $$
-                    $$ radical_0, radical_1, ..., radical_{nAge} \\newline $$
+                    $$ naive_0, naive_1, ..., naive_{nAge} $$
+                    $$ radical_0, radical_1, ..., radical_{nAge} $$
                     $$ moderate_0, moderate_1, ..., moderate_{nAge} $$
 
                     Naive people are radicalized by the radicalization rate R,
