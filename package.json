@@ -1,63 +1,30 @@
 {
-  "name": "popjs",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
-  },
-  "dependencies": {
-    "@iktakahiro/markdown-it-katex": "^3.1.0",
-    "chart.js": "^2.9.3",
-    "core-js": "^3.6.4",
-    "dedent": "^0.7.0",
-    "lodash": "^4.17.15",
-    "markdown-it": "^10.0.0",
-    "markdown-it-katex": "^2.0.3",
-    "markdown-it-vue": "^1.0.11",
-    "vue": "^2.6.11",
-    "vue-chartjs": "^3.5.1",
-    "vue-router": "^3.1.6",
-    "vuetify": "^2.2.11",
-    "vuex": "^3.1.3"
-  },
-  "devDependencies": {
-    "@vue/cli-plugin-babel": "~4.3.0",
-    "@vue/cli-plugin-eslint": "~4.3.0",
-    "@vue/cli-plugin-router": "~4.3.0",
-    "@vue/cli-plugin-vuex": "~4.3.0",
-    "@vue/cli-service": "~4.3.0",
-    "@vue/eslint-config-prettier": "^6.0.0",
-    "babel-eslint": "^10.1.0",
-    "eslint": "^6.7.2",
-    "eslint-plugin-prettier": "^3.1.1",
-    "eslint-plugin-vue": "^6.2.2",
-    "prettier": "^1.19.1",
-    "sass": "^1.19.0",
-    "sass-loader": "^8.0.0",
-    "vue-cli-plugin-vuetify": "~2.0.5",
-    "vue-template-compiler": "^2.6.11",
-    "vuetify-loader": "^1.3.0"
-  },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
+    "version": "0.0.0",
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build",
+        "serve": "vite preview"
     },
-    "extends": [
-      "plugin:vue/essential",
-      "eslint:recommended",
-      "@vue/prettier"
-    ],
-    "parserOptions": {
-      "parser": "babel-eslint"
+    "dependencies": {
+        "bootstrap": "^5.0.2",
+        "chart.js": "^4.4.0",
+        "country-codes-list": "^1.6.8",
+        "currency-symbol-map": "^5.0.1",
+        "dedent": "^0.7.0",
+        "lodash": "^4.17.21",
+        "markdown-it": "^12.3.2",
+        "markdown-it-katex": "^2.0.3",
+        "node-fetch": "^2.6.1",
+        "vue": "^3.0.5",
+        "vue-chartjs": "^5.2.0",
+        "vue-router": "^4.0.11",
+        "vue-slider-component": "^4.1.0-beta.7",
+        "xlsx": "^0.17.2"
     },
-    "rules": {}
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not dead"
-  ]
+    "devDependencies": {
+        "@vitejs/plugin-vue": "^1.2.3",
+        "@vue/compiler-sfc": "^3.0.5",
+        "vite": "^2.3.8",
+        "vue-cli-plugin-pug": "~2.0.0"
+    }
 }

@@ -1,10 +1,12 @@
 import { PopModel, makeLinearFunction } from './pop-model'
 
 class EconModel extends PopModel {
-    constructor () {
+    constructor() {
         super()
         this.link =
             'https://github.com/boscoh/popjs/blob/master/src/models/econ-models.js'
+        this.summary = `The breakthrough Steve Keen model of a basic macro-economy
+            demonstrates the basic oscillations of a capitalist economy.`
         this.title = 'Keen-Minsky Financial Instability Model'
         this.yCutoff = 1e10
         this.dt = 0.05
@@ -26,7 +28,7 @@ class EconModel extends PopModel {
         this.param.initialLaborFraction = 0.61
     }
 
-    initializeRun () {
+    initializeRun() {
         this.fn.wageFn = makeLinearFunction(
             this.param.wageSlope,
             this.param.wageXOrigin
@@ -46,7 +48,7 @@ class EconModel extends PopModel {
         this.var.debtRatio = 0
     }
 
-    calcAuxVars () {
+    calcAuxVars() {
         this.auxVar.labor = this.var.laborFraction * this.var.population
         this.auxVar.wageDelta = this.fn.wageFn(this.var.laborFraction)
         this.auxVar.laborWages = this.var.wage * this.auxVar.labor
@@ -72,7 +74,7 @@ class EconModel extends PopModel {
         this.auxVar.borrow = this.auxVar.investment - this.auxVar.capitalProfit
     }
 
-    calcDVars () {
+    calcDVars() {
         this.dVar.wage = this.auxVar.wageDelta * this.var.wage
 
         this.dVar.productivity =
@@ -99,7 +101,7 @@ class EconModel extends PopModel {
             this.var.debtRatio * this.auxVar.realGrowthRate
     }
 
-    getGuiParams () {
+    getInitialParams() {
         return [
             { key: 'time', max: 500 },
             {
@@ -133,7 +135,7 @@ class EconModel extends PopModel {
         ]
     }
 
-    getCharts () {
+    getCharts() {
         return [
             {
                 markdown: `

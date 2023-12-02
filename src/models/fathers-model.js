@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import { PopModel } from '@/models/pop-model'
+import { PopModel } from './pop-model'
 
 class FathersModel extends PopModel {
     constructor() {
@@ -21,6 +21,8 @@ class FathersModel extends PopModel {
         this.link =
             'https://github.com/boscoh/popjs/blob/master/src/models/fathers-model.js'
         this.title = 'Turchin Fathers and Sons Model'
+        this.summary = `The Peter Turchin model of generational violence based on an mental
+            infection model of violent radicalisation`
 
         this.initializeRun()
     }
@@ -51,7 +53,7 @@ class FathersModel extends PopModel {
 
     calcAuxVars() {
         for (let group of this.groups) {
-            let vals = _.filter(_.map(this.pops[group], k => this.var[k]))
+            let vals = _.filter(_.map(this.pops[group], (k) => this.var[k]))
             this.auxVar[`${group}_total`] = _.sum(vals)
         }
 
@@ -100,7 +102,7 @@ class FathersModel extends PopModel {
         }
     }
 
-    getGuiParams() {
+    getInitialParams() {
         return this.getDefaultGuiParams()
     }
 

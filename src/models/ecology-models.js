@@ -1,7 +1,7 @@
 import { PopModel } from './pop-model'
 
 class EcologyModel extends PopModel {
-    constructor () {
+    constructor() {
         const params = {
             time: 200,
             initialPrey: 10,
@@ -16,14 +16,16 @@ class EcologyModel extends PopModel {
             'https://github.com/boscoh/popjs/blob/master/src/models/ecology-models.js'
         this.title = 'Lokta Volterra Predator-Prey Model'
         this.dt = 0.1
+        this.summary = `The granddaddy population model Lotka-Volterra that follows the
+            rise and fall of predator-prey populations`
     }
 
-    initializeRun () {
+    initializeRun() {
         this.var.predator = this.param.initialPrey
         this.var.prey = this.param.initialPredator
     }
 
-    calcDVars () {
+    calcDVars() {
         this.dVar.prey =
             this.var.prey * this.param.preyGrowthRate -
             this.param.predationRate * this.var.prey * this.var.predator
@@ -32,7 +34,7 @@ class EcologyModel extends PopModel {
             this.var.predator * this.param.predatorDeathRate
     }
 
-    getGuiParams () {
+    getInitialParams() {
         return [
             { key: 'time', max: 300 },
             {
@@ -62,7 +64,7 @@ class EcologyModel extends PopModel {
         ]
     }
 
-    getCharts () {
+    getCharts() {
         return [
             {
                 markdown: `

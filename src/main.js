@@ -1,12 +1,28 @@
-import Vue from 'vue'
+import { createApp } from 'vue'
 import App from './App.vue'
-import router from './router'
-import vuetify from './plugins/vuetify'
+import * as VueRouter from 'vue-router'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import 'bootstrap'
+import models from './models'
+import HomeView from './views/HomeView.vue'
+import PopModelView from './views/PopModelView.vue'
 
-Vue.config.productionTip = false
+let routes = [{ path: '/', component: HomeView }]
+for (let model of models) {
+    routes.push({
+        path: model.path,
+        name: model.name,
+        component: PopModelView,
+        props: { name: model.name },
+    })
+}
+const router = VueRouter.createRouter({
+    history: VueRouter.createWebHashHistory(),
+    routes,
+})
 
-new Vue({
-    router,
-    vuetify,
-    render: h => h(App),
-}).$mount('#app')
+const app = createApp(App)
+
+app.use(router)
+
+app.mount('#app')

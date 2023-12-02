@@ -1,15 +1,17 @@
 import _ from 'lodash'
-import { PopModel } from '@/models/pop-model'
+import { PopModel } from './pop-model'
 
 class FlowPopModel extends PopModel {
-    constructor () {
+    constructor() {
         super()
         this.auxVarFlows = []
         this.paramFlows = []
         this.dt = 1
+        this.summary = `The classic model of epidemiological
+            spread in a single population uses the classic population model.`
     }
 
-    calcDVars () {
+    calcDVars() {
         let flows = []
 
         for (let [from, to, auxVarKey] of this.auxVarFlows) {
@@ -32,7 +34,7 @@ class FlowPopModel extends PopModel {
         }
     }
 
-    preRunCheck () {
+    preRunCheck() {
         this.calcAuxVars()
         this.calcDVars()
         let auxVarKeys = _.keys(this.auxVar)
@@ -59,7 +61,7 @@ class FlowPopModel extends PopModel {
 }
 
 class SirModel extends FlowPopModel {
-    constructor () {
+    constructor() {
         super()
 
         this.name = 'SIR'
@@ -67,7 +69,8 @@ class SirModel extends FlowPopModel {
         this.dt = 0.1
         this.link =
             'https://github.com/boscoh/popjs/blob/master/src/models/epi-models.js'
-
+        this.summary = `The classic model of epidemiological
+             spread in a single population uses the classic population model.`
         this.param = {
             time: 100,
             initialPopulation: 50000,
@@ -87,7 +90,7 @@ class SirModel extends FlowPopModel {
         this.paramFlows.push(['infectious', 'recovered', 'recoverRate'])
     }
 
-    initializeRun () {
+    initializeRun() {
         this.param.recoverRate = 1 / this.param.infectiousPeriod
         this.param.contactRate =
             this.param.reproductionNumber * this.param.recoverRate
@@ -98,7 +101,7 @@ class SirModel extends FlowPopModel {
         this.var.recovered = 0
     }
 
-    calcAuxVars () {
+    calcAuxVars() {
         this.auxVar.population = _.sum(_.values(this.var))
         this.auxVar.rateForce =
             (this.param.contactRate / this.auxVar.population) *
@@ -108,7 +111,7 @@ class SirModel extends FlowPopModel {
             this.param.reproductionNumber
     }
 
-    getGuiParams () {
+    getInitialParams() {
         return [
             {
                 key: 'time',
@@ -137,7 +140,7 @@ class SirModel extends FlowPopModel {
         ]
     }
 
-    getCharts () {
+    getCharts() {
         return [
             {
                 title: 'COMPARTMENTS',

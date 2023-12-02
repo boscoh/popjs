@@ -1,7 +1,7 @@
 import { PopModel } from './pop-model'
 
 class StateModel extends PopModel {
-    constructor () {
+    constructor() {
         const params = {
             time: 600,
             maxSurplus: 1,
@@ -15,11 +15,13 @@ class StateModel extends PopModel {
         this.link =
             'https://github.com/boscoh/popjs/blob/master/src/models/state-models.js'
         this.title = 'Turchin Demographic Fiscal Model'
+        this.summary = `The simple Peter Turchin model of the resource constrained
+            rise and fall of a simple fiscal state`
         this.dt = 1
     }
 
-    initializeRun () {
-        this.fn.carryCapacityFromStateRevenue = revenue =>
+    initializeRun() {
+        this.fn.carryCapacityFromStateRevenue = (revenue) =>
             1 +
             this.param.carryCapacityDiff *
                 (revenue / (this.param.stateRevenueAtHalfCapacity + revenue))
@@ -27,17 +29,16 @@ class StateModel extends PopModel {
         this.var.revenue = 0
     }
 
-    calcAuxVars () {
+    calcAuxVars() {
         let s = this.var.revenue > 0 ? this.var.revenue : 0
-        this.auxVar.carryingCapacityFunction = this.fn.carryCapacityFromStateRevenue(
-            s
-        )
+        this.auxVar.carryingCapacityFunction =
+            this.fn.carryCapacityFromStateRevenue(s)
         this.auxVar.surplus =
             this.param.maxSurplus *
             (1 - this.var.population / this.auxVar.carryingCapacityFunction)
     }
 
-    calcDVars () {
+    calcDVars() {
         this.dVar.population =
             this.param.populationGrowthRate *
             this.var.population *
@@ -51,7 +52,7 @@ class StateModel extends PopModel {
         }
     }
 
-    getGuiParams () {
+    getInitialParams() {
         return [
             { key: 'time', max: 1000 },
             {
@@ -77,7 +78,7 @@ class StateModel extends PopModel {
         ]
     }
 
-    getCharts () {
+    getCharts() {
         return [
             {
                 markdown: `
