@@ -1,7 +1,7 @@
 <template lang="pug">
 .w-100.d-flex.flex-column(style="height: 100vh")
     nav-bar(name="")
-    .overflow-scroll
+    .overflow-scroll(style="height: calc(100vh - var(--nav-bar-height))")
       .col-lg-6.col-md-8.col-sm-12
         .m-5
           .pt-3
