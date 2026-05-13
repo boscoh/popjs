@@ -18,7 +18,7 @@ body {
     color: #2c3e50;
 }
 .katex {
-  font-size: 0.95em;
+  font-size: 0.95em !important;
   font-family: sans-serif;
 }
 </style>

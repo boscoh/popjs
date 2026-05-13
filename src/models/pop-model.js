@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import md from 'markdown-it'
-import mk from 'markdown-it-katex'
+import texmath from 'markdown-it-texmath'
+import katex from 'katex'
 import dedent from 'dedent'
 import { integrateRungeKuttaStep } from './runge-kutta'
 
@@ -269,7 +270,7 @@ class PopModel {
         for (let chart of charts) {
             if (chart.markdown) {
                 let parser = md()
-                parser.use(mk, { insert_fonts_css: false })
+                parser.use(texmath, { engine: katex, delimiters: 'dollars' })
                 chart.html = parser.render(dedent(chart.markdown))
             }
             chart.options = {

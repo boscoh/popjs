@@ -1,5 +1,7 @@
 import { createApp } from 'vue'
 import App from './App.vue'
+import 'katex/dist/katex.min.css'
+import 'markdown-it-texmath/css/texmath.css'
 import * as VueRouter from 'vue-router'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap'
