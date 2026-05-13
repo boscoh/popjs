@@ -1,26 +1,28 @@
 <template lang="pug">
-.nav-bar.d-flex.flex-column.ps-5.border-bottom(ref="nav")
+.nav-bar.d-flex.flex-row.border-bottom(ref="nav")
 
-  router-link.text-decoration-none(to=".")
-    h3.mt-3.text-dark.text-truncate PopJS - Interactive Population Models
-
-  .dropdown
-    button.btn.btn-sm.btn-secondary.dropdown-toggle(
-      type="button" data-bs-toggle="dropdown" aria-expanded="false"
-    )
-      template(v-if="title")
-        | {{ title }}
-      template(v-else)
-        | - choose model -
-    ul.dropdown-menu
-      li
-        router-link.dropdown-item(v-for="menu in menus" :to="menu.path")
-          |  {{ menu.title }}
+  .d-none.d-md-block.col-4
+  .col-sm-12.col-md-8.com-lg-8.ps-5.d-flex
+    .flex-column
+      router-link.text-decoration-none(to=".")
+        h6.bold.text-uppercase.mt-3.mb-1.text-dark.text-truncate PopJS - Population Models
+      .dropdown
+        button.btn.btn-sm.btn-outline-secondary.dropdown-toggle(
+          type="button" data-bs-toggle="dropdown" aria-expanded="false"
+        )
+          template(v-if="title")
+            | {{ title }}
+          template(v-else)
+            | - choose model -
+        ul.dropdown-menu
+          li
+            router-link.dropdown-item(v-for="menu in menus" :to="menu.path")
+              |  {{ menu.title }}
 </template>
 
 <style>
 :root {
-    --nav-bar-height: 100px;
+    --nav-bar-height: 80px;
 }
 .nav-bar {
     height: var(--nav-bar-height);

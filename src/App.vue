@@ -17,4 +17,8 @@ body {
     -moz-osx-font-smoothing: grayscale;
     color: #2c3e50;
 }
+.katex {
+  font-size: 0.95em;
+  font-family: sans-serif;
+}
 </style>
